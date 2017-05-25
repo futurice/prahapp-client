@@ -1,33 +1,27 @@
-* Backend repository here: https://github.com/futurice/wappuapp-backend
+* Backend repository here: https://github.com/kaupunki-apina/prahapp-backend/
 
-# Whappu app
+* Fork from https://github.com/futurice/wappuapp-client
+
+# Prahapp #prahantakii
 
 ![](docs/logo.png)
 
-> An event app similar to a festival app, which helps students of TTY(Tampere University of Technology) and Otaniemi to find events and celebrate between 19th April - 1st May.
+> An Epic festival app for Futurice Summer Party
 
-### Download the App
-* [App Store](https://itunes.apple.com/fi/app/whappu/id1096655903?mt=8)
-* [Play Store](https://play.google.com/store/apps/details?id=com.wappuapp)
 
 ### Features:
-* Low-effort user registration
-* Feed with images and text
-* Radio streaming
+* Auth0 login
+* Feed with images, text and comments
 * Event Calendar
-* Event Map
-* Vibe Meter and Charts
-* Scoreboard
+* Event Map with cateogry filters
 * Event links
 
-### Short facts:
+### Architecture
 * React Native + Redux
 * iOS and Android
-
-- Whappu 2017 architectural updates
-  - Selectors with [reselect](https://github.com/reactjs/reselect/) to access store
-  - Redux architecture using [ducks](https://github.com/erikras/ducks-modular-redux). See `/app/concepts`
-  - Data processing in concepts and minimize logic in views
+* Selectors with [reselect](https://github.com/reactjs/reselect/) to access store
+* Redux architecture using [ducks](https://github.com/erikras/ducks-modular-redux). See `/app/concepts`
+* Data processing in _concepts_ and minimize logic in views
 
 ## Release
 
