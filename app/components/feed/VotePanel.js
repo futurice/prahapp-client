@@ -33,8 +33,8 @@ class VotePanel extends Component {
     // const iconName = positive ? 'keyboard-arrow-up' : 'keyboard-arrow-down';
     // const alreadyVotedThis = userVote === value;
 
-    const value = userVote && userVote > 0 ? -1 : 1;
-    const alreadyVotedThis = userVote !== 0;
+    const value = userVote && userVote > 0 ? 0 : 1;
+    const alreadyVotedThis = userVote > 0;
 
     return (
       <View style={styles.itemVoteButtonWrap}>

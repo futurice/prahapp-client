@@ -101,7 +101,6 @@ const voteFeedItem = (feedItemId, value) => (dispatch, getState) => {
     return;
   }
 
-
   //  userVote needs to be updated
   //  votevalue for item need to be calculated
   //    * if user had no previous vote, just sum given vote to vote values
@@ -109,10 +108,8 @@ const voteFeedItem = (feedItemId, value) => (dispatch, getState) => {
   const votes = voteItem.get('votes');
   const userVote = voteItem.get('userVote');
 
-  const wasAlreadyVotedByMe = userVote !== 0;
-  const voteWasChanged = userVote !== value;
-  const multiplier = wasAlreadyVotedByMe ? 2 : 1;
-  const difference = voteWasChanged ? (value * multiplier) : 0;
+  const wasAlreadyVotedByMe = userVote > 0;
+  const difference = wasAlreadyVotedByMe ? -1 : 1;
 
   const newVotes = parseInt(votes) + difference;
 
