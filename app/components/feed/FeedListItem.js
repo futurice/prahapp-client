@@ -497,7 +497,7 @@ class FeedListItem extends Component {
 
             <CommentsLink
               parentId={item.id}
-              commentCount={16}
+              commentCount={item.commentCount}
               openComments={() => openComments(item.id)}
             />
 
