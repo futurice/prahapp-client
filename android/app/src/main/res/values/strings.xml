@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Prahapp</string>
+		<string name="auth0_domain">futuapp.eu.auth0.com</string>
+</resources>

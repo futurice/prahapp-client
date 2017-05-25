@@ -1,0 +1,20 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">#46289A</item>
+        <!-- Status Bar color -->
+        <item name="colorPrimaryDark">#3d2487</item>
+        <!-- Plain buttons -->
+        <item name="colorAccent">#329E41</item>
+        <!-- text -->
+        <item name="android:textColor">#46289A</item>
+    </style>
+
+    <style name="MyLock.Theme" parent="Lock.Theme" >
+       <item name="Auth0.Background">#FDF0C4</item>
+       <item name="Auth0.Separator.Color">#FDF0C4</item>
+   </style>
+
+</resources>
