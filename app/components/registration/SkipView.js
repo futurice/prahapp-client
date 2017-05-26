@@ -5,6 +5,7 @@ import {
   View,
   Text,
   StyleSheet,
+  Image,
   Platform,
   ScrollView,
   Dimensions
@@ -34,6 +35,7 @@ class SkipView extends Component {
           <ScrollView style={{flex:1, width: null, height: null}}>
               <View style={styles.content}>
                 <View style={styles.textContainer}>
+                  <Image style={{ width: 200, height: 30, tintColor: theme.blue2 }} source={require('../../../assets/prague/futubohemia/logo.png')} />
                   <Text style={styles.subTitle}>IT'S FUN O'CLOCK!</Text>
                     <Text style={styles.text}>Login with your
                       <Text style={{fontWeight: 'bold'}}> @futurice </Text>email address.
@@ -122,15 +124,15 @@ const styles = StyleSheet.create({
 
   textContainer: {
     flex: 3,
-    marginHorizontal: 30,
+    alignItems: 'center',
     flexDirection: 'column'
   },
   subTitle: {
     textAlign: 'center',
-    color: theme.blue2,
+    color: theme.blue1,
     fontWeight: '600',
     fontSize: 15,
-    marginBottom: 15,
+    margin: 15,
   },
   text: {
     marginBottom: 20,

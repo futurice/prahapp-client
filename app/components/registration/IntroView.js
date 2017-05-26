@@ -77,7 +77,7 @@ class InstructionView extends Component {
                     <View style={styles.textContainer}>
                       <Image style={{ width: 200, height: 30, tintColor: theme.blue2 }} source={require('../../../assets/prague/futubohemia/logo.png')} />
                       <Text style={styles.subTitle}>WELCOME TO PRAGUE</Text>
-                      <Text style={styles.text}>Get to know your colleagues better</Text>
+                      <Text style={styles.text}>It's time for Fututrip again!</Text>
                     </View>
                   </View>
                   {/*
