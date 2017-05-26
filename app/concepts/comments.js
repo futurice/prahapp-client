@@ -46,7 +46,7 @@ const {
 } = createRequestActionTypes('POST_COMMENT');
 
 const ADD_COMMENT = 'comments/ADD_COMMENT';
-const SET_COMMENTS = 'comments/SET_COMMENTS';
+export const SET_COMMENTS = 'comments/SET_COMMENTS'; // update comment count for feed
 const OPEN_COMMENTS = 'comments/OPEN_COMMENTS';
 const CLOSE_COMMENTS = 'comments/CLOSE_COMMENTS';
 const EDIT_COMMENT = 'comments/EDIT_COMMENT';

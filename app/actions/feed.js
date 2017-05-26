@@ -3,9 +3,11 @@ import {createRequestActionTypes} from '.';
 import { getCityId } from '../concepts/city';
 import { getFeedSortType } from '../concepts/sortType';
 import { getAllPostsInStore } from '../reducers/feed';
+import { SET_COMMENTS as _SET_COMMENTS } from '../concepts/comments';
 
 const SET_FEED = 'SET_FEED';
 const APPEND_FEED = 'APPEND_FEED';
+const SET_COMMENTS = _SET_COMMENTS;
 
 const {
   GET_FEED_REQUEST,
@@ -24,7 +26,6 @@ const {
   VOTE_FEED_ITEM_REQUEST,
   VOTE_FEED_ITEM_SUCCESS,
 } = createRequestActionTypes('VOTE_FEED_ITEM');
-
 
 const fetchFeed = () => (dispatch, getState) => {
   const cityId = getCityId(getState());
@@ -152,6 +153,7 @@ export {
   DELETE_FEED_ITEM,
   OPEN_LIGHTBOX,
   CLOSE_LIGHTBOX,
+  SET_COMMENTS,
 
   fetchFeed,
   refreshFeed,

@@ -14,7 +14,8 @@ import {
   DELETE_FEED_ITEM,
   OPEN_LIGHTBOX,
   VOTE_FEED_ITEM_REQUEST,
-  CLOSE_LIGHTBOX
+  CLOSE_LIGHTBOX,
+  SET_COMMENTS
 } from '../actions/feed';
 import { getUserImages } from '../concepts/user';
 import { getEventImages } from './event';
@@ -107,6 +108,18 @@ export default function feed(state = initialState, action) {
         isLightBoxOpen: false,
         lightBoxItemId: null,
       })
+
+    case SET_COMMENTS: {
+      const list = state.get('list');
+      const itemIndex = list.findIndex((item) => item.get('id') === action.payload.postId);
+
+      if (itemIndex < 0) {
+        console.log('Tried to update comment count for post, but it was not found from state:', itemIndex);
+        return state;
+      } else {
+        return state.setIn(['list', itemIndex, 'commentCount'], action.payload.comments.length || 0);
+      }
+    }
 
     default:
       return state;
