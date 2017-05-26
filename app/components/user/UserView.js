@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 
 import {
   getUserImages,
+  getUserPicture,
   getUserTeam,
   getTotalSimas,
   getTotalVotesForUser,
@@ -23,7 +24,7 @@ import theme from '../../style/theme';
 import Header from '../common/Header';
 import Loader from '../common/Loader';
 
-const headerImage = require('../../../assets/patterns/sea.png');
+const headerImage = require('../../../assets/prague/futubohemia/solid.png');
 
 const { height, width } = Dimensions.get('window');
 const isIOS = Platform.OS === 'ios';
@@ -43,7 +44,7 @@ class UserView extends Component {
   render() {
 
     const { images, isLoading, totalVotes, totalSimas,
-      userTeam, userName, navigator } = this.props;
+      userTeam, userName, navigator, profilePicture } = this.props;
     let { user } = this.props.route;
 
     // Show Current user if not user selected
@@ -58,7 +59,7 @@ class UserView extends Component {
       {false && <Header backgroundColor={theme.secondary} title={user.name} navigator={navigator} />}
       <ParallaxView
         backgroundSource={headerImage}
-        windowHeight={270}
+        windowHeight={230}
         style={{ backgroundColor:theme.white }}
         header={(
           <View style={styles.header}>
@@ -70,14 +71,19 @@ class UserView extends Component {
             </View>
             }
             <View style={styles.avatar}>
-              <Icon style={styles.avatarText} name="person-outline" />
+              {profilePicture
+                ? <Image style={styles.avatarImage} source={{ uri: profilePicture }} />
+                : <Icon style={styles.avatarText} name="person-outline" />
+              }
             </View>
             <Text style={styles.headerTitle}>
               {user.name}
             </Text>
+          {/*
             <Text style={styles.headerSubTitle}>
               {userTeam || user.team}
             </Text>
+          */}
             <View style={styles.headerKpis}>
               <View style={styles.headerKpi}>
                 <Text style={styles.headerKpiValue}>{!isLoading ? imagesCount : '-'}</Text>
@@ -85,12 +91,14 @@ class UserView extends Component {
               </View>
               <View style={styles.headerKpi}>
                 <Text style={styles.headerKpiValue}>{!isLoading ? totalVotes : '-'}</Text>
-                <Text style={styles.headerKpiTitle}>votes for photos</Text>
+                <Text style={styles.headerKpiTitle}>likes for photos</Text>
               </View>
+            {/*
               <View style={styles.headerKpi}>
                 <Text style={styles.headerKpiValue}>{!isLoading ? (totalSimas || '-') : '-'}</Text>
                 <Text style={styles.headerKpiTitle}>simas</Text>
               </View>
+            */}
             </View>
           </View>
         )}
@@ -160,10 +168,10 @@ const styles = StyleSheet.create({
     color: theme.white
   },
   headerTitle:{
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: 'bold',
     textAlign: 'center',
-    color: theme.light,
+    color: theme.blue2,
     marginBottom: 3,
   },
   headerSubTitle: {
@@ -182,9 +190,14 @@ const styles = StyleSheet.create({
     backgroundColor: theme.stable,
     borderRadius: 45,
   },
+  avatarImage: {
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+  },
   avatarText: {
     backgroundColor: theme.transparent,
-    color: theme.secondary,
+    color: theme.blue1,
     fontSize: 60,
   },
   headerKpis: {
@@ -195,17 +208,17 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    marginBottom: 10,
-    marginTop: 25,
+    marginBottom: 15,
+    marginTop: 0,
   },
   headerKpiTitle: {
-    color: theme.accentLight,
+    color: theme.blue1,
     fontWeight: '500',
     fontSize: 11,
   },
   headerKpiValue: {
     fontSize: 26,
-    color: theme.accentLight,
+    color: theme.blue1,
     fontWeight: '400'
   },
   loader: {
@@ -241,6 +254,7 @@ const mapDispatchToProps = { openLightBox, fetchUserImages };
 
 const mapStateToProps = state => ({
   images: getUserImages(state),
+  profilePicture: getUserPicture(state),
   isLoading: isLoadingUserImages(state),
   totalSimas: getTotalSimas(state),
   totalVotes: getTotalVotesForUser(state),
