@@ -1,5 +1,6 @@
 import api from '../services/api';
 import {createRequestActionTypes} from '.';
+import staticMarkers from '../data/markers';
 
 const SET_MARKER_LIST = 'SET_MARKER_LIST';
 const {
@@ -13,10 +14,10 @@ const fetchMarkers = () => {
     dispatch({ type: GET_MARKER_LIST_REQUEST });
 
     api.fetchModels('markers')
-      .then(events => {
+      .then(markers => {
         dispatch({
           type: SET_MARKER_LIST,
-          payload: events
+          payload: staticMarkers // markers
         });
         dispatch({ type: GET_MARKER_LIST_SUCCESS });
       })
