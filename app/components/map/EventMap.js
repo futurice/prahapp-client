@@ -10,6 +10,7 @@ import {
   Image,
   Text,
   FlatList,
+  ScrollView,
   TouchableHighlight,
   TouchableOpacity
 } from 'react-native';
@@ -50,8 +51,8 @@ const CITY_COORDS = {
     longitude: 24.827895
   },
   prague: {
-    latitude: 50.0718166,
-    longitude: 14.401159
+    latitude: 50.093277,
+    longitude: 14.4376183
   }
 };
 const { width } = Dimensions.get('window');
@@ -87,8 +88,8 @@ class EventMap extends Component {
 
   getCityRegion(city) {
     const deltaSettings = {
-      latitudeDelta: 0.2,
-      longitudeDelta: 0.2
+      latitudeDelta: 0.075,
+      longitudeDelta: 0.075
     };
    const cityCoords = this.getCityCoords(city);
    return Object.assign(deltaSettings, cityCoords);
@@ -177,11 +178,11 @@ class EventMap extends Component {
       <View style={styles.customCallout}>
         <View style={styles.callout}>
           <View style={styles.calloutImageWrap}>
-            {location.get('image')
+            {location.get('imageUrl')
               ?
               <Image
                 style={styles.calloutImage}
-                source={{ uri: location.get('image') }}
+                source={{ uri: location.get('imageUrl') }}
               />
               :
               <MDIcon
@@ -207,9 +208,11 @@ class EventMap extends Component {
           {location.get('title')}
         </Text>
 
-        <Text style={styles.calloutInfo}>
-          {location.get('subtitle')}
-        </Text>
+        <ScrollView>
+          <Text style={styles.calloutInfo}>
+            {location.get('description')}
+          </Text>
+        </ScrollView>
       </View>);
   }
 
@@ -221,9 +224,11 @@ class EventMap extends Component {
         </Text>
       </View>
 
-      <Text style={styles.calloutInfo}>
-        {!!location && location.get('subtitle')}
-      </Text>
+      <ScrollView>
+        <Text style={styles.calloutInfo}>
+          {!!location && location.get('description')}
+        </Text>
+      </ScrollView>
     </View>;
   }
 
@@ -445,7 +450,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 10,
     bottom: IOS ? 58 : 0,
-    height: 110,
+    height: 150,
     backgroundColor: theme.white,
     borderRadius: 3,
     elevation: 2,
@@ -469,8 +474,8 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   calloutImageWrap: {
-    width: 100,
-    height: 110,
+    width: 120,
+    height: 150,
     backgroundColor: theme.yellow,
     justifyContent: 'center',
     alignItems: 'center',
@@ -480,13 +485,14 @@ const styles = StyleSheet.create({
     color: theme.blue1
   },
   calloutImage: {
-    width: 100,
-    height: 110,
+    width: 120,
+    height: 150,
     backgroundColor: theme.grey1,
   },
   calloutContent: {
     flex: 1,
     padding: 15,
+    paddingBottom: 10,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     flexDirection: 'column',
