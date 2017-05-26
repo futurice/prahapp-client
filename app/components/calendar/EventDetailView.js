@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   },
   detailEventInfoIcon: {
     fontSize:25,
-    color:theme.secondary,
+    color:theme.blue1,
     marginTop:1,
     paddingRight:23,
     marginLeft:7,
@@ -160,12 +160,12 @@ const styles = StyleSheet.create({
     paddingRight:20,
   },
   gridListItemIcon:{
-    color: theme.secondary,
+    color: theme.blue1,
     fontSize: 24,
     top:2
   },
   gridListItemIconImage:{
-    tintColor: theme.secondary,
+    tintColor: theme.blue1,
     width: 26,
     height: 26,
     top:2
@@ -399,23 +399,23 @@ const EventDetail = React.createClass({
       <ParallaxView
           backgroundSource={coverImage ? {uri: coverImage} : placholderImage}
           windowHeight={300}
-          style={{backgroundColor:'#eee'}}
+          style={{backgroundColor: theme.yellow}}
           header={(
             <View style={{ flex:1, elevation: 3 }}>
               <LinearGradient
                 locations={[0,0.6,0.9]}
-                colors={['transparent', 'rgba(0,0,0,.1)', 'rgba(40,10,5,.5)']}
+                colors={['transparent', 'rgba(0,0,0,.1)', 'rgba(0,58,111,.4)']}
                 style={styles.gridListItemImgColorLayer}>
                 <Text style={styles.header}>
                     {model.name}
                 </Text>
-                {!IOS && this.renderCheckinButton()}
+                {/*!IOS && this.renderCheckinButton()*/}
               </LinearGradient>
             </View>
           )}
       >
         <View style={styles.eventContent}>
-          {IOS && this.renderCheckinButton()}
+          {/* IOS && this.renderCheckinButton() */}
           <View style={styles.gridListItemMetaWrap}>
 
             <View style={styles.gridListItemMeta}>

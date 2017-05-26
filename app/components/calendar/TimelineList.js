@@ -72,13 +72,13 @@ const styles = StyleSheet.create({
   },
   sectionHeaderAnnouncementText:{
     backgroundColor: 'transparent',
-    color: theme.secondary
+    color: theme.primary
   },
   sectionHeaderText: {
     textAlign: 'left',
-    fontWeight: IOS ? 'bold' : 'bold',
+    fontWeight: 'bold',
     fontSize: IOS ? 18 : 16,
-    color: IOS ? theme.secondary : theme.secondary
+    color: theme.primary
   }
 });
 

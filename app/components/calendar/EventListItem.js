@@ -33,8 +33,8 @@ const styles = StyleSheet.create({
     height: 200
   },
   gridListItemImgColorLayer: {
-    backgroundColor: '#444',
-    opacity: 0.6,
+    backgroundColor: theme.blue2,
+    opacity: 0.4,
     position: 'absolute',
     left: 0, top: 0, bottom: 0, right: 0
   },
@@ -46,11 +46,11 @@ const styles = StyleSheet.create({
     padding: 20
   },
   gridListItemTitle: {
-    fontSize: 23,
+    fontSize: 22,
     lineHeight:26,
     fontWeight: 'bold',
     textAlign: 'left',
-    color: theme.light,
+    color: theme.white,
     paddingBottom:10
   },
 
@@ -59,15 +59,15 @@ const styles = StyleSheet.create({
   },
   gridListItemPlace: {
     fontSize: 15,
-    color: '#ddd'
+    color: theme.white
   },
   gridListItemDistance: {
-    color:'#ddd',
+    color: theme.white,
     fontSize:14,
   },
   gridListItemTime: {
     fontSize: 15,
-    color: theme.accent,
+    color: theme.yellow,
     fontWeight: 'bold',
   },
   gridListItemIconsWrapper__left:{
