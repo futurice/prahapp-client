@@ -94,7 +94,7 @@ class Navigation extends Component {
         </MDIcon.TabBarItemIOS>*/}
         <MDIcon.TabBarItemIOS
           iconName='account-circle'
-          title={'You'}
+          title={'Info'}
           selected={currentTab === Tabs.SETTINGS}
           onPress={() => { this.onChangeTab(Tabs.SETTINGS); }}>
           <SettingsView navigator={navigator} />
