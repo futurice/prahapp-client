@@ -285,7 +285,10 @@ class Profile extends Component {
         <View style={linkItemStyles}>
           <View style={styles.listItem}>
             <Icon style={styles.listItemIcon} name={item.icon} />
-            <Text style={styles.listItemText}>{item.title}</Text>
+            <View style={styles.listItemTitles}>
+              <Text style={styles.listItemText}>{item.title}</Text>
+              {item.subtitle && <Text style={styles.listItemSubtitle}>{item.subtitle}</Text>}
+            </View>
             {!item.separatorAfter && !item.last && <View style={styles.listItemBottomLine} />}
           </View>
         </View>

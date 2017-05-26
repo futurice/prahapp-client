@@ -4,14 +4,12 @@ import TermsView from '../components/terms/Terms';
 const ROOT_URL = 'https://wappu.futurice.com';
 
 const links = [
-  {title: 'My Prague Log', icon:'person-outline', component: UserView, subtitle: 'All photos', separatorAfter: true },
-  {title: 'Fuksi Survival Kit', showCity: 'tampere', link: `https://ttyy.fi/me-ollaan-teekkareita/teekkarikulttuuri/wappu/fuksi-survival-kit/`, icon: 'local-hospital', showInWebview: true},
+  {title: 'My Prague Memories', icon:'person-outline', component: UserView, subtitle: 'All photos during trip' },
+  {title: 'Flight info', subtitle: 'When does my flight leave?', link: `https://docs.google.com/spreadsheets/u/1/d/1UqjyQCf7EPOekbC-59A9CSshDydilf_D8D2y2hMYq_Y/edit?usp=gmail#gid=1369902543`, icon: 'flight'},
+  {title: 'Airport transportation', subtitle: 'How to get to hotel?', link: `https://docs.google.com/spreadsheets/d/15wcfhNatqr3E6KZo7NG7DgCn6O4XCJ_YU3vgK2JJOws/edit#gid=0`, icon: 'directions-bus', separatorAfter: true},
+
   {title: 'Feedback', mailto: 'wappu@futurice.com', icon: 'send'},
-  {title: 'Source Code', link: `https://github.com/futurice/wappuapp-client`, icon: 'code', showInWebview: false},
-  {title: 'from Tammerforce', showCity: 'tampere', link: `https://tammerforce.com?utm_source=wappuapp&utm_medium=app&utm_campaign=wappu2017`, icon: 'favorite-border', showInWebview: false},
-  {title: 'Wanna work at Futurice?',
-    link: 'https://futurice.com/careers?utm_source=wappuapp&utm_medium=app&utm_campaign=wappu2017',
-    icon: 'star', separatorAfter: true}
+
 ];
 
 const terms = [
