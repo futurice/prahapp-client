@@ -57,7 +57,7 @@ const getMapMarkers = createSelector(
   getMarkers, getSelectedCategory,
   (markers, categoryFilter) => {
     const validMarkers = markers
-      .filter(marker => categoryFilter === 'ALL' || marker.get('type') === categoryFilter)
+      .filter(marker => categoryFilter === 'ALL' || marker.get('type') === categoryFilter || marker.get('type') === 'HOTEL')
       .filter(marker => marker.has('location'));
 
     return validMarkers;

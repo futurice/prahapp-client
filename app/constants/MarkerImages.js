@@ -6,6 +6,7 @@ export default {
   STORE: require('../../assets/marker__shop.png'),
   ALKO: require('../../assets/marker__wine.png'),
   DEFAULT: require('../../assets/marker__plain.png'),
+  SELECTED: require('../../assets/marker__selected.png'),
 };
 
 // https://material.io/icons/

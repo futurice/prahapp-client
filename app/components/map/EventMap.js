@@ -354,15 +354,22 @@ class EventMap extends Component {
     )
   }
 
+  getMarker(marker, selectedMarker) {
+    if (marker && marker.type === 'HOTEL') {
+      return MARKER_IMAGES['EVENT']
+    }
+    return MARKER_IMAGES[selectedMarker && marker.title === selectedMarker.get('title') ? 'SELECTED' : 'DEFAULT']
+  }
+
   render() {
     const { mapMarkers, firstFutureEvent, selectedMarker } = this.props;
     const markersJS = mapMarkers.toJS();
 
     const markers = markersJS.map((location, i) => {
       return <MapView.Marker
-        centerOffset={{x: 0, y: location.type === 'EVENT' ? 0 : 0}}
-        anchor={{x: 0.5, y: location.type === 'EVENT' ? 0.5 : 0.5}}
-        image={MARKER_IMAGES[location.type === 'EVENT' ? 'EVENT' : 'DEFAULT']}
+        centerOffset={{x: 0, y: location.type === 'HOTEL' ? -10 : 0}}
+        anchor={{x: 0.5, y: location.type === 'HOTEL' ? 0.9 : 0.5}}
+        image={this.getMarker(location, selectedMarker)}
         key={i}
         coordinate={location.location}
         onPress={() => this.onSelectMarker(location)}
