@@ -5,16 +5,7 @@ import moment from 'moment';
 
 import api from '../services/api';
 import { createRequestActionTypes } from '../actions';;
-import { getAllPostsInStore } from '../reducers/feed';;
-
-const DUMMY_COMMENTS = fromJS([
-  { text: 'Hello', author: { name: 'James Bruce' }, createdAt: moment().subtract(1, 'week').toISOString() },
-  { text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua', author: { name: 'John Bar', img: 'https://lh6.googleusercontent.com/-7wsIj22-QV0/AAAAAAAAAAI/AAAAAAAAADg/mV5k6mK_ADs/photo.jpg' }, createdAt: moment().subtract(1, 'week').toISOString() },
-  { text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua', author: { name: 'John Bar' }, createdAt: moment().subtract(1, 'week').toISOString() },
-  { text: 'sry @JaakkoH tää jääny huomiotta - ehottomasti mielestäni OK, jos haluat ni voiaan porukalla sanity checkata että ei tuu mitään liian yksityistä tietoa julki mutta varmaan osaat itekin ton arvioida?', author: { name: 'MiroN', img: 'https://d2cxspbh1aoie1.cloudfront.net/avatars/e0ade99c12d8e10c4d46b6b73e6dfee4/72' }, createdAt: moment().subtract(4, 'days').toISOString() },
-  { text: 'joo ei mitään, en sit itsekään pingaillut tästä sen enempää. Mä arvioin itse ja laitoin tosta käytännössä ton ylempänä postaaman version ihan suoraan tuolla vanhalla datalla, nappasin siitä siis vaan bonuspisteet kotiin "edistyneestä datavisualisaatiosta', author: { name: 'JaakkoH', img: 'https://d2cxspbh1aoie1.cloudfront.net/avatars/local/1f5165d96f74095ff2b216814a81c8b6b1d9a003e97a7dc8f63ef798a07d8bc3/72' }, createdAt: moment().subtract(3, 'days').toISOString() },
-  { text: 'tee ihmeessä blogipostiks asti jos sulla on yhtään kaistaa - ainakin se visualisaatio oli tosi mielenkiintone jo pikavilkasulla. tunnit vaan whappuapp-projektille', author: { name: 'MiroN', img: 'https://d2cxspbh1aoie1.cloudfront.net/avatars/e0ade99c12d8e10c4d46b6b73e6dfee4/72' }, createdAt: moment().subtract(2, 'hours').toISOString() },
-]);
+import { getAllPostsInStore } from '../reducers/feed';
 
 // # Selectors
 export const getComments = state => state.comments.get('comments', List([]));
