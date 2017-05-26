@@ -118,13 +118,13 @@ var styles = StyleSheet.create({
     alignItems:'center'
   },
   navBarButton:{
-    color: theme.white,
+    color: theme.blue2,
     padding:10,
     fontSize:16,
     textAlign:'center',
   },
   navBarIcon:{
-    color: theme.white,
+    color: theme.blue2,
     padding:6,
     paddingLeft:10,
     paddingRight:10,
@@ -140,7 +140,7 @@ var styles = StyleSheet.create({
   navBarTitle:{
     padding:10,
     fontSize:16,
-    color: theme.white,
+    color: theme.blue2,
     textAlign:'center',
     fontWeight:'bold',
   }
