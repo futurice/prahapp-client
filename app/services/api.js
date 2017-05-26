@@ -32,6 +32,19 @@ const fetchMoreFeed = (beforeId, params) => {
   return cachedFetch(url);
 };
 
+const fetchComments = (postId, params) => {
+  let url = Endpoints.urls.feedItem(postId);
+
+  if (!isEmpty(params) && isObject(params)) {
+    url += '?' + Object.keys(params).map(k => {
+      return params[k] ? (encodeURIComponent(k) + '=' + encodeURIComponent(params[k])) : ''
+    }).join('&');
+  }
+
+  return cachedFetch(url);
+};
+
+
 const postAction = (params, location, queryParams) => {
   let payload = Object.assign({}, params, { user: DeviceInfo.getUniqueID() });
 
@@ -208,7 +221,9 @@ export default {
   voteFeedItem,
   fetchModels,
   fetchMoreFeed,
+  fetchComments,
   postAction,
+  postComment,
   putUser,
   putMood,
   getUser,

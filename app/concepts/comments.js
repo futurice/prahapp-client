@@ -56,8 +56,8 @@ export const editComment = payload => ({ type: EDIT_COMMENT, payload })
 
 export const fetchPostComments = (postId) => (dispatch) => {
   dispatch({ type: GET_COMMENTS_REQUEST });
-  return api.getUserProfile(postId)
-    .then(comments => {
+  return api.fetchComments(postId)
+    .then(({ comments }) => {
       dispatch({
         type: SET_COMMENTS,
         payload: { comments, postId }
@@ -67,30 +67,35 @@ export const fetchPostComments = (postId) => (dispatch) => {
     .catch(error => dispatch({ type: GET_COMMENTS_FAILURE, error: true, payload: error }));
 }
 
-export const postComment = (comment) => (dispatch, getState) => {
+export const postComment = (text) => (dispatch, getState) => {
   const state = getState();
-  const postId = getCommentItemId(state);
+  const feedItemId = getCommentItemId(state);
+  const payload = { text, feedItemId, type: 'COMMENT' };
 
   dispatch({ type: POST_COMMENT_REQUEST });
-  // return api.postComment(postId, comment)
-  return Promise.resolve(dispatch({ type: POST_COMMENT_REQUEST }))
+  return api.postAction(payload)
     .then(response => {
-      dispatch({
-        type: ADD_COMMENT,
-        payload: { text: comment, author: { name: 'James Bruce' }, createdAt: moment().toISOString() },
-        // payload: response
+
+      // Fetch all comments to get latest comments
+      // This is also good because we don't have any refersh mechanism
+      Promise.resolve(
+        dispatch(fetchPostComments(feedItemId))
+      ).then(() => {
+        dispatch({ type: POST_COMMENT_SUCCESS });
       });
-      dispatch({ type: POST_COMMENT_SUCCESS });
     })
     .catch(error => dispatch({ type: POST_COMMENT_FAILURE, error: true, payload: error }));
 }
 
-export const openComments = (id) => ({ type: OPEN_COMMENTS, payload: id });
+export const openComments = (id) => (dispatch) => {
+  dispatch(fetchPostComments(id));
+  return dispatch({ type: OPEN_COMMENTS, payload: id })
+}
 export const closeComments = () => ({ type: CLOSE_COMMENTS });
 
 // # Reducer
 const initialState = fromJS({
-  comments: DUMMY_COMMENTS,
+  comments: [],
   editComment: null,
   isOpen: false,
   isLoading: false,
@@ -104,10 +109,10 @@ export default function comments(state = initialState, action) {
       return state.merge({ postId: action.payload, isOpen: true });
 
     case CLOSE_COMMENTS:
-      return state.merge({ postId: null, isOpen: false });
+      return state.merge({ comments: [], postId: null, isOpen: false });
 
     case SET_COMMENTS: {
-      return state.setIn('comments', fromJS(action.payload.comments));
+      return state.set('comments', fromJS(action.payload.comments));
     }
 
     case ADD_COMMENT: {
