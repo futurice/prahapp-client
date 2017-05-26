@@ -53,11 +53,7 @@ class CommentForm extends Component {
     const { text, loadingCommentPost } = this.props;
 
     return (
-      <View
-        behavior={IOS ? 'position' : 'height'}
-        keyboardVerticalOffset={IOS ? 0 : 30}
-        style={styles.itemWrapper}
-      >
+      <View style={styles.itemWrapper}>
         <View style={styles.inputContainer}>
           <TextInput
             autoFocus={false}
@@ -92,7 +88,7 @@ const styles = StyleSheet.create({
   itemWrapper: {
     width,
     height: 52,
-    position: 'absolute',
+    position: 'relative',
     bottom: 0,
     left: 0,
     right: 0,
@@ -130,7 +126,7 @@ const styles = StyleSheet.create({
   },
   sendButtonIcon: {
     backgroundColor: theme.transparent,
-    color: theme.blue1,
+    color: theme.blue2,
     fontSize: 25,
   }
 });

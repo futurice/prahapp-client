@@ -24,27 +24,25 @@ import CommentForm from './CommentForm';
 const { width, height } = Dimensions.get('window');
 const IOS = Platform.OS === 'ios';
 
-const Comment = props => {
-  const { item } = props;
+const Comment = ({ item }) => {
   const ago = time.getTimeAgo(item.get('createdAt'));
-  const avatarUrl = item.getIn(['author', 'img']);
+  const profilePicture = item.get('profilePicture');
 
   return (
     <View style={styles.comment}>
         <View style={styles.commentContent}>
           <View style={styles.commentAvatarCol}>
             <View style={styles.commentAvatar}>
-              {avatarUrl
-                ? <Image source={{ uri: avatarUrl }} style={styles.commentAvatarImage} />
+              {profilePicture
+                ? <Image source={{ uri: profilePicture }} style={styles.commentAvatarImage} />
                 : <Icon name="person" style={styles.commentAvatarIcon} />
-                /*<Image source={ICONS.PERSON} style={styles.commentAvatarIcon} />*/
               }
             </View>
           </View>
 
           <View style={styles.commentTextContent}>
             <Text style={styles.commentText}>
-              <Text style={styles.commentAuthor}>{item.getIn(['author', 'name'])} </Text>
+              <Text style={styles.commentAuthor}>{item.get('userName')} </Text>
               {item.get('text')}
             </Text>
 
@@ -86,22 +84,27 @@ class CommentList extends Component {
         style={styles.commentList}
       >
         <View style={styles.commentView}>
-          <ScrollView
-            style={styles.scrollView}
-            ref={ref => this.commentScrollView = ref}
-            onContentSizeChange={(contentWidth, contentHeight) => {
-              this.commentScrollView.scrollToEnd({ animated: false });
-            }}
-          >
-            {comments.map((comment, index) => <Comment key={index} item={comment} />)}
-          </ScrollView>
-          <CommentForm
-            postComment={this.postComment}
-            editComment={editComment}
-            text={editCommentText}
-            postCommentCallback={this.scrollBottom}
-            loadingCommentPost={loadingCommentPost}
-          />
+          <View style={styles.commentScroll}>
+            <ScrollView
+              style={styles.scrollView}
+              ref={ref => this.commentScrollView = ref}
+              onContentSizeChange={(contentWidth, contentHeight) => {
+                this.commentScrollView.scrollToEnd({ animated: false });
+              }}
+            >
+              {comments.map((comment, index) => <Comment key={index} item={comment} />)}
+            </ScrollView>
+          </View>
+
+          <View style={styles.commentForm}>
+            <CommentForm
+              postComment={this.postComment}
+              editComment={editComment}
+              text={editCommentText}
+              postCommentCallback={this.scrollBottom}
+              loadingCommentPost={loadingCommentPost}
+            />
+          </View>
         </View>
       </KeyboardAvoidingView>
     )
@@ -110,22 +113,36 @@ class CommentList extends Component {
 
 
 const styles = StyleSheet.create({
+
+  // # <CommentList />
   commentList: {
     flex: 1,
-    paddingBottom: 0,
+    flexGrow: 1,
     backgroundColor: theme.white,
   },
   commentView: {
     paddingBottom: 52,
-  },
-  itemWrapper: {
-    width,
-    flex: 1,
+    minHeight: height - 56,
+    flexGrow: 1,
     backgroundColor: theme.white,
-    paddingBottom: 10,
-    paddingTop: 0,
+    justifyContent: 'space-between',
+  },
+  commentScroll: {
+    // flex: 1,
+    alignItems: 'stretch',
+    flexGrow: 1,
+    backgroundColor: theme.white,
+  },
+  commentForm: {
+    height: 52,
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
 
+
+  // # <Comment />
   comment:{
     flex: 1,
     flexDirection: 'column',
