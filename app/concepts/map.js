@@ -54,24 +54,15 @@ const getFirstFutureEvent = createSelector(
 )
 
 const getMapMarkers = createSelector(
-  getEvents, getMarkers, getShowFilter, getSelectedCategory, getFirstFutureEvent,
-  (events, markers, showFilter, categoryFilter, firstFutureEvent) => {
-
-    const validEvents = events
-      .filter(event => {
-        const hasLocation = !!event.getIn(['location', 'latitude']) && !!event.getIn(['location', 'longitude']);
-        return hasLocation && isEventBetweenSelectedTime(event, firstFutureEvent, showFilter);
-      })
-      .map(event => event.set('type', 'EVENT'));
-
+  getMarkers, getSelectedCategory,
+  (markers, categoryFilter) => {
     const validMarkers = markers
       .filter(marker => categoryFilter === 'ALL' || marker.get('type') === categoryFilter)
       .filter(marker => marker.has('location'));
 
-    let mapMarkers = validEvents.concat(validMarkers);
-
-    // Filter markers which do not have correct type
-    return mapMarkers.filter(marker => has(MarkerImages, marker.get('type')));
+    return validMarkers;
+    // Filter markers which have correct type
+    // return validMarkers.filter(marker => has(MarkerImages, marker.get('type')));
 });
 
 const getMapMarkersCoords = createSelector(getMapMarkers, markers => {
