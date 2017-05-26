@@ -1,6 +1,7 @@
 import api from '../services/api';
 import {createRequestActionTypes} from '.';
 import { getCityId } from '../concepts/city';
+import staticEvents from '../data/events';
 
 const SET_EVENT_LIST = 'SET_EVENT_LIST';
 const SET_EVENT_IMAGES = 'SET_EVENT_IMAGES';
@@ -31,7 +32,7 @@ const fetchEvents = () => (dispatch, getState) => {
   .then(events => {
     dispatch({
       type: SET_EVENT_LIST,
-      payload: events
+      payload: staticEvents // events
     });
     dispatch({ type: GET_EVENT_LIST_SUCCESS });
   })
