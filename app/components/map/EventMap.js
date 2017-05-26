@@ -178,11 +178,11 @@ class EventMap extends Component {
       <View style={styles.customCallout}>
         <View style={styles.callout}>
           <View style={styles.calloutImageWrap}>
-            {location.get('imageUrl')
+            {location.get('imageUrl', location.get('image_url'))
               ?
               <Image
                 style={styles.calloutImage}
-                source={{ uri: location.get('imageUrl') }}
+                source={{ uri: location.get('imageUrl', location.get('image_url')) }}
               />
               :
               <MDIcon
@@ -210,7 +210,7 @@ class EventMap extends Component {
 
         <ScrollView>
           <Text style={styles.calloutInfo}>
-            {location.get('description')}
+            {location.get('subtitle')}
           </Text>
         </ScrollView>
       </View>);
@@ -226,7 +226,7 @@ class EventMap extends Component {
 
       <ScrollView>
         <Text style={styles.calloutInfo}>
-          {!!location && location.get('description')}
+          {!!location && location.get('subtitle')}
         </Text>
       </ScrollView>
     </View>;
@@ -627,7 +627,7 @@ const styles = StyleSheet.create({
   },
   markerFilterButton: {
     height: 52,
-    paddingHorizontal: 30,
+    paddingHorizontal: 20,
     justifyContent: 'center',
     alignItems: 'stretch',
     paddingTop: 4,
