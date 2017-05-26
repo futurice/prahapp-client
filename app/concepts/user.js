@@ -8,6 +8,7 @@ import { VOTE_FEED_ITEM_REQUEST } from '../actions/feed';
 
 // # Selectors
 export const getUserImages = state => state.user.getIn(['profile', 'images'], List()) || List();
+export const getUserPicture = state => state.user.getIn(['profile', 'profilePicture'], '');
 export const getUserTeam = state => state.user.getIn(['profile', 'team'], List()) || List();
 export const getTotalSimas = state => state.user.getIn(['profile', 'numSimas'], '') || '';
 export const getSelectedUser = state => state.user.get('selectedUser', Map()) || Map();
@@ -37,6 +38,7 @@ export const fetchUserImages = (userId) => (dispatch) => {
   dispatch({ type: GET_USER_PROFILE_REQUEST });
   return api.getUserProfile(userId)
     .then(images => {
+      console.log(images);
       dispatch({
         type: SET_USER_PROFILE,
         payload: images
