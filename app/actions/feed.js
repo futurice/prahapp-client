@@ -31,10 +31,6 @@ const fetchFeed = () => (dispatch, getState) => {
   const cityId = getCityId(getState());
   const sort = getFeedSortType(getState());
 
-  if (!cityId) {
-    return;
-  }
-
   dispatch({ type: GET_FEED_REQUEST });
   return api.fetchModels('feed', { cityId, sort })
   .then(items => {
