@@ -65,10 +65,11 @@ class LightBox extends Component {
   }
 
   parseUrl(url) {
-    const urlParts = url.split('/');
-    const imageId = urlParts[urlParts.length - 1];
+    return url;
+    // const urlParts = url.split('/');
+    // const imageId = urlParts[urlParts.length - 1];
 
-    return 'https://wappu.futurice.com/i/' + imageId;
+    // return 'https://wappu.futurice.com/i/' + imageId;
   }
 
   onShare(imgUrl) {

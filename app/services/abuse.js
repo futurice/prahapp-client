@@ -6,10 +6,11 @@ const ABUSE_EMAIL_SUBJECT = 'Whappu Flagged Content';
 
 // item.type === 'IMAGE', item.url
 function parseUrl(url) {
-  const urlParts = url.split('/');
-  const imageId = urlParts[urlParts.length - 1];
+  return url;
+//   const urlParts = url.split('/');
+//   const imageId = urlParts[urlParts.length - 1];
 
-  return 'https://wappu.futurice.com/i/' + imageId;
+//   return 'https://wappu.futurice.com/i/' + imageId;
 }
 
 // Reports feed item via email
