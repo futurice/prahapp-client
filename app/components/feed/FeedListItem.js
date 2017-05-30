@@ -85,8 +85,8 @@ const styles = StyleSheet.create({
   itemTextWrapper: {
     paddingLeft: 30,
     paddingRight: 30,
-    paddingTop: 16,
-    paddingBottom: 12,
+    paddingTop: 18,
+    paddingBottom: 4,
     top: -10,
   },
   feedItemListText: {
