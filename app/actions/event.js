@@ -28,11 +28,11 @@ const fetchEvents = () => (dispatch, getState) => {
   }
 
   dispatch({ type: GET_EVENT_LIST_REQUEST });
-  return api.fetchModels('events', { cityId, showPast: true })
+  return api.fetchModels('events', { showPast: true })
   .then(events => {
     dispatch({
       type: SET_EVENT_LIST,
-      payload: staticEvents // events
+      payload: events
     });
     dispatch({ type: GET_EVENT_LIST_SUCCESS });
   })
