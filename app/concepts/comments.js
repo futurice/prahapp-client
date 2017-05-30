@@ -6,6 +6,7 @@ import moment from 'moment';
 import api from '../services/api';
 import { createRequestActionTypes } from '../actions';;
 import { getAllPostsInStore } from '../reducers/feed';
+import ActionTypes from '../constants/ActionTypes';
 
 // # Selectors
 export const getComments = state => state.comments.get('comments', List([]));
@@ -70,12 +71,11 @@ export const fetchPostComments = (postId) => (dispatch) => {
 export const postComment = (text) => (dispatch, getState) => {
   const state = getState();
   const feedItemId = getCommentItemId(state);
-  const payload = { text, feedItemId, type: 'COMMENT' };
+  const payload = { text, feedItemId, type: ActionTypes.COMMENT };
 
   dispatch({ type: POST_COMMENT_REQUEST });
   return api.postAction(payload)
     .then(response => {
-
       // Fetch all comments to get latest comments
       // This is also good because we don't have any refersh mechanism
       Promise.resolve(
