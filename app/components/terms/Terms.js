@@ -11,13 +11,13 @@ class Terms extends Component {
   render() {
 
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor: theme.yellow }}>
       {!isIOS && <Header backgroundColor={theme.secondary} title="Terms of Service" navigator={this.props.navigator} />}
       <ScrollView style={styles.container}>
         <View style={styles.content}>
         <Text style={styles.paragraph}><Text style={styles.bold}>Terms and Conditions ("Terms")</Text></Text>
-        <Text style={styles.paragraph}>Last updated: March 27, 2017</Text>
-        <Text style={styles.paragraph}>Please read these Terms and Conditions ("Terms", "Terms and Conditions") carefully before using the Whappu mobile application and wappu.futurice.com site (the "Service") operated by Futurice Oy ("us", "we", or "our").</Text>
+        <Text style={styles.paragraph}>Last updated: May 27, 2017</Text>
+        <Text style={styles.paragraph}>Please read these Terms and Conditions ("Terms", "Terms and Conditions") carefully before using the Prahapp mobile application and wappu.futurice.com site (the "Service") operated by Futurice Oy ("us", "we", or "our").</Text>
         <Text style={styles.paragraph}>Your access to and use of the Service is conditioned on your acceptance of and compliance with these Terms. These Terms apply to all visitors, users and others who access or use the Service.</Text>
         <Text style={styles.paragraph}>By accessing or using the Service you agree to be bound by these Terms. If you disagree with any part of the terms then you may not access the Service.</Text>
 
@@ -78,7 +78,7 @@ class Terms extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.white
+    backgroundColor: theme.yellow
   },
   content: {
     padding: isIOS ? 10 : 20,
@@ -92,6 +92,8 @@ const styles = StyleSheet.create({
     color: theme.dark
   },
   bold: {
+    color: theme.blue2,
+    fontSize: 15,
     fontWeight: 'bold'
   }
 });
