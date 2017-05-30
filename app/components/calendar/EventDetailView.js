@@ -444,7 +444,7 @@ const EventDetail = React.createClass({
             </TouchableHighlight>
 
 
-            { currentDistance !== '' && currentDistance &&
+            {currentDistance !== '' && currentDistance &&
             <View style={styles.gridListItemMeta}>
               <View style={styles.gridListItemMeta__block}>
                 <Text style={styles.gridListItemLeftIcon}><MaterialIcon style={styles.gridListItemIcon} name='redo'/> </Text>
@@ -486,11 +486,11 @@ const EventDetail = React.createClass({
           <View style={styles.content}>
             <Text style={styles.detailEventDescription}>{model.description}</Text>
           </View>
-          {!!eventGeoUrl &&
+          {/*!!eventGeoUrl &&
           <View style={styles.navigationButtonWrapper}>
             <Button onPress={() => Linking.openURL(eventGeoUrl)}>Get me there!</Button>
           </View>
-          }
+          */}
 
           {this.props.images.size > 0 &&
             <View>
