@@ -1,6 +1,6 @@
 'use strict';
 
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
 
 import {
   View,
@@ -18,21 +18,18 @@ import autobind from 'autobind-decorator';
 
 import Button from '../../components/common/Button';
 import theme from '../../style/theme';
-// import Modal from 'react-native-modalbox';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
-import * as CompetitionActions from '../../actions/competition';
+import {
+  postText,
+  closeTextActionView
+} from '../../actions/competition';
+
 const IOS = Platform.OS === 'ios';
 
 const { width, height } = Dimensions.get('window');
 
-
 class TextActionView extends Component {
-  propTypes: {
-    dispatch: PropTypes.func.isRequired,
-    isTextActionViewOpen: PropTypes.bool.isRequired
-  }
-
   constructor(props) {
     super(props);
     this.state = {
@@ -42,9 +39,17 @@ class TextActionView extends Component {
     }
   }
 
+  componentWillReceiveProps({ isTextActionViewOpen }) {
+    // when opening again
+    if (isTextActionViewOpen && !this.props.isTextActionViewOpen){
+      this.hideOK();
+      this.setState({text: ''});
+    }
+  }
+
   showOK() {
-    Animated.spring(this.state.okAnimation, {toValue:1, duration:250}).start();
-    Animated.timing(this.state.formAnimation, {toValue:0, duration:100}).start();
+    Animated.spring(this.state.okAnimation, { toValue:1, duration:250 }).start();
+    Animated.timing(this.state.formAnimation, { toValue:0, duration:100 }).start();
   }
 
   hideOK() {
@@ -58,31 +63,30 @@ class TextActionView extends Component {
   }
 
   @autobind
-  onCancel() {
+  onClose() {
     this.setState({text: ''});
-    this.props.dispatch(CompetitionActions.closeTextActionView());
+    this.props.closeTextActionView();
   }
 
   @autobind
   onSendText() {
 
     if (!this.state.text.length) {
-      this.onCancel();
+      this.onClose();
       return;
     }
 
-    this.showOK()
-    setTimeout(() => {
-      this.props.dispatch(CompetitionActions.postText(this.state.text));
-      this.setState({text: ''});
-      this.props.dispatch(CompetitionActions.closeTextActionView());
+    this.showOK();
+    this.props.postText(this.state.text);
 
-      // reset values for the next time
-      setTimeout(() => {
-        this.hideOK();
-      },100);
+    // setTimeout(() => {
+    //   reset values for the next time
+    //   this.hideOK();
+    // }, 100);
 
-    }, 600);
+    // setTimeout(() => {
+    //   this.onClose();
+    // }, 600);
 
   }
 
@@ -96,15 +100,15 @@ class TextActionView extends Component {
 
     return (
       <Modal
-        onRequestClose={this.onCancel}
+        onRequestClose={this.onClose}
         visible={isTextActionViewOpen}
         animationType={'slide'}
       >
         <View style={[styles.container, styles.modalBackgroundStyle]}>
 
-          <Animated.View style={[styles.okView, { opacity: this.state.okAnimation}]}>
+          <Animated.View style={[styles.okView, { opacity: this.state.okAnimation }]}>
             <Animated.View style={[styles.okWrap,
-              {opacity: this.state.okAnimation, transform:[{ scale: this.state.okAnimation }]}
+              { opacity: this.state.okAnimation, transform:[{ scale: this.state.okAnimation }] }
             ]}>
               <Icon name='done' style={styles.okSign} />
             </Animated.View>
@@ -152,7 +156,7 @@ class TextActionView extends Component {
 
             <View style={styles.bottomButtons}>
               <Button
-                onPress={this.onCancel}
+                onPress={this.onClose}
                 style={styles.cancelButton}>
                 Cancel
               </Button>
@@ -160,6 +164,7 @@ class TextActionView extends Component {
               <Button
                 onPress={this.onSendText}
                 style={styles.modalButton}
+                textStyle={{ color: theme.blue2 }}
                 isDisabled={!this.state.text}>
                 Post
               </Button>
@@ -221,19 +226,20 @@ const styles = StyleSheet.create({
     left: 0,
     padding: 20,
     paddingBottom: 0,
-    paddingLeft: 20,
-    paddingRight: 20,
+    paddingLeft: IOS ? 0 : 20,
+    paddingRight: IOS ? 0 : 20,
     borderTopWidth: IOS ? 0 : 1,
     borderTopColor:'rgba(0,0,0,.1)',
   },
   modalButton: {
     flex: 1,
-    marginLeft: 10,
+    marginLeft: 6,
+    backgroundColor: theme.yellow
   },
   cancelButton: {
     flex: 1,
-    marginRight: 10,
-    backgroundColor: '#999',
+    marginRight: 6,
+    backgroundColor: '#aaa',
   },
   modalBackgroundStyle: {
     backgroundColor: theme.blue2
@@ -261,7 +267,7 @@ const styles = StyleSheet.create({
   },
   okView: {
     position: 'absolute',
-    top: IOS ? height / 2 - 140 : 50,
+    top: IOS ? height / 2 - 170 : 50,
     left: 0,
     right: 0,
     alignItems: 'center',
@@ -271,17 +277,14 @@ const styles = StyleSheet.create({
   okWrap:{
     position: 'relative',
     overflow: 'visible',
-    borderWidth: 5,
-    borderColor: theme.light,
     paddingTop: 32,
-    borderRadius: 70,
     width: 140,
     height: 140,
     opacity: 0,
-    transform: [{scale: 0}]
+    transform: [{ scale: 0 }]
   },
   okSign:{
-    fontSize: 65,
+    fontSize: 105,
     color: theme.light,
     backgroundColor: 'transparent',
     textAlign: 'center',
@@ -295,10 +298,15 @@ const styles = StyleSheet.create({
   }
 });
 
-const select = store => {
-  return {
-    isTextActionViewOpen: store.competition.get('isTextActionViewOpen')
-  };
+
+const mapDispatchToProps = {
+  closeTextActionView,
+  postText
 };
 
-export default connect(select)(TextActionView);
+
+const select = store => ({
+  isTextActionViewOpen: store.competition.get('isTextActionViewOpen')
+})
+
+export default connect(select, mapDispatchToProps)(TextActionView);
