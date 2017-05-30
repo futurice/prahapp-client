@@ -30,45 +30,34 @@ const UPDATE_COOLDOWNS = 'UPDATE_COOLDOWNS';
 const SET_EDITABLE_IMAGE = 'SET_EDITABLE_IMAGE';
 const CLEAR_EDITABLE_IMAGE = 'CLEAR_EDITABLE_IMAGE';
 
-const openTextActionView = () => {
-  return { type: OPEN_TEXTACTION_VIEW };
-};
+const openTextActionView = () => ({ type: OPEN_TEXTACTION_VIEW });
 
-const closeTextActionView = () => {
-  return { type: CLOSE_TEXTACTION_VIEW };
-};
+const closeTextActionView = () => ({ type: CLOSE_TEXTACTION_VIEW });
 
-const openCheckInView = () => {
-  return { type : OPEN_CHECKIN_VIEW };
-};
+const openCheckInView = () => ({ type: OPEN_CHECKIN_VIEW });
 
-const closeCheckInView = () => {
-  return { type: CLOSE_CHECKIN_VIEW };
-};
+const closeCheckInView = () => ({ type: CLOSE_CHECKIN_VIEW });
 
 const _postAction = (payload) => {
   return (dispatch, getState) => {
     dispatch({ type: POST_ACTION_REQUEST });
 
     const state = getState();
-    const cityId = getCityId(state);
-    const queryParams = !isNil(cityId) ? { cityId } : {};
+    // const cityId = getCityId(state);
+    // const queryParams = !isNil(cityId) ? { cityId } : {};
 
-    return api.postAction(payload, state.location.get('currentLocation'), queryParams)
+    return api.postAction(payload, state.location.get('currentLocation'))
       .then(response => {
-         setTimeout(() => {
+        // Set feed sort to 'new' if posted image or text, otherwise just refresh
+        if ([ActionTypes.TEXT, ActionTypes.IMAGE].indexOf(payload.type) >= 0) {
+          dispatch(sortFeedChronological())
+        } else {
+          dispatch(refreshFeed());
+        }
 
-            // Set feed sort to 'new' if posted image or text, otherwise just refresh
-            if ([ActionTypes.TEXT, ActionTypes.IMAGE].indexOf(payload.type) >= 0) {
-              dispatch(sortFeedChronological())
-            } else {
-              dispatch(refreshFeed());
-            }
+        dispatch({ type: POST_ACTION_SUCCESS, payload: { type: payload.type } });
+        dispatch({ type: SHOW_NOTIFICATION, payload: NotificationMessages.getMessage(payload) });
 
-            dispatch({ type: POST_ACTION_SUCCESS, payload: { type: payload.type } });
-            dispatch({ type: SHOW_NOTIFICATION, payload: NotificationMessages.getMessage(payload) });
-
-         }, 1000);
 
         setTimeout(() => {
           dispatch({ type: HIDE_NOTIFICATION });
@@ -108,12 +97,18 @@ const postAction = type => {
   });
 };
 
-const postText = text => {
-  return _postAction({
-    type: ActionTypes.TEXT,
-    text: text
+const postText = text => (dispatch) =>
+  Promise.resolve(
+    dispatch(_postAction({
+      type: ActionTypes.TEXT,
+      text: text
+    }))
+  )
+  .then(() => {
+    setTimeout(() => {
+      dispatch(closeTextActionView())
+    }, 2000);
   });
-};
 
 const postImage = (image, imageText, imageTextPosition) => {
   const postObject = Object.assign({
