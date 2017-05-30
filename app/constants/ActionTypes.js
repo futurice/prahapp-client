@@ -4,4 +4,5 @@ export default {
   SIMA: 'SIMA',
   CHECK_IN_EVENT: 'CHECK_IN_EVENT',
   MOOD: 'MOOD',
+  COMMENT: 'COMMENT',
 };
