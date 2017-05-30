@@ -1,6 +1,6 @@
 import { fromJS } from 'immutable';
 import SortTypes from '../constants/SortTypes';
-import { fetchFeed } from '../actions/feed';
+import { fetchFeed, refreshFeed } from '../actions/feed';
 
 
 // # Action creators
@@ -9,7 +9,7 @@ export const setFeedSortType = (payload) => dispatch =>
   Promise.resolve(
     dispatch({ type: SET_FEED_SORT_TYPE, payload })
   )
-  .then(() => dispatch(fetchFeed()));
+  .then(() => dispatch(refreshFeed()));
 
 export const sortFeedChronological = () => setFeedSortType(SortTypes.SORT_NEW);
 
