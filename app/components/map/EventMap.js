@@ -356,7 +356,7 @@ class EventMap extends Component {
 
   getMarker(marker, selectedMarker) {
     if (marker && marker.type === 'HOTEL') {
-      return MARKER_IMAGES['EVENT']
+      return MARKER_IMAGES['HOME']
     }
     return MARKER_IMAGES[selectedMarker && marker.title === selectedMarker.get('title') ? 'SELECTED' : 'DEFAULT']
   }
@@ -367,8 +367,8 @@ class EventMap extends Component {
 
     const markers = markersJS.map((location, i) => {
       return <MapView.Marker
-        centerOffset={{x: 0, y: location.type === 'HOTEL' ? -10 : 0}}
-        anchor={{x: 0.5, y: location.type === 'HOTEL' ? 0.9 : 0.5}}
+        centerOffset={{x: 0, y: location.type === 'HOTEL' ? 0 : 0}}
+        anchor={{x: 0.5, y: location.type === 'HOTEL' ? 0.5 : 0.5}}
         image={this.getMarker(location, selectedMarker)}
         key={i}
         coordinate={location.location}
@@ -512,11 +512,11 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: theme.dark,
     fontSize: 14,
-    paddingBottom: 10
+    paddingBottom: 8
   },
   calloutInfo: {
-    fontSize: 13,
-    color: '#999',
+    fontSize: 12,
+    color: '#888',
     backgroundColor: theme.transparent
   },
   calloutIcon:{
