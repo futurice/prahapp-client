@@ -179,12 +179,9 @@ class RegistrationView extends Component {
     return (
       <View style={containerStyles}>
 
-        {!simplified ? <Toolbar icon={'done'}
+        <Toolbar icon={'done'}
           iconClick={this.onCloseProfileEditor}
           title='Fill your profile' />
-        : <Text style={styles.header}>Create
-            <Image style={styles.logo}  source={require('../../../assets/whappu-text.png')}/>
-            user</Text>}
 
         <ScrollView
           ref={view => this.containerScrollViewRef = view}
@@ -344,9 +341,12 @@ class RegistrationView extends Component {
           <View style={[styles.slide, styles.slideIntro]} >
             <View style={styles.topArea} level={10} >
               <View style={styles.iconWrap}>
+                <Image style={styles.subImage} source={require('../../../assets/prague/futubohemia/glasses.png')} />
+                {/*
                 <Image style={styles.bgImage} source={require('../../../assets/patterns/sea.png')} />
                 <Icon style={styles.icon} name={'people-outline'} />
                 <Icon style={[styles.subIcon, { left: 115, top: IOS ? -15 : 0, }]} name={'wb-sunny'} />
+                */}
               </View>
             </View>
             <View level={-10} >
@@ -525,7 +525,7 @@ const styles = StyleSheet.create({
 
   slideIntro: {
     backgroundColor: theme.yellow,
-    paddingTop: height / 2.4,
+    paddingTop: height / 2.3,
   },
   topArea: {
     position: 'absolute',
@@ -545,11 +545,19 @@ const styles = StyleSheet.create({
     width: 190,
     height: 190,
     borderRadius: 95,
-    backgroundColor: 'rgba(255,255,255,.1)',
+    // backgroundColor: 'rgba(255,255,255,.1)',
     left: width / 2 - 95,
     top: width / 8,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  subImage: {
+    width: width - 120,
+    height: width - 120,
+    left: 0,
+    bottom: 0,
+    position: 'relative',
+    zIndex: 2,
   },
   icon: {
     // width: 200,

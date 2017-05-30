@@ -36,13 +36,10 @@ class SkipView extends Component {
               <View style={styles.content}>
                 <View style={styles.textContainer}>
                   <Image style={{ width: 200, height: 30, tintColor: theme.blue2 }} source={require('../../../assets/prague/futubohemia/logo.png')} />
-                  <Text style={styles.subTitle}>IT'S FUN O'CLOCK!</Text>
-                    <Text style={styles.text}>Login with your
-                      <Text style={{fontWeight: 'bold'}}> @futurice </Text>email address.
-                    </Text>
-
-
-                    <Text style={[styles.text, { fontWeight: 'bold' }]}></Text>
+                  {/*<Text style={styles.subTitle}>IT'S FUN O'CLOCK!</Text>*/}
+                  <Text style={styles.text}>Login with your
+                    <Text style={{fontWeight: 'bold'}}> @futurice </Text>email address.
+                  </Text>
                 </View>
                 <PlatformTouchable onPress={this.props.onPressProfileLink}>
                   <View style={styles.editButton}>
@@ -131,22 +128,24 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: theme.blue1,
     fontWeight: '600',
-    fontSize: 15,
+    fontSize: 16,
     margin: 15,
+    marginTop: 30,
   },
   text: {
+    marginTop: 35,
     marginBottom: 20,
-    fontSize: 13,
+    fontSize: 16,
     lineHeight: 18,
-    color: theme.blue2,
+    color: theme.blue1,
     textAlign: 'center',
   },
   editButton: {
-    marginTop: IOS ? 0 : 10,
+    marginTop: 40,
     marginBottom: 10,
     padding: 5,
-    paddingTop: 8,
-    paddingBottom: 8,
+    paddingTop: 10,
+    paddingBottom: 10,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: IOS ? 25 : 2,
@@ -154,7 +153,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     borderColor: theme.grey,
     backgroundColor: theme.blue2,
-    width: 240,
+    width: 250,
     shadowColor: '#000000',
     shadowOpacity: 0.15,
     shadowRadius: 1,

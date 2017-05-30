@@ -58,14 +58,6 @@ class InstructionView extends Component {
           <View style={styles.topArea}>
             <View style={styles.iconWrap}>
               <Image style={styles.subImage} source={require('../../../assets/prague/futubohemia/chilicorn.png')} />
-              {/*
-              <Image style={styles.bgImage} source={require('../../../assets/patterns/sea.png')} />
-              <Image style={styles.accentImage} source={require('../../../assets/prague/prague-illustration/cloud-1.png')} />
-              <Image style={styles.accentImage} source={require('../../../assets/prague/prague-illustration/cloud-2.png')} />
-              <Icon style={styles.icon} name={'md-globe'} />
-              <Image style={styles.subImage} source={{uri: 'https://spiceprogram.org/assets/img/logo/chilicorn_no_text-256.png'}} />
-              <MdIcon style={styles.subIcon} name={'location-on'} />
-              */}
             </View>
           </View>
 
@@ -76,40 +68,10 @@ class InstructionView extends Component {
                   <View style={styles.content}>
                     <View style={styles.textContainer}>
                       <Image style={{ width: 200, height: 30, tintColor: theme.blue2 }} source={require('../../../assets/prague/futubohemia/logo.png')} />
-                      <Text style={styles.subTitle}>WELCOME TO PRAGUE</Text>
-                      <Text style={styles.text}>It's time for Fututrip again!</Text>
+                      <Text style={styles.subTitle}>WELCOME TO PRAGUE!</Text>
+                      {/*<Text style={styles.text}>It's time for Fututrip again!</Text>*/}
                     </View>
                   </View>
-                  {/*
-                  <View style={styles.cities}>
-                    {this.props.cities.map((city, i) => {
-                      const isCitySelected = city.get('id') === this.props.selectedCity;
-                      return <TouchableOpacity
-                        key={i}
-                        activeOpacity={0.5}
-                        style={styles.button}
-                        onPress={this.handlePress.bind(this, city.get('id'))}>
-                        <Animated.View style={[styles.touchable, {transform: [{ scale: isCitySelected ? active : unactive }] }]}>
-                          <View style={styles.circle}>
-                            {isCitySelected && <MdIcon name={'done'} style={styles.checked} />}
-
-                            <Image
-                              source={(city.get('name') || '').toLowerCase() === 'tampere'
-                                ? cityIcons.tampere
-                                : cityIcons.helsinki
-                              }
-                              style={styles.cityIcon}
-                            />
-
-                            <Text style={[styles.cityText, isCitySelected ? styles.activeCityText : {}]}>
-                              {city.get('name')}
-                            </Text>
-                          </View>
-                        </Animated.View>
-                      </TouchableOpacity>}
-                    )}
-                  </View>
-                  */}
                 </View>
 
               </View>
@@ -213,13 +175,15 @@ const styles = StyleSheet.create({
   subTitle: {
     color: theme.blue1,
     fontWeight: '600',
-    fontSize: 15,
+    fontSize: 16,
     margin: 15,
+    marginTop: 35,
   },
   text: {
-    fontSize: 13,
+    fontSize: 16,
     lineHeight: 18,
-    color: theme.blue2,
+    marginTop: 40,
+    color: theme.blue1,
     textAlign: 'center',
   },
   cities: {
