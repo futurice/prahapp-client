@@ -122,7 +122,10 @@ export default function map(state = initialState, action) {
     }
 
     case SELECT_CATEGORY: {
-      return state.set('selectedCategory', action.payload);
+      return state.merge({
+        selectedCategory: action.payload,
+        selectedMarker: null
+      });
     }
 
     default: {
