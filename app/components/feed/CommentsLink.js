@@ -9,14 +9,19 @@ class CommentsLinks extends Component {
   render() {
     const { commentCount, openComments } = this.props;
 
+    const hasComments = commentCount > 0;
+
     return (
       <PlatformTouchable style={styles.commentLink} onPress={openComments}>
         <View style={styles.comment}>
           <Text style={styles.commentText}>
-            {commentCount}
+            {hasComments ? commentCount : ''}
           </Text>
           <Text style={[styles.commentText, styles.commentTextRight]}>
-            <Icon style={styles.commentIcon} name="chat-bubble-outline" />
+            <Icon
+              style={[styles.commentIcon, hasComments ? styles.activeCommentIcon : {}]}
+              name={hasComments ? 'chat-bubble' : 'chat-bubble-outline'}
+            />
           </Text>
         </View>
       </PlatformTouchable>
@@ -26,7 +31,7 @@ class CommentsLinks extends Component {
 
 
 const styles = StyleSheet.create({
-   comment: {
+  comment: {
     paddingHorizontal: 15,
     flexDirection: 'row',
     alignItems: 'center',
@@ -44,6 +49,9 @@ const styles = StyleSheet.create({
   },
   commentIcon: {
     fontSize: 18,
+  },
+  activeCommentIcon: {
+    color: theme.blue1,
   }
 });
 

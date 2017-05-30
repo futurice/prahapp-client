@@ -11,7 +11,8 @@ class VotePanel extends Component {
   @autobind
   getVotes() {
     const { votes } = this.props.item;
-    return parseInt(votes, 10);
+    const voteCount = parseInt(votes, 10);
+    return voteCount > 0 ? voteCount : '';
   }
 
   @autobind
@@ -47,7 +48,7 @@ class VotePanel extends Component {
             <View style={styles.itemVoteButton}>
               <Image
                 source={heartIcon}
-                style={[styles.voteImage, {tintColor: alreadyVotedThis ? theme.primary : theme.grey} ]}
+                style={[styles.voteImage, {tintColor: alreadyVotedThis ? theme.blue1 : theme.grey} ]}
               />
               {/*
               <Text style={{color: alreadyVotedThis ? theme.primary : theme.grey}}>
@@ -65,7 +66,9 @@ class VotePanel extends Component {
     return (
       <View style={styles.itemVoteWrapper}>
         {this.renderVoteButton(true)}
-        <Text style={styles.itemVoteValue}>{this.getVotes()}</Text>
+        <View>
+          <Text style={styles.itemVoteValue}>{this.getVotes()}</Text>
+        </View>
         {/* this.renderVoteButton() */}
       </View>
     );
@@ -77,8 +80,9 @@ const styles = StyleSheet.create({
   itemVoteWrapper: {
     flexDirection: 'row',
     paddingVertical: 5,
-    paddingLeft: 5,
-    width: 50,
+    paddingLeft: 0,
+    marginLeft: 8,
+    minWidth: 45,
   },
   itemVoteButtonWrap: {
     flex: 1,
@@ -89,7 +93,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     backgroundColor: 'transparent',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   itemVoteButton: {
     flex: 1,
@@ -98,11 +102,12 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     backgroundColor: 'transparent',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginRight: 0,
   },
   itemVoteValue: {
     minWidth: 15,
-    textAlign: 'center',
+    textAlign: 'left',
     fontSize: 15,
     paddingVertical: 5,
     color: theme.grey
