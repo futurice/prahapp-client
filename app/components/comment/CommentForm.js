@@ -72,7 +72,7 @@ class CommentForm extends Component {
           />
 
           {loadingCommentPost
-            ? <ActivityIndicator style={styles.sendButton} size={'small'} color={theme.secondary} />
+            ? <ActivityIndicator style={styles.sendButton} size={'small'} color={theme.blue2} />
             : <TouchableOpacity style={styles.sendButton}>
               <Icon name="send" onPress={this.onSendText} style={styles.sendButtonIcon} />
             </TouchableOpacity>
