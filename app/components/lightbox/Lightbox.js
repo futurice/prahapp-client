@@ -68,7 +68,6 @@ class LightBox extends Component {
     return url;
     // const urlParts = url.split('/');
     // const imageId = urlParts[urlParts.length - 1];
-
     // return 'https://wappu.futurice.com/i/' + imageId;
   }
 
@@ -76,9 +75,9 @@ class LightBox extends Component {
     const url = this.parseUrl(imgUrl);
 
     const shareOptions = {
-      title: 'Whappu',
+      title: 'Futubohemia',
       url: url,
-      message: 'Whappu'
+      message: 'Futubohemia'
     };
 
     Share.open(shareOptions);

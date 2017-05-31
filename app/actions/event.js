@@ -1,7 +1,7 @@
 import api from '../services/api';
 import {createRequestActionTypes} from '.';
 import { getCityId } from '../concepts/city';
-import staticEvents from '../data/events';
+// import staticEvents from '../data/events';
 
 const SET_EVENT_LIST = 'SET_EVENT_LIST';
 const SET_EVENT_IMAGES = 'SET_EVENT_IMAGES';

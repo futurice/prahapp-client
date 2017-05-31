@@ -10,9 +10,9 @@ import CalendarView from './CalendarView';
 
 import CompetitionView from './CompetitionNavigator';
 import FeedView from './FeedView';
-import ScanView from './Scan';
 import SettingsView from './ProfileView';
 import Tabs from '../constants/Tabs';
+import { isUserLoggedIn } from '../reducers/registration';
 import { changeTab } from '../actions/navigation';
 import MDIcon from 'react-native-vector-icons/MaterialIcons';
 
@@ -37,7 +37,6 @@ class Navigation extends Component {
         unselectedItemTintColor={theme.blue3}
         translucent={false}
       >
-
         <TabBarIOS.Item
           icon={ICONS.CHATS}
           title={'Buzz'}
@@ -45,16 +44,6 @@ class Navigation extends Component {
           onPress={() => { this.onChangeTab(Tabs.FEED); }}>
           <FeedView navigator={navigator} />
         </TabBarIOS.Item>
-
-        { /*
-        <TabBarIOS.Item
-          icon={ICONS.HEART}
-          title={'How to'}
-          selected={currentTab === Tabs.FEELING}
-          onPress={() => { this.onChangeTab(Tabs.FEELING); }}>
-          <ScanView navigator={navigator} />
-        </TabBarIOS.Item>
-        */ }
         <MDIcon.TabBarItemIOS
           iconName='access-time'
           title={'Event'}
@@ -62,7 +51,6 @@ class Navigation extends Component {
           onPress={() => { this.onChangeTab(Tabs.CALENDAR); }}>
           <CalendarView navigator={navigator} />
         </MDIcon.TabBarItemIOS>
-
         <MDIcon.TabBarItemIOS
           iconName='map'
           title={'Discover'}
@@ -70,28 +58,6 @@ class Navigation extends Component {
           onPress={() => { this.onChangeTab(Tabs.MAP); }}>
           <EventMap navigator={navigator} />
         </MDIcon.TabBarItemIOS>
-        {/*
-        <TabBarIOS.Item
-          icon={ICONS.CHATS}
-          title=''
-          selected={currentTab === Tabs.FEED}
-          onPress={() => { this.onChangeTab(Tabs.FEED); }}>
-          <FeedView navigator={navigator} />
-        </TabBarIOS.Item>
-        <MDIcon.TabBarItemIOS
-          iconName='trending-up'
-          title=''
-          selected={currentTab === Tabs.FEELING}
-          onPress={() => { this.onChangeTab(Tabs.FEELING); }}>
-          <MoodView navigator={navigator} />
-        </MDIcon.TabBarItemIOS>
-        <MDIcon.TabBarItemIOS
-          iconName='equalizer'
-          title=''
-          selected={currentTab === Tabs.ACTION}
-          onPress={() => { this.onChangeTab(Tabs.ACTION); }}>
-          <CompetitionView navigator={navigator} />
-        </MDIcon.TabBarItemIOS>*/}
         <MDIcon.TabBarItemIOS
           iconName='account-circle'
           title={'Info'}

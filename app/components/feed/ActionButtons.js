@@ -13,6 +13,7 @@ import theme from '../../style/theme';
 import reactMixin from 'react-mixin';
 import TimerMixin from 'react-timer-mixin';
 import { updateCooldowns } from '../../actions/competition';
+import { getActionTypesForFeed } from '../../reducers/competition';
 
 const IOS = Platform.OS === 'ios';
 
@@ -237,7 +238,9 @@ class ActionButtons extends Component {
   }
 
   renderActionButtons() {
-    return this.props.actionTypes.map((actionType, i) => {
+    const { actionTypes } = this.props;
+
+    return actionTypes.map((actionType, i) => {
       const actionTypeCode = actionType.get('code');
       const actionTypeValue = actionType.get('value');
       const iconName = this.getIconForAction(actionTypeCode);
@@ -331,7 +334,7 @@ const mapDispatchToProps = { updateCooldowns, openRegistrationView };
 
 const select = store => {
   return {
-    actionTypes: store.competition.get('actionTypes'),
+    actionTypes: getActionTypesForFeed(store),
     disabledActionTypes: store.competition.get('disabledActionTypes'),
     cooldownTimes: store.competition.get('cooldownTimes')
   };

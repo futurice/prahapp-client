@@ -211,11 +211,11 @@ const styles = StyleSheet.create({
   },
   listItemIcon__hero:{
     top: 0,
-    width:40,
-    fontSize: 40,
-    color: theme.light,
+    width:60,
+    fontSize: 60,
+    color: theme.blue2,
     top: 0,
-    left: 9,
+    left: 5,
     alignSelf: 'stretch',
     backgroundColor: 'transparent',
   },
@@ -354,7 +354,7 @@ class Profile extends Component {
                     {item.title}
                   </Text> :
                   <Text style={[styles.listItemText, styles.listItemText__downgrade]}>
-                    Unnamed Whappu user
+                    Unnamed Futubohemia user
                   </Text>
                 }
                 <Text style={[styles.listItemText, styles.listItemText__small]}>
@@ -446,7 +446,7 @@ class Profile extends Component {
 
     const userItem = {
       title: user.get('name'),
-      icon: 'person-outline',
+      icon: 'face',
       rightIcon: 'create',
       id: 'user-edit',
       picture: user.get('picture')
@@ -462,7 +462,7 @@ class Profile extends Component {
         </ScrollView>
 
       {/*
-      <ListView style={[styles.scrollView]}
+         <ListView style={[styles.scrollView]}
           dataSource={this.state.dataSource.cloneWithRows(listData)}
           renderRow={this.renderItem}
         />

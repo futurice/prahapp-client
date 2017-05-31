@@ -230,10 +230,12 @@ const styles = StyleSheet.create({
   // # Skeleton styles
   skeletonWrap: {
     flex: 1,
+    minHeight: 193
   },
   skeletonHeader: {
-    height: 50,
+    minHeight: 50,
     paddingTop: 15,
+    justifyContent: 'center',
   },
   skeletonAvatar: {
     width: 32,
@@ -269,6 +271,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 16,
     margin: 10,
+    marginHorizontal: 15,
   }
 });
 

@@ -53,11 +53,16 @@ const getFirstFutureEvent = createSelector(
   }
 )
 
+const stickyMarkerCategories = ['HOTEL'/*, 'SUMMER PARTY', 'FUTUCAMP'*/];
 const getMapMarkers = createSelector(
   getMarkers, getSelectedCategory,
   (markers, categoryFilter) => {
     const validMarkers = markers
-      .filter(marker => categoryFilter === 'ALL' || marker.get('type') === categoryFilter || marker.get('type') === 'HOTEL')
+      .filter(marker =>
+        categoryFilter === 'ALL' ||
+        marker.get('type') === categoryFilter ||
+        stickyMarkerCategories.indexOf(marker.get('type')) >= 0
+      )
       .filter(marker => marker.has('location'));
 
     return validMarkers;

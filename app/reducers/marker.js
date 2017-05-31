@@ -1,5 +1,6 @@
 'use strict';
 import { List, fromJS } from 'immutable';
+import { createSelector } from 'reselect';
 
 import {
   SET_MARKER_LIST,
@@ -9,8 +10,18 @@ import {
 } from '../actions/marker';
 
 // # Selectors
-export const getMarkers = state => state.marker.get('list') || List([]);
+export const getMarkersState = state => state.marker.get('list') || List([]);
 export const getMarkerListState = state => state.marker.get('listState', null);
+
+// Concert location to numbers
+export const getMarkers = createSelector(
+  getMarkersState,
+  (markers) => markers.map(m => m.mergeIn(['location'], {
+    latitude: parseFloat(m.getIn(['location', 'latitude'], 0)),
+    longitude: parseFloat(m.getIn(['location', 'longitude'], 0))
+  }))
+);
+
 
 const initialState = fromJS({
   list: [],

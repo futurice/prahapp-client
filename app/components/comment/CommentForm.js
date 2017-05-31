@@ -57,6 +57,7 @@ class CommentForm extends Component {
         <View style={styles.inputContainer}>
           <TextInput
             autoFocus={false}
+            autoCorrect={false}
             autoCapitalize={'sentences'}
             underlineColorAndroid={'transparent'}
             returnKeyType={'send'}

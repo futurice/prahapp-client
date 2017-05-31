@@ -63,7 +63,6 @@ export default {
 };
 
 if (process.argv && !module.parent) {
-  // Allow test name generation from the command line, e.g.
   // node_modules/.bin/babel-node app/services/namegen.js
   console.log(generateName(process.argv[2]));
 }

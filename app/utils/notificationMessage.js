@@ -12,7 +12,7 @@ const getMessage = (payload) => {
       return 'That\'s cool!';
     }
     case ActionTypes.CHECK_IN_EVENT: {
-      return '*Check* Whappu hard!';
+      return '*Check* Futubohemia hard!';
     }
     case ActionTypes.MOOD: {
       return 'Vibe added!';

@@ -143,6 +143,7 @@ class TextActionView extends Component {
               maxLength={151}
               placeholderTextColor={'rgba(255,255,255, 0.65)'}
               placeholder="Say something..."
+              autoCorrect={false}
               value={this.state.text} />
 
 

@@ -7,6 +7,8 @@ import { APP_STORAGE_KEY, AUTH_CLIENTID, AUTH_DOMAIN } from '../../env';
 import namegen from '../services/namegen';
 import { createRequestActionTypes } from '.';
 
+import { changeTab } from './navigation';
+import Tabs from '../constants/Tabs';
 import { getTeams } from '../reducers/team';
 
 const {
@@ -56,6 +58,7 @@ const putUser = () => {
       .then(response => {
         dispatch({ type: CREATE_USER_SUCCESS });
         dispatch({ type: CLOSE_REGISTRATION_VIEW });
+        dispatch(changeTab(Tabs.SETTINGS));
       })
       .catch(error => dispatch({ type: CREATE_USER_FAILURE, error: error }));
   };
@@ -120,7 +123,7 @@ const setUserToStorage = payload => ({ type: SET_USER_STORAGE, payload });
 
 const Auth0Lock = require('react-native-lock');
 const lock = new Auth0Lock({clientId: AUTH_CLIENTID, domain: AUTH_DOMAIN, useBrowser: true });
-const userKey = `${APP_STORAGE_KEY}:registration`;
+const userKey = `${APP_STORAGE_KEY}:user`;
 
 export const openLoginView = () => (dispatch, getState) => {
   const state = getState();
@@ -129,15 +132,6 @@ export const openLoginView = () => (dispatch, getState) => {
   lock.show({
     connections: ['google-oauth2']
   }, (err, profile, token) => {
-
-    // const profile = {
-    //   createdAt:"2016-05-11T12:40:39.632Z",
-    //   email:"palampinen@gmail.com",
-    //   name:"Pasi Lampinen",
-    //   nickname:"palampinen",
-    //   picture:"https://lh6.googleusercontent.com/-7wsIj22-QV0/AAAAAAAAAAI/AAAAAAAAADg/mV5k6mK_ADs/photo.jpg",
-    //   userId:"google-oauth2|12345677654321" // this could be used instead of uuid
-    // };
 
     const userFields = {
       profilePicture: profile.picture,
@@ -148,7 +142,7 @@ export const openLoginView = () => (dispatch, getState) => {
     // Save profile to state
     Promise.resolve(dispatch(updateProfile(userFields)))
     .then(() => {
-      // Save profile to Storage // TODO CHECK THIS
+      // Save profile to Storage
       AsyncStorage.setItem(userKey, JSON.stringify(profile), () => {
         dispatch(setUserToStorage(profile));
         // Send profile info to server

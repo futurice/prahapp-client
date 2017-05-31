@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const placholderImage = require('../../../assets/patterns/sea.png');
+const noImageCover = require('../../../assets/prague/futubohemia/chilicorn.png');
 
 export default class EventListItem extends Component {
   propTypes: {
@@ -108,7 +108,7 @@ export default class EventListItem extends Component {
       <View style={styles.gridListItem}>
         <View style={styles.gridListItemImgWrap}>
           <Image
-            source={coverImage ? { uri: coverImage } : placholderImage}
+            source={coverImage ? { uri: coverImage } : noImageCover}
             style={styles.gridListItemImg} />
           <View style={styles.gridListItemImgColorLayer} />
         </View>
@@ -129,8 +129,6 @@ export default class EventListItem extends Component {
 
           {!hideStatus &&
           <View style={styles.gridListItemIconsWrapper}>
-            {item.teemu && <Text style={styles.gridListItemIcon}>
-              <Icon name='school' size={15} /> Emäteemu!</Text>}
             {!pastEvent && timepoint.onGoing && <Text style={styles.gridListItemIcon}>Ongoing!</Text>}
             {!pastEvent && timepoint.startsSoon && <Text style={styles.gridListItemIcon}>Starts soon!</Text>}
           </View>}

@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     borderRadius: 95,
     backgroundColor: 'rgba(255,255,255,0)',
     left: width / 2 - 95,
-    top: width / 8,
+    top: width / 6,
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'visible'

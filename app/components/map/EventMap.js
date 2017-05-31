@@ -55,7 +55,7 @@ const CITY_COORDS = {
     longitude: 14.4376183
   }
 };
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 
 const IOS = Platform.OS === 'ios';
@@ -176,34 +176,39 @@ class EventMap extends Component {
 
     return (
       <View style={styles.customCallout}>
-        <View style={styles.callout}>
-          <View style={styles.calloutImageWrap}>
-            {location.get('imageUrl', location.get('image_url'))
-              ?
-              <Image
-                style={styles.calloutImage}
-                source={{ uri: location.get('imageUrl', location.get('image_url')) }}
-              />
-              :
-              <MDIcon
-                style={styles.calloutImageIcon}
-                name={_.get(ICONS, location.get('type'), ICONS.DEFAULT)}
-              />
+        <TouchableHighlight
+          underlayColor='transparent'
+          style={styles.calloutTouchable}
+          {...calloutProps}
+        >
+          <View style={styles.callout}>
+            <View style={styles.calloutImageWrap}>
+              {location.get('imageUrl', location.get('image_url'))
+                ?
+                <Image
+                  style={styles.calloutImage}
+                  source={{ uri: location.get('imageUrl', location.get('image_url')) }}
+                />
+                :
+                <MDIcon
+                  style={styles.calloutImageIcon}
+                  name={_.get(ICONS, location.get('type'), ICONS.DEFAULT)}
+                />
+              }
+            </View>
+            {
+              location && location.get('url')
+                ? this.renderStaticUrlMarkerView(location)
+                : this.renderStaticMarkerView(location)
             }
           </View>
-          {
-            location && location.get('url')
-              ? this.renderStaticUrlMarkerView(location)
-              : this.renderStaticMarkerView(location)
-          }
-        </View>
+        </TouchableHighlight>
       </View>);
   }
 
   renderStaticUrlMarkerView(location) {
     return (
       <View style={styles.calloutContent}>
-
         <Text style={styles.calloutTitle}>
           {location.get('title')}
         </Text>
@@ -289,7 +294,7 @@ class EventMap extends Component {
     const { selectMarker } = this.props;
 
     selectMarker(marker);
-    this.map.animateToCoordinate(marker.location)
+    this.map.animateToCoordinate(marker.location);
   }
 
   @autobind
@@ -317,7 +322,7 @@ class EventMap extends Component {
   fitMarkersToMap() {
     const { visiblemarkerCoords } = this.props;
     if (this.map && visiblemarkerCoords && visiblemarkerCoords.length) {
-      const padding = 30;
+      const padding = visiblemarkerCoords.length <= 2 ? 60 : 30;
       const edgePadding = { top: padding, bottom: padding, left: padding, right: padding };
       this.map.fitToCoordinates(visiblemarkerCoords, { edgePadding }, false)
     }
@@ -358,6 +363,12 @@ class EventMap extends Component {
     if (marker && marker.type === 'HOTEL') {
       return MARKER_IMAGES['HOME']
     }
+    if (marker && marker.type === 'SUMMER PARTY') {
+      return MARKER_IMAGES['FUTUCAMP']
+    }
+    if (marker && marker.type === 'FUTUCAMP') {
+      return MARKER_IMAGES['FUTUCAMP']
+    }
     return MARKER_IMAGES[selectedMarker && marker.title === selectedMarker.get('title') ? 'SELECTED' : 'DEFAULT']
   }
 
@@ -367,12 +378,13 @@ class EventMap extends Component {
 
     const markers = markersJS.map((location, i) => {
       return <MapView.Marker
-        centerOffset={{x: 0, y: location.type === 'HOTEL' ? 0 : 0}}
-        anchor={{x: 0.5, y: location.type === 'HOTEL' ? 0.5 : 0.5}}
+        centerOffset={{x: 0, y: 0}}
+        anchor={{x: 0.5, y: 0.5}}
         image={this.getMarker(location, selectedMarker)}
         key={i}
         coordinate={location.location}
         onPress={() => this.onSelectMarker(location)}
+        style={selectedMarker && location.title === selectedMarker.get('title') ? { zIndex: 1 } : null}
       >
         {/*
           location.type === 'EVENT'
@@ -457,7 +469,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 10,
     bottom: IOS ? 58 : 0,
-    height: 150,
+    height: height / 4.3,
     backgroundColor: theme.white,
     borderRadius: 3,
     elevation: 2,
@@ -477,12 +489,12 @@ const styles = StyleSheet.create({
   },
   calloutTouchable: {
     padding: 0,
-    flex: 1,
+    // flex: 1,
     flexGrow: 1,
   },
   calloutImageWrap: {
     width: 120,
-    height: 150,
+    height: height / 4,
     backgroundColor: theme.yellow,
     justifyContent: 'center',
     alignItems: 'center',
@@ -493,8 +505,8 @@ const styles = StyleSheet.create({
   },
   calloutImage: {
     width: 120,
-    height: 150,
-    backgroundColor: theme.grey1,
+    height: height / 4,
+    backgroundColor: theme.yellow,
   },
   calloutContent: {
     flex: 1,

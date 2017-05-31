@@ -63,21 +63,6 @@ let NavigationBarRouteMapper = props => ({
       return (<SortSelector />);
     }
 
-    if (props.currentTab === Tabs.FEELING && !route.hideNavButton) {
-      return (<TouchableOpacity
-        onPress={() => {
-          navigator.push({
-            component: MoodInfo,
-            name: 'Whappu Vibe',
-            showName: true,
-            hideNavButton: true
-          });
-        }}
-        >
-          <Icon name='ios-information-circle-outline' style={[styles.navBarIcon, { paddingRight: 12, paddingTop: 8}]} />
-        </TouchableOpacity>);
-    }
-
     if (route.actions) {
       return (
         <TouchableHighlight

@@ -1,7 +1,7 @@
 import { Linking } from 'react-native';
 
-const FEEDBACK_EMAIL_ADDRESS = 'wappu@futurice.com';
-const FEEDBACK_EMAIL_SUBJECT = 'Whappu Feedback';
+const FEEDBACK_EMAIL_ADDRESS = 'futubohemia@futurice.com';
+const FEEDBACK_EMAIL_SUBJECT = 'Futubohemia Feedback';
 
 
 

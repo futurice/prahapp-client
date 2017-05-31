@@ -5,8 +5,8 @@ async function requestLocationPermission(cb) {
     const granted = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
       {
-        'title': 'Whappu Location Permission',
-        'message': 'Whappu needs access to location ' +
+        'title': 'Futubohemia Location Permission',
+        'message': 'Futubohemia needs access to location ' +
                    'to serve best possible experience.'
       }
     )
@@ -26,8 +26,8 @@ async function requestCameraPermission(cb) {
     const grantCamera = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.CAMERA,
       {
-        'title': 'Whappu Camera Permission',
-        'message': 'Whappu needs access to camera ' +
+        'title': 'Futubohemia Camera Permission',
+        'message': 'Futubohemia needs access to camera ' +
                    'to post images to feed.'
       }
     );
@@ -35,8 +35,8 @@ async function requestCameraPermission(cb) {
     const grantWrite = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
       {
-        'title': 'Whappu Storage Permission',
-        'message': 'Whappu needs access to storage ' +
+        'title': 'Futubohemia Storage Permission',
+        'message': 'Futubohemia needs access to storage ' +
         'to post images to feed.'
       }
     );

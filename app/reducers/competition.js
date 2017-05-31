@@ -1,6 +1,9 @@
 'use strict';
 
 import Immutable from 'immutable';
+import { createSelector } from 'reselect';
+
+import ActionTypes from '../constants/ActionTypes';
 import {
   POST_ACTION_REQUEST,
   POST_ACTION_SUCCESS,
@@ -18,6 +21,17 @@ import {
   SET_EDITABLE_IMAGE,
   CLEAR_EDITABLE_IMAGE
 } from '../actions/competition';
+
+// # Selectors
+export const getActionTypes = state => state.competition.get('actionTypes',  Immutable.List([]));
+
+
+const selectableActionTypes = [ActionTypes.IMAGE, ActionTypes.TEXT];
+export const getActionTypesForFeed = createSelector(
+  getActionTypes,
+  (types) => types.filter((type) => selectableActionTypes.indexOf(type.get('code')) >= 0)
+);
+
 
 const initialState = Immutable.fromJS({
   isSending: false,

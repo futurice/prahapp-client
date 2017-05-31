@@ -34,7 +34,7 @@ import Button from '../common/Button';
 
 import { openLightBox } from '../../actions/feed';
 import { openRegistrationView } from '../../actions/registration';
-import { fetchImages } from '../../actions/event';
+
 import {
   INACTIVE,
   UNAVAILABLE,
@@ -67,9 +67,9 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     alignItems:'flex-start',
     justifyContent:'center',
-    padding:20,
-    paddingTop:15,
-    paddingBottom:15,
+    padding: 20,
+    paddingTop: 15,
+    paddingBottom: 0,
     backgroundColor:'#fff'
   },
   detailEventInfoWrapper: {
@@ -112,10 +112,9 @@ const styles = StyleSheet.create({
   },
 
   navigationButtonWrapper: {
-    margin: 15,
-    marginTop: 0,
-    marginBottom: 15,
-    borderRadius: 3,
+    margin: 0,
+    marginTop: 30,
+    borderRadius: 0,
     backgroundColor: theme.light
   },
   navigationButton: {
@@ -144,7 +143,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   gridListItemMetaWrap:{
-    paddingBottom:10,
+    paddingBottom: 10,
     borderBottomWidth:1,
     borderBottomColor:'#eee',
   },
@@ -290,7 +289,6 @@ const EventDetail = React.createClass({
 
   componentDidMount() {
     analytics.viewOpened(VIEW_NAME);
-    this.props.fetchImages(this.props.route.model.id);
   },
 
   onPressBack() {
@@ -399,7 +397,7 @@ const EventDetail = React.createClass({
       <ParallaxView
           backgroundSource={coverImage ? {uri: coverImage} : placholderImage}
           windowHeight={300}
-          style={{backgroundColor: theme.yellow}}
+          style={{backgroundColor: theme.white}}
           header={(
             <View style={{ flex:1, elevation: 3 }}>
               <LinearGradient
@@ -486,16 +484,16 @@ const EventDetail = React.createClass({
           <View style={styles.content}>
             <Text style={styles.detailEventDescription}>{model.description}</Text>
           </View>
-          {/*!!eventGeoUrl &&
+          {!!eventGeoUrl &&
           <View style={styles.navigationButtonWrapper}>
-            <Button onPress={() => Linking.openURL(eventGeoUrl)}>Get me there!</Button>
+            <Button style={{ borderRadius: 0, backgroundColor: theme.blue2 }} onPress={() => Linking.openURL(eventGeoUrl)}>Show Directions</Button>
           </View>
-          */}
+          }
 
           {this.props.images.size > 0 &&
             <View>
               <View style={styles.imageTitleWrap}>
-                <Text style={styles.imageTitle}>Images posted from the event</Text>
+                <Text style={styles.imageTitle}>Event images</Text>
               </View>
               <View style={styles.imageContainer}>
                 {this.props.images.map(image => {
@@ -526,7 +524,7 @@ const EventDetail = React.createClass({
 
 });
 
-const mapDispatchToProps = { checkIn, fetchImages, openLightBox, openRegistrationView };
+const mapDispatchToProps = { checkIn, openLightBox, openRegistrationView };
 
 
 const select = store => {
