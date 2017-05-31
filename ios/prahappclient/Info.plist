@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>prahappclient</string>
+	<string>Futubohemia</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -49,11 +49,11 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Prahapp requires access to the camera</string>
+	<string>Futubohemia requires access to the camera</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Prahapp requires access to the photo library</string>
+	<string>Futubohemia requires access to the photo library</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Entypo.ttf</string>

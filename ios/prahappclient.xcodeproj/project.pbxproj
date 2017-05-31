@@ -1469,7 +1469,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.prahappclient;
+				PRODUCT_BUNDLE_IDENTIFIER = com.futubohemia;
 				PRODUCT_NAME = prahappclient;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1501,7 +1501,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.prahappclient;
+				PRODUCT_BUNDLE_IDENTIFIER = com.futubohemia;
 				PRODUCT_NAME = prahappclient;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
