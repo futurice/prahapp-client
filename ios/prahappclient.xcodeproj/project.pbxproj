@@ -1471,6 +1471,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.futurice.futubohemia;
 				PRODUCT_NAME = prahappclient;
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1503,6 +1504,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.futurice.futubohemia;
 				PRODUCT_NAME = prahappclient;
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
