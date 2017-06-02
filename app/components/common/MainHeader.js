@@ -7,7 +7,6 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import theme from '../../style/theme';
 import Tabs from '../../constants/Tabs';
 import SortTypes from '../../constants/SortTypes';
-import MoodInfo from '../mood/MoodInfo';
 
 const cityIcons = {
   'helsinki': require('../../../assets/cities/icon-ota-amfi-accent.png'),
@@ -84,13 +83,7 @@ var EventDetailToolbar = React.createClass({
       }
 
       case 1: {
-        if (currentTab === Tabs.FEELING) {
-          navigator.push({
-            component: MoodInfo
-          });
-        } else {
-          this.props.setFeedSortType(SortTypes.SORT_NEW);
-        }
+        this.props.setFeedSortType(SortTypes.SORT_NEW);
         break;
       }
       case 2: {
