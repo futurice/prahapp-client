@@ -1,4 +1,5 @@
 import { PermissionsAndroid } from 'react-native';
+import { get } from 'lodash';
 
 async function requestLocationPermission(cb) {
   try {
@@ -23,6 +24,7 @@ async function requestLocationPermission(cb) {
 
 async function requestCameraPermission(cb) {
   try {
+    /*
     const grantCamera = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.CAMERA,
       {
@@ -40,8 +42,19 @@ async function requestCameraPermission(cb) {
         'to post images to feed.'
       }
     );
+    */
 
-    if (grantCamera && grantWrite) {
+    const grantCamera = await PermissionsAndroid.requestMultiple([
+      PermissionsAndroid.PERMISSIONS.CAMERA,
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+    ], {
+      'title': 'Futubohemia Camera Permission',
+      'message': 'Futubohemia needs access to camera and storage to post images to feed.'
+    })/*.then((response) => {
+      console.log('PERMISSIONS: ', response);
+    });*/
+
+    if (grantCamera) {
       console.log("You can use the Camera and storage")
       cb();
     } else {
