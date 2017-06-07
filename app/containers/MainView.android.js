@@ -14,9 +14,8 @@ import { connect } from 'react-redux';
 import AndroidTabNavigation from './Navigation';
 import RegistrationView from '../components/registration/RegistrationView';
 import TextActionView from '../components/actions/TextActionView';
-import CheckInActionView from '../components/actions/CheckInActionView';
-import errorAlert from '../utils/error-alert';
 import LightBox from '../components/lightbox/Lightbox';
+import errorAlert from '../utils/error-alert';
 
 const theme = require('../style/theme');
 
@@ -52,7 +51,7 @@ class MainView extends Component {
         <Navigator
           initialRoute={{
             component: AndroidTabNavigation,
-            name: 'Whappu'
+            name: 'Futubohemia'
           }}
           renderScene={this.renderScene}
           configureScene={() => ({
@@ -61,7 +60,6 @@ class MainView extends Component {
         />
         <RegistrationView />
         <LightBox />
-        <CheckInActionView />
         <TextActionView />
       </View>
     )
