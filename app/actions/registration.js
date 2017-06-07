@@ -11,6 +11,8 @@ import { changeTab } from './navigation';
 import Tabs from '../constants/Tabs';
 import { getTeams } from '../reducers/team';
 
+const IOS = Platform.OS === 'ios';
+
 const {
   CREATE_USER_REQUEST,
   CREATE_USER_SUCCESS,
@@ -58,7 +60,10 @@ const putUser = () => {
       .then(response => {
         dispatch({ type: CREATE_USER_SUCCESS });
         dispatch({ type: CLOSE_REGISTRATION_VIEW });
-        dispatch(changeTab(Tabs.SETTINGS));
+        // Works only in IOS
+        if (IOS) {
+          dispatch(changeTab(Tabs.SETTINGS));
+        }
       })
       .catch(error => dispatch({ type: CREATE_USER_FAILURE, error: error }));
   };
@@ -140,19 +145,24 @@ export const openLoginView = () => (dispatch, getState) => {
     };
 
     // Save profile to state
+    // (we don't have user id yet, because user is not created)
     Promise.resolve(dispatch(updateProfile(userFields)))
     .then(() => {
       // Save profile to Storage
       AsyncStorage.setItem(userKey, JSON.stringify(profile), () => {
+        // Set storage info to state
         dispatch(setUserToStorage(profile));
+
         // Send profile info to server
-        dispatch(putUser());
+        // and then get created user
+        Promise.resolve(dispatch(putUser()))
+        .then(() => dispatch(getUser()));
+
       });
     });
   });
 }
 
-export const checkUserLogin = () => (dispatch, getState) => {
 // # Logout
 // Remove user from AsyncStorage and state
 export const logoutUser = () => (dispatch) => {
@@ -161,6 +171,7 @@ export const logoutUser = () => (dispatch) => {
   });
 }
 
+export const checkUserLogin = () => (dispatch, getState) => {
   AsyncStorage.getItem(userKey, (err, user) => {
     if (!user) {
       // # No need to show login here
