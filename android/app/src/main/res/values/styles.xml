@@ -3,13 +3,13 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">#46289A</item>
+        <item name="colorPrimary">#003A6F</item>
         <!-- Status Bar color -->
-        <item name="colorPrimaryDark">#3d2487</item>
+        <item name="colorPrimaryDark">#003A6F</item>
         <!-- Plain buttons -->
-        <item name="colorAccent">#329E41</item>
+        <item name="colorAccent">#729FC1</item>
         <!-- text -->
-        <item name="android:textColor">#46289A</item>
+        <item name="android:textColor">#003A6F</item>
     </style>
 
     <style name="MyLock.Theme" parent="Lock.Theme" >
