@@ -1,4 +1,4 @@
-package com.prahappclient;
+package com.futubohemia;
 
 import android.app.Application;
 
@@ -11,12 +11,12 @@ import com.BV.LinearGradient.LinearGradientPackage;
 import com.image.zoom.ReactImageZoom;
 import com.imagepicker.ImagePickerPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
-import com.lwansbrough.RCTCamera.RCTCameraPackage;
 import com.cmcewen.blurview.BlurViewPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.airbnb.android.react.maps.MapsPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -41,8 +41,8 @@ public class MainApplication extends Application implements ReactApplication {
             new ReactImageZoom(),
             new ImagePickerPackage(),
             new RNDeviceInfo(),
-            new RCTCameraPackage(),
-            new BlurViewPackage()
+            new BlurViewPackage(),
+            new MapsPackage()
       );
     }
   };
