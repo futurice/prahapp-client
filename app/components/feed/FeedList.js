@@ -287,6 +287,7 @@ class FeedList extends Component {
             <ListView
               ref='_scrollView'
               dataSource={this.state.dataSource}
+              showsVerticalScrollIndicator={false}
               renderRow={item => <FeedListItem
                 item={item}
                 key={item.id}
