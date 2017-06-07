@@ -1,17 +1,13 @@
 'use strict';
 
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import { ToolbarAndroid, StyleSheet } from 'react-native';
+import autobind from 'autobind-decorator';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import theme from '../../style/theme';
 import Tabs from '../../constants/Tabs';
 import SortTypes from '../../constants/SortTypes';
-
-const cityIcons = {
-  'helsinki': require('../../../assets/cities/icon-ota-amfi-accent.png'),
-  'tampere': require('../../../assets/cities/icon-tampere-accent-sm.png')
-};
 
 const styles = StyleSheet.create({
   toolbar: {
@@ -23,11 +19,12 @@ const styles = StyleSheet.create({
 
 const iconColor = theme.blue2;
 
+const selectedActionIcon = '• '; //‣ • ● ♥
+
 const getElevation = (tab) => {
   switch (tab) {
-    case Tabs.FEED:
-    case Tabs.FEELING:
-    case Tabs.CALENDAR: {
+    case Tabs.MAP:
+    case Tabs.SETTINGS: {
       return 0;
     }
     default:{
@@ -36,57 +33,31 @@ const getElevation = (tab) => {
   }
 };
 
-const selectedActionText = '• '; //‣ • ● ♥
-
-var EventDetailToolbar = React.createClass({
-  propTypes: {
-    title: PropTypes.string,
-    navigator: PropTypes.object.isRequired
-  },
-
-  getCityIcon(cityName) {
-    return (cityName || '').toLowerCase() === 'tampere' ? cityIcons.tampere : cityIcons.helsinki;
-  },
-
-  getActions(tab, sortType, cityName) {
-
-    switch (tab) {
-      case Tabs.FEED: {
-        return [
-          // { title: 'City', id:'city', show: 'always', icon: this.getCityIcon(cityName), iconColor },
-          { title: `${sortType === SortTypes.SORT_NEW ? selectedActionText : '  '} Newest`, id: SortTypes.SORT_NEW, show: 'never' },
-          { title: `${sortType === SortTypes.SORT_HOT ? selectedActionText : '  '} Trending`, id: SortTypes.SORT_HOT, show: 'never' },
-        ]
-      }
-      // case Tabs.FEELING:
-      //   return [
-      //     // { title: 'City', id:'city', show: 'always', icon: this.getCityIcon(cityName), iconColor },
-      //     { title: 'Info', id:'mood', show: 'always', iconName: 'info-outline', iconColor }
-      //   ];
-
-      // // case Tabs.CALENDAR:
-      // // case Tabs.ACTION:
-      // // case Tabs.SETTINGS:
-      // //   return [{ title: 'City', id:'city', show: 'always', icon: this.getCityIcon(cityName), iconColor }]
-      default:{
-        return [];
-      }
+const getActions = (tab, sortType) => {
+  switch (tab) {
+    case Tabs.FEED: {
+      return [
+        { title: `${sortType === SortTypes.SORT_NEW ? selectedActionIcon : '  '} Newest`, id: SortTypes.SORT_NEW, show: 'never' },
+        { title: `${sortType === SortTypes.SORT_HOT ? selectedActionIcon : '  '} Trending`, id: SortTypes.SORT_HOT, show: 'never' },
+      ];
     }
-  },
+    default: {
+      return [];
+    }
+  }
+  return [];
+};
 
+class EventDetailToolbar extends Component {
+  @autobind
   onActionSelected(position) {
     const { currentTab, navigator } = this.props;
     switch (position) {
       case 0: {
-        this.props.toggleCityPanel();
-        break;
-      }
-
-      case 1: {
         this.props.setFeedSortType(SortTypes.SORT_NEW);
         break;
       }
-      case 2: {
+      case 1: {
         this.props.setFeedSortType(SortTypes.SORT_HOT);
         break;
       }
@@ -95,8 +66,10 @@ var EventDetailToolbar = React.createClass({
         console.log('No action for this selection');
         break;
       }
+
+      return;
     }
-  },
+  }
 
   render() {
     const toolbarStyles = [styles.toolbar];
@@ -105,7 +78,6 @@ var EventDetailToolbar = React.createClass({
       backgroundColor,
       titleColor,
       currentTab,
-      currentCityName,
       selectedSortType,
     } = this.props;
 
@@ -115,19 +87,19 @@ var EventDetailToolbar = React.createClass({
     }
 
     return (
-      <Icon.ToolbarAndroid
-        actions={this.getActions(currentTab, selectedSortType, currentCityName)}
+      <ToolbarAndroid
+        actions={getActions(currentTab, selectedSortType)}
         logo={require('../../../assets/prague/futubohemia/logo-blue.png')}
         overflowIconName={'sort'}
-        title={null}
+        overflowIcon={require('../../../assets/icons/sort.png')}
+        title={''}
         onActionSelected={this.onActionSelected}
-        onIconClicked={this.chooseCity}
         iconColor={theme.blue2}
-        titleColor={titleColor || theme.light}
+        titleColor={titleColor || theme.blue2}
         style={toolbarStyles}
       />
     );
   }
-});
+}
 
 export default EventDetailToolbar;
