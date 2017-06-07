@@ -28,7 +28,9 @@ import PlatformTouchable from '../common/PlatformTouchable';
 import time from '../../utils/time';
 import theme from '../../style/theme';
 import MARKER_IMAGES, { ICONS } from '../../constants/MarkerImages';
-import MAP_STYLE from '../../constants/MapStyle';
+// import MAP_STYLE from '../../constants/MapStyle';
+import permissions from '../../services/android-permissions';
+
 
 import {
   mapViewData,
@@ -97,10 +99,16 @@ class EventMap extends Component {
 
   @autobind
   getCityCoords(city) {
-   // const cityName = city || this.props.currentCity;
-   // const isTampere = (cityName || '').toLowerCase() === 'tampere';
-   // return isTampere ? CITY_COORDS.tampere : CITY_COORDS.otaniemi;
    return CITY_COORDS.prague
+  }
+
+  @autobind
+  onLocatePress() {
+    if (IOS) {
+      this.props.toggleLocateMe();
+    } else {
+      permissions.requestLocationPermission(this.props.toggleLocateMe);
+    }
   }
 
   renderDisabledMapAnnouncement(event) {
@@ -266,13 +274,12 @@ class EventMap extends Component {
   }
 
   renderLocateMe() {
-    return IOS ? <View style={styles.locateButton}>
-          <TouchableOpacity onPress={this.props.toggleLocateMe.bind(this,null)}
+    return <View style={styles.locateButton}>
+          <TouchableOpacity onPress={this.onLocatePress}
             style={styles.locateButtonText} >
             <MDIcon size={20} style={{ color:this.props.locateMe ? theme.blue2 : '#999' }} name='navigation' />
           </TouchableOpacity>
-        </View> :
-        false;
+        </View>;
   }
 
   changeShowFilter(filterName) {
@@ -335,9 +342,10 @@ class EventMap extends Component {
       <PlatformTouchable
         key={item}
         onPress={() => this.onCategorySelect(item)}
-        style={[styles.markerFilterButton, item === selectedCategory ? styles.activeButton : {}]}
       >
-        <Text style={styles.markerFilterButtonText}>{item}</Text>
+        <View style={[styles.markerFilterButton, item === selectedCategory ? styles.activeButton : {}]}>
+          <Text style={styles.markerFilterButtonText}>{item}</Text>
+        </View>
       </PlatformTouchable>
     )
   }
@@ -349,6 +357,7 @@ class EventMap extends Component {
       <View style={styles.markerNavigation}>
         <FlatList
           horizontal
+          showsHorizontalScrollIndicator={false}
           style={styles.markerNavigationScroll}
           ref={ref => this.categoryScroll = ref}
           renderItem={this.renderMarkerFilterButton}
@@ -407,13 +416,13 @@ class EventMap extends Component {
           <MapView
             style={styles.map}
             initialRegion={initialRegion}
-            showsUserLocation={!IOS || this.props.locateMe}
-            showsPointsOfInterest={false}
-            showsBuildings={false}
+            showsUserLocation={this.props.locateMe}
+            showsPointsOfInterest={true}
+            showsBuildings={true}
             showsIndoors={false}
             rotateEnabled={false}
             ref={(map) => { this.map = map; }}
-            customMapStyle={MAP_STYLE} // TODO IOS Support
+            // customMapStyle={MAP_STYLE} // TODO IOS Support
             // https://github.com/airbnb/react-native-maps#customizing-the-map-style
             // provider={PROVIDER_GOOGLE}
           >
@@ -468,7 +477,7 @@ const styles = StyleSheet.create({
     width: width - 20,
     position: 'absolute',
     left: 10,
-    bottom: IOS ? 58 : 0,
+    bottom: IOS ? 58 : 10,
     height: height / 4.3,
     backgroundColor: theme.white,
     borderRadius: 3,
@@ -512,7 +521,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 15,
     paddingBottom: 10,
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'flex-start',
     flexDirection: 'column',
   },
@@ -569,7 +578,7 @@ const styles = StyleSheet.create({
     color:'#aaa'
   },
   locateButton:{
-    backgroundColor:'rgba(255,255,255,.9)',
+    backgroundColor: 'rgba(255,255,255,.99)',
     shadowColor: '#000000',
     shadowOpacity: 0.25,
     shadowRadius: 1,
@@ -577,19 +586,21 @@ const styles = StyleSheet.create({
       height: 1,
       width: 0
     },
-    borderRadius:2,
-    justifyContent:'center',
-    position:'absolute',
-    right:12,
-    top:12,
-    width:40,
-    height:40
+    elevation: 2,
+    borderRadius: IOS ? 2 : 20,
+    justifyContent: 'center',
+    position: 'absolute',
+    right: 12,
+    top: 12,
+    width: 40,
+    height: 40
   },
   locateButtonText:{
+    backgroundColor: 'transparent',
     flex:1,
     alignItems:'center',
     justifyContent:'center',
-    paddingTop:5
+    paddingTop: IOS ? 5 : 0
   },
   emptyWrap: {
     flex: 1,
@@ -625,7 +636,8 @@ const styles = StyleSheet.create({
     height: 52,
     zIndex: 10,
     justifyContent: 'flex-start',
-    backgroundColor: theme.white
+    backgroundColor: theme.white,
+    elevation: 2
   },
   markerNavigationScroll: {
     flex: 1
