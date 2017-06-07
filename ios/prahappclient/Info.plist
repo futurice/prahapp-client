@@ -51,7 +51,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Futubohemia requires access to the camera</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Futubohemia requires access to the photo library</string>
 	<key>UIAppFonts</key>
