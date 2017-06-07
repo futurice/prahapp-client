@@ -16,8 +16,6 @@ import { initializeUsersCity, fetchCities } from '../concepts/city';
 import permissions from '../services/android-permissions';
 
 const IOS = Platform.OS === 'ios';
-// var HockeyApp = require('react-native-hockeyapp');
-
 
 const middlewares = [thunk];
 if (__DEV__) {
@@ -36,9 +34,9 @@ store.dispatch(fetchActionTypes());
 store.dispatch(getUser());
 
 // Fetch all cities
-store.dispatch(fetchCities())
-// load selected city from local storage
-.then(() => store.dispatch(initializeUsersCity()))
+// store.dispatch(fetchCities())
+// // load selected city from local storage
+// .then(() => store.dispatch(initializeUsersCity()))
 
 
 class RootView extends Component {
@@ -49,12 +47,12 @@ class RootView extends Component {
   }
 
   componentDidMount() {
-
     // Location watcher
     if (IOS) {
       this.startLocationWatcher();
     } else {
-      permissions.requestLocationPermission(this.startLocationWatcher);
+      // No need for location watcher
+      // permissions.requestLocationPermission(this.startLocationWatcher);
     }
 
     // Statusbar style
@@ -73,8 +71,8 @@ class RootView extends Component {
   startLocationWatcher() {
     const locationOpts = {
       enableHighAccuracy: false,
-      timeout: 20000,
-      maximumAge: 1000 * 60 * 5
+      timeout: 20000, // 20 sec
+      maximumAge: 1000 * 60 * 5 // 5 min
     };
 
     navigator.geolocation.getCurrentPosition(
