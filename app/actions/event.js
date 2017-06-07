@@ -21,12 +21,6 @@ const UPDATE_EVENT_SHOWFILTER = 'UPDATE_EVENT_SHOWFILTER';
 const TOGGLE_EVENT_MAP_LOCATE = 'TOGGLE_EVENT_MAP_LOCATE';
 
 const fetchEvents = () => (dispatch, getState) => {
-  const cityId = getCityId(getState());
-
-  if (!cityId) {
-    return;
-  }
-
   dispatch({ type: GET_EVENT_LIST_REQUEST });
   return api.fetchModels('events', { showPast: true })
   .then(events => {
