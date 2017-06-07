@@ -24,7 +24,7 @@ import PlatformTouchable from '../common/PlatformTouchable';
 import theme from '../../style/theme';
 import { fetchLinks } from '../../actions/profile';
 import { getCurrentCityName } from '../../concepts/city';
-import { openRegistrationView } from '../../actions/registration';
+import { openRegistrationView, logoutUser } from '../../actions/registration';
 import { getStoredUser } from '../../reducers/registration';
 import feedback from '../../services/feedback';
 
@@ -49,14 +49,14 @@ const styles = StyleSheet.create({
   listItem__hero:{
     flexDirection: 'column',
     alignItems: 'center',
-    paddingTop: 35,
-    paddingBottom:25,
-    backgroundColor: theme.transparent,
+    paddingTop: IOS ? 35 : 0,
+    paddingBottom: 25,
+    backgroundColor: theme.yellow,
     elevation: 3,
     overflow: 'hidden'
   },
   heroItem: {
-    height: 180,
+    height: IOS ? 180 : 190,
     marginBottom: 0,
     flex: 0,
   },
@@ -128,8 +128,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     backgroundColor: theme.transparent,
     padding: 0,
-    paddingHorizontal: 3,
-    top: 10,
+    paddingHorizontal: 0,
+    top: 0,
     fontSize: 14,
   },
   listItemText__downgrade: {
@@ -174,14 +174,14 @@ const styles = StyleSheet.create({
     fontWeight: '300'
   },
   listItemHeroIcon:{
-    borderColor: theme.yellow,
-    borderWidth: 4,
-    borderRadius: 40,
-    width: 80,
-    height: 80,
+    backgroundColor: theme.transparent,
+    borderRadius: 0,
+    width: 100,
+    top: 0,
+    height: 140,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 15,
+    marginBottom: IOS ? 15 : 0,
     overflow:'visible'
   },
   profilePicBgLayer:{
@@ -214,7 +214,6 @@ const styles = StyleSheet.create({
     width:60,
     fontSize: 60,
     color: theme.blue2,
-    top: 0,
     left: 5,
     alignSelf: 'stretch',
     backgroundColor: 'transparent',
@@ -261,6 +260,39 @@ class Profile extends Component {
       });
 
     }
+  }
+
+  renderCustomItem(item, index) {
+    const linkItemStyles = [styles.listItemButton];
+
+    if (item.separatorAfter || item.last) {
+      linkItemStyles.push(styles.listItemSeparator)
+    }
+
+    if (item.last) {
+      linkItemStyles.push(styles.listItemLast)
+    }
+
+    return (
+      <PlatformTouchable
+        key={index}
+        underlayColor={'#eee'}
+        activeOpacity={0.6}
+        delayPressIn={0}
+        style={styles.listItemButton}
+        onPress={item.onPress}>
+        <View style={linkItemStyles}>
+          <View style={styles.listItem}>
+            <Icon style={styles.listItemIcon} name={item.icon} />
+            <View style={styles.listItemTitles}>
+              <Text style={styles.listItemText}>{item.title}</Text>
+              {item.subtitle && <Text style={styles.listItemSubtitle}>{item.subtitle}</Text>}
+            </View>
+            {!item.separatorAfter && !item.last && <View style={styles.listItemBottomLine} />}
+          </View>
+        </View>
+      </PlatformTouchable>
+    );
   }
 
   renderLinkItem(item, index) {
@@ -327,74 +359,27 @@ class Profile extends Component {
     );
   }
 
-
-
-  _renderModalItem(item, index) {
-    const currentTeam = _.find(this.props.teams.toJS(), ['id', this.props.selectedTeam]) || { name:'' };
-    const hasName = !!item.title;
-    const avatarInitialLetters = hasName ? item.title.split(' ').slice(0, 2).map(t => t.substring(0, 1)).join('') : null;
-
-    return (
-      <View key={index} style={{flex:1}}>
-        <PlatformTouchable delayPressIn={0} activeOpacity={0.8} onPress={this.openRegistration}>
-            <View style={[styles.listItemButton, styles.listItemSeparator]}>
-            <View style={[styles.listItem, styles.listItem__hero]}>
-              <View style={styles.avatarColumn}>
-                <View style={[styles.avatar, hasName ? styles.avatarInitialLetter : {}]}>
-                  {hasName
-                    ? <Text style={styles.avatarText}>{avatarInitialLetters}</Text>
-                    : <Icon style={[styles.listItemIcon, styles.listItemIcon__hero]} name={item.icon} />
-                  }
-                </View>
-              </View>
-              <View style={{flexDirection:'column', flex:1}}>
-                {
-                  item.title ?
-                  <Text style={[styles.listItemText, styles.listItemText__highlight]}>
-                    {item.title}
-                  </Text> :
-                  <Text style={[styles.listItemText, styles.listItemText__downgrade]}>
-                    Unnamed Futubohemia user
-                  </Text>
-                }
-                <Text style={[styles.listItemText, styles.listItemText__small]}>
-                  {currentTeam.name}
-                </Text>
-              </View>
-              <Icon style={[styles.listItemIcon, styles.listItemIconRight]} name={item.rightIcon} />
-            </View>
-          </View>
-        </PlatformTouchable>
-      </View>
-    );
-  }
-
   renderModalItem(item) {
     const currentTeam = _.find(this.props.teams.toJS(), ['id', this.props.selectedTeam]) || { name: '' };
-
     const avatar = item.picture;
 
     return (
       <View style={[styles.listItemButton, styles.listItemSeparator, styles.heroItem]}>
         <View style={[styles.listItem, styles.listItem__hero]}>
-          {avatar !== '' &&
-            <Image style={styles.profilePicBg} resizeMode={'cover'} source={require('../../../assets/patterns/sea.png')} />
-          }
 
-          <View style={styles.profilePicBgLayer} />
+          {/*<View style={styles.profilePicBgLayer} /> */}
           <View style={styles.listItemHeroIcon}>
-
-          { avatar ?
-            <Image style={styles.profilePic} source={{ uri: avatar }} /> :
-            <Icon style={[styles.listItemIcon, styles.listItemIcon__hero]} name={item.icon} />
-          }
             <Image
-              resizeMode={'contain'}
-              source={require('../../../assets/prague/futubohemia/frames.png')}
-              style={{ tintColor: theme.blue2, width: 85, height: 200, position: 'absolute', left: -7, top: -65, zIndex: 10, }}
+            resizeMode={'contain'}
+            source={require('../../../assets/prague/futubohemia/frames.png')}
+            style={{ tintColor: theme.blue2, width: 85, height: 200, position: 'absolute', left: 8, top: -30, zIndex: 10, }}
             />
+            {avatar ?
+              <Image style={styles.profilePic} source={{ uri: avatar }} /> :
+              <Icon style={[styles.listItemIcon, styles.listItemIcon__hero]} name={item.icon} />
+            }
           </View>
-          <View style={{flexDirection:'column',flex:1, alignItems:'center'}}>
+          <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
             {
               item.title ?
               <Text style={[styles.listItemText, styles.listItemText__highlight]}>
@@ -433,7 +418,7 @@ class Profile extends Component {
   }
 
   render() {
-    const { name, links, terms, cityName, user } = this.props;
+    const { name, links, terms, cityName, user, logoutUser } = this.props;
 
     const linksForCity = links.toJS().map(link => {
       const showCity = link.showCity;
@@ -453,12 +438,20 @@ class Profile extends Component {
     };
     const listData = [userItem].concat(linksForCity, terms.toJS());
 
+    const logoutItem = {
+      title: 'Logout from App',
+      onPress: () => logoutUser(),
+      icon: 'exit-to-app',
+      separatorAfter: true,
+    }
+
     return (
       <View style={styles.container}>
 
         {this.renderModalItem(userItem, 'user-1')}
         <ScrollView style={styles.scrollView}>
           {listData.map(this.renderItem)}
+          {this.renderCustomItem(logoutItem, 'logout')}
         </ScrollView>
 
       {/*
@@ -473,7 +466,7 @@ class Profile extends Component {
   }
 }
 
-const mapDispatchToProps = { fetchLinks, openRegistrationView };
+const mapDispatchToProps = { fetchLinks, openRegistrationView, logoutUser };
 
 const select = store => ({
   selectedTeam: store.registration.get('selectedTeam'),
