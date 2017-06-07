@@ -38,7 +38,6 @@ export const fetchUserImages = (userId) => (dispatch) => {
   dispatch({ type: GET_USER_PROFILE_REQUEST });
   return api.getUserProfile(userId)
     .then(images => {
-      console.log(images);
       dispatch({
         type: SET_USER_PROFILE,
         payload: images

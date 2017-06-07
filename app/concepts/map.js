@@ -20,7 +20,6 @@ import LoadingStates from '../constants/LoadingStates';
 import MarkerImages from '../constants/MarkerImages';
 import time from '../utils/time';
 
-
 // # Selectors
 const getSelectedCategory = state => state['map'].get('selectedCategory');
 const getSelectedMarker = state => state['map'].get('selectedMarker');

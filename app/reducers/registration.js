@@ -104,8 +104,8 @@ export default function registration(state = initialState, action) {
 export const getUserId = state => state.registration.get('userId');
 export const getUserName = state => state.registration.get('name');
 export const getUserTeamId = state => state.registration.get('selectedTeam', 0);
-export const getStoredUser = state => state.registration.get('storageUser', new Map());
+export const getStoredUser = state => state.registration.get('storageUser', fromJS({})) || fromJS({});
 export const getUserTeam = createSelector(getUserTeamId, getTeams,
   (teamId, teams) => teams.find(item => item.get('id') === teamId))
 
-export const isUserLoggedIn = createSelector(getStoredUser, user => user && !user.isEmpty())
+export const isUserLoggedIn = createSelector(getStoredUser, user => !!user && !user.isEmpty())
