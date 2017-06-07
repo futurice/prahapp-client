@@ -10,14 +10,17 @@ import {
   Easing,
   TouchableOpacity,
   ScrollView,
-  Dimensions
+  Dimensions,
+  Platform
 } from 'react-native';
+
 
 import theme from '../../style/theme';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import MdIcon from 'react-native-vector-icons/MaterialIcons';
 
+const IOS = Platform.OS === 'ios';
 const { width, height } = Dimensions.get('window');
 const cityIcons = {
   'helsinki': require('../../../assets/cities/icon-ota-amfi-accent.png'),
@@ -101,18 +104,18 @@ const styles = StyleSheet.create({
   },
   iconWrap: {
     position: 'absolute',
-    width: 190,
-    height: 190,
-    borderRadius: 95,
+    width: IOS ? 190 : 210,
+    height: IOS ? 190 : 210,
+    borderRadius: IOS ? 95 : 105,
     backgroundColor: 'rgba(255,255,255,0)',
-    left: width / 2 - 95,
-    top: width / 6,
+    left: width / 2 - 105,
+    top: IOS ? width / 6 : width / 8,
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'visible'
   },
   icon: {
-    // width: 200,
+    // width: 210,
     // left: width / 2 - 100,
     // top: 50,
     // position: 'absolute',

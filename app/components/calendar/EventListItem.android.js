@@ -27,7 +27,8 @@ const styles = StyleSheet.create({
   gridListItemImgWrap: {
     height: 80,
     width: Dimensions.get('window').width - 130,
-    position: 'relative'
+    position: 'relative',
+    backgroundColor: theme.yellow
   },
   gridListItemImg: {
     width: Dimensions.get('window').width - 130,
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
   },
   gridListItemTime: {
     fontSize: 14,
-    color: theme.secondary,
+    color: theme.blue2,
     fontWeight:'normal'
   },
   gridListItemTimeEnd: {
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
     fontSize: 12
   },
   gridListItemIcon__alert: {
-    color: theme.secondary
+    color: theme.blue2
   },
   timeline: {
     position:'absolute',
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
     backgroundColor:'#eee'
   },
   timelineCircle: {
-    backgroundColor: theme.secondary,
+    backgroundColor: theme.blue2,
     borderColor:theme.light,
     position:'absolute',
     left:66,
@@ -137,7 +138,8 @@ export default class EventListItem extends Component {
   render() {
     const { item, hideStatus, pastEvent } = this.props;
     const timepoint = time.formatEventTime(item.startTime, item.endTime);
-    const coverImage = item.coverImage ? item.coverImage.replace('https://', 'http://') : '';
+    // const coverImage = item.coverImage ? item.coverImage.replace('https://', 'http://') : '';
+    const { coverImage } = item;
 
     return <TouchableNativeFeedback onPress={this.props.handlePress}  delayPressIn={100} background={TouchableNativeFeedback.SelectableBackground()}>
       <View style={styles.gridListItem}>
@@ -147,12 +149,10 @@ export default class EventListItem extends Component {
 
           {!hideStatus &&
             <View style={[styles.gridListItemIconsWrapper,
-              {marginBottom: item.teemu || timepoint.onGoing || timepoint.startsSoon ? 5 : 0}
+              {marginBottom: timepoint.onGoing || timepoint.startsSoon ? 5 : 0}
             ]}>
               {!pastEvent && timepoint.onGoing && <Text style={[styles.gridListItemIcon, styles.gridListItemIcon__alert]}>Ongoing!</Text>}
               {!pastEvent && timepoint.startsSoon && <Text style={[styles.gridListItemIcon, styles.gridListItemIcon__alert]}>Starts soon!</Text>}
-              {item.teemu && <Text style={styles.gridListItemIcon}>
-              <Icon name='school' style={{color:theme.secondary}} size={13} /> Emäteemu!</Text>}
             </View>
           }
 

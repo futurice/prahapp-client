@@ -93,7 +93,7 @@ var AndroidTabBar = React.createClass({
           name={item.icon}
           size={item.iconSize || 22}
           style={{
-            top: 0, //isTabActive ? -7 : 0,
+            top: 0,
             color: isTabActive ? activeTextColor : inactiveTextColor,
           }} />
 

@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
   inputField: {
     fontSize: 18,
     margin: 0,
-    marginLeft: 10,
+    marginLeft: 20,
     marginTop: IOS ? 110 : 0,
     color:'#FFF',
     textAlign: 'center',

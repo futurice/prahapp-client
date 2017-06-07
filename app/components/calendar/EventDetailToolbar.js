@@ -13,22 +13,17 @@ import theme from '../../style/theme';
 
 const styles = StyleSheet.create({
   toolbar: {
-    backgroundColor: 'rgba(206,62,138,.25)',
-    position:'absolute',
-    left:0,
-    top:0,
-    right:0,
-    elevation:2,
+    backgroundColor: 'rgba(0, 58, 111, .4)',
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    right: 0,
+    elevation: 2,
     height: 56,
   }
 });
 
 class EventDetailToolbar extends Component {
-  propTypes: {
-    title: PropTypes.string.isRequired,
-    navigator: PropTypes.object.isRequired
-  }
-
   @autobind
   goBack() {
     this.props.navigator.pop();
@@ -39,7 +34,7 @@ class EventDetailToolbar extends Component {
   }
 
   render() {
-    const { backgroundColor } = this.props;
+    const { backgroundColor, color } = this.props;
 
     return (
       <Icon.ToolbarAndroid
@@ -47,8 +42,8 @@ class EventDetailToolbar extends Component {
       // onActionSelected={this._onActionSelected}
       onIconClicked={this.goBack}
       navIconName={'arrow-back'}
-      titleColor={theme.light}
-      iconColor={theme.light}
+      titleColor={color || theme.light}
+      iconColor={color || theme.light}
       style={[styles.toolbar, backgroundColor ? { backgroundColor } : {} ]}
       title={this.props.title}
       />

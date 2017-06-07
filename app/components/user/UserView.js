@@ -56,7 +56,6 @@ class UserView extends Component {
 
     return (
       <View style={{ flex: 1 }}>
-      {false && <Header backgroundColor={theme.secondary} title={user.name} navigator={navigator} />}
       <ParallaxView
         backgroundSource={headerImage}
         windowHeight={230}
@@ -165,7 +164,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.transparent
   },
   backLinkIcon: {
-    color: theme.white
+    color: theme.blue2
   },
   headerTitle:{
     fontSize: 15,

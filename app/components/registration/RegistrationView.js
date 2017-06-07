@@ -542,12 +542,11 @@ const styles = StyleSheet.create({
   iconWrap: {
     // overflow: 'hidden',
     position: 'absolute',
-    width: 190,
-    height: 190,
-    borderRadius: 95,
-    // backgroundColor: 'rgba(255,255,255,.1)',
-    left: width / 2 - 95,
-    top: width / 6,
+    width: IOS ? 190 : 210,
+    height: IOS ? 190 : 210,
+    borderRadius: IOS ? 95 : 105,
+    left: width / 2 - 105,
+    top: IOS ? width / 6 : width / 8,
     alignItems: 'center',
     justifyContent: 'center'
   },

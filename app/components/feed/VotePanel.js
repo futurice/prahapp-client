@@ -83,6 +83,9 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
     marginLeft: 8,
     minWidth: 45,
+    minHeight: 42,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   itemVoteButtonWrap: {
     flex: 1,

@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     marginTop: 35,
     marginBottom: 20,
     fontSize: 16,
-    lineHeight: 18,
+    lineHeight: 20,
     color: theme.blue1,
     textAlign: 'center',
   },
