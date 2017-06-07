@@ -55,8 +55,8 @@ var EventDetailToolbar = React.createClass({
         navIconName={'arrow-back'}
         // logo={require('../../../assets/logo-toolbar.png')}
         onIconClicked={this._goBack}
-        iconColor={theme.light}
-        titleColor={this.props.titleColor || theme.light}
+        iconColor={theme.blue2}
+        titleColor={this.props.titleColor || theme.blue2}
         style={toolbarStyles}
         title={this.props.title}
       />

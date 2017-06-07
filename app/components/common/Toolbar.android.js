@@ -29,8 +29,8 @@ class ToolBar extends Component {
       <Icon.ToolbarAndroid
         onIconClicked={this.props.leftIconClick}
         navIconName={this.props.leftIcon}
-        titleColor={theme.light}
-        iconColor={theme.light}
+        titleColor={theme.blue2}
+        iconColor={theme.blue2}
         style={styles.toolbar}
         title={this.props.title}
       />
