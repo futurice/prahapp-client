@@ -25,7 +25,7 @@ class WebViewer extends Component {
 
     return (
       <View style={styles.container}>
-        {!IOS && <Toolbar title={name} backgroundColor={theme.secondary} navigator={this.props.navigator} /> }
+        {!IOS && <Toolbar title={name} color={theme.blue2} backgroundColor={theme.secondary} navigator={this.props.navigator} /> }
 
         {url &&
           <WebView

@@ -369,6 +369,11 @@ class RegistrationView extends Component {
 
   render() {
     const { isUserLogged } = this.props;
+
+    return !isUserLogged || this.props.isRegistrationViewOpen
+      ? this.renderAppIntro()
+      : null;
+    /*
     return (
       !isUserLogged ?
         this.renderAppIntro()
@@ -381,6 +386,7 @@ class RegistrationView extends Component {
           {this._renderNameSelectContainer()}
         </Modal>
     );
+    */
   }
 
 }

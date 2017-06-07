@@ -23,15 +23,6 @@ class SkipView extends Component {
 
     return (
        <View style={styles.container}>
-          {/*
-          <View style={styles.topArea}>
-            <View style={styles.iconWrap}>
-              <Image style={styles.bgImage} source={require('../../../assets/patterns/sea.png')} />
-              <MdIcon style={styles.icon} name={'loyalty'} />
-            </View>
-          </View>
-          */}
-
           <ScrollView style={{flex:1, width: null, height: null}}>
               <View style={styles.content}>
                 <View style={styles.textContainer}>
