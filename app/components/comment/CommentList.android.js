@@ -125,17 +125,14 @@ class CommentList extends Component {
     } = this.props;
 
     return (
-      <KeyboardAvoidingView
-        behavior={IOS ? 'position' : 'position'}
-        keyboardVerticalOffset={IOS ? 0 : 300}
-        style={styles.commentList}
-      >
+      <View style={styles.commentList}>
         <View style={styles.commentView}>
           <View style={styles.commentScroll}>
             {loadingComments
               ? this.renderLoader()
               :
               <ScrollView
+                keyboardShouldPersistTaps={'handled'}
                 ref={ref => this.commentScrollView = ref}
                 onContentSizeChange={(contentWidth, contentHeight) => {
                   this.commentScrollView.scrollToEnd({ animated: false });
@@ -148,6 +145,7 @@ class CommentList extends Component {
           </View>
 
           <View style={styles.commentForm}>
+
             <CommentForm
               postComment={this.postComment}
               editComment={editComment}
@@ -157,7 +155,7 @@ class CommentList extends Component {
             />
           </View>
         </View>
-      </KeyboardAvoidingView>
+      </View>
     )
   }
 }
@@ -172,12 +170,13 @@ const styles = StyleSheet.create({
     backgroundColor: theme.white,
   },
   commentView: {
-    paddingBottom: 52,
-    minHeight: height - 56,
-    maxHeight: height - 56,
-    flexGrow: 1,
+    paddingBottom: 28,
+    // height: height,
+    // justifyContent: 'space-between',
+    flexDirection: 'column',
     backgroundColor: theme.white,
-    justifyContent: 'space-between',
+    flexGrow: 1,
+    flex: 1,
   },
   commentScroll: {
     // flex: 1,
@@ -185,15 +184,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexGrow: 1,
     backgroundColor: theme.white,
-    minHeight: height - 107,
+    // minHeight: height - 135,
     paddingBottom: IOS ? 0 : 20,
   },
   commentForm: {
     height: 52,
-    position: 'relative',
+    position: 'absolute',
+    zIndex: 99,
     left: 0,
     right: 0,
-    bottom: IOS ? 0 : 25,
+    bottom: IOS ? 0 : 0,
   },
 
 

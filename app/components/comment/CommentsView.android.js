@@ -31,8 +31,6 @@ import CommentPost from './CommentPost';
 import CommentList from './CommentList';
 import Toolbar from '../common/Toolbar';
 
-const IOS = Platform.OS === 'ios';
-
 const { width, height } = Dimensions.get('window');
 
 class CommentsView extends Component {
@@ -65,12 +63,12 @@ class CommentsView extends Component {
         animationType={'slide'}
       >
         <View style={styles.container}>
-          <View style={styles.header}>
-            <TouchableOpacity onPress={this.onClose} style={styles.closeLink}>
-              <Icon style={styles.closeLinkIcon} name="close" />
-            </TouchableOpacity>
-            <Text style={styles.headerTitle}>Comment</Text>
-          </View>
+
+        <Toolbar leftIcon={'arrow-back'}
+          leftIconClick={this.onClose}
+          title='Comments for Post' />
+
+          {/*<CommentPost item={commentItem} /> */ }
           <CommentList
             postItem={commentItem}
             comments={comments}
@@ -89,7 +87,7 @@ class CommentsView extends Component {
 // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
+    flex: 1,
     // paddingTop: 0,
     // paddingBottom: 0,
     // justifyContent: 'flex-start',

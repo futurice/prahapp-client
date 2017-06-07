@@ -6,7 +6,6 @@ import {
   View,
   Image,
   TouchableOpacity,
-  Platform,
   Dimensions,
   TextInput,
   KeyboardAvoidingView,
@@ -19,8 +18,7 @@ import PlatformTouchable from '../common/PlatformTouchable';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import theme from '../../style/theme';
 
-const { width, height } = Dimensions.get('window');
-const IOS = Platform.OS === 'ios';
+const { width, height } = Dimensions.get('window');;
 
 class CommentForm extends Component {
   constructor(props) {
@@ -63,7 +61,7 @@ class CommentForm extends Component {
         ? this.renderPostLoader()
         :
         <View style={styles.sendButton}>
-          <TouchableOpacity onPress={this.onSendText} >
+          <TouchableOpacity onPress={this.onSendText} underlayColor={theme.white} style={{ width: 52, height: 52,  alignItems: 'center', justifyContent: 'center' }} >
             <Text>
               <Icon name="send" style={styles.sendButtonIcon} />
             </Text>
@@ -77,17 +75,21 @@ class CommentForm extends Component {
 
     return (
       <View style={styles.itemWrapper}>
-        <View style={styles.inputContainer}>
+        <KeyboardAvoidingView
+          behavior={'height'}
+          keyboardVerticalOffset={0}
+          style={styles.inputContainer}
+        >
           <TextInput
             autoFocus={false}
             autoCorrect={false}
             autoCapitalize={'sentences'}
             underlineColorAndroid={'transparent'}
+            clearButtonMode={'while-editing'}
             returnKeyType={'send'}
             style={styles.inputField}
-            numberOfLines={1}
             blurOnSubmit={false}
-            maxLength={151}
+            maxLength={131}
             placeholderTextColor={'rgba(0,0,0, 0.4)'}
             placeholder="Add comment..."
             onSubmitEditing={this.onSendText}
@@ -95,9 +97,8 @@ class CommentForm extends Component {
             value={text}
           />
 
-          {IOS && this.renderSubmit()}
-          {!IOS && loadingCommentPost && this.renderPostLoader()}
-        </View>
+          {loadingCommentPost && this.renderPostLoader()}
+        </KeyboardAvoidingView>
       </View>
     );
   }
@@ -133,11 +134,11 @@ const styles = StyleSheet.create({
     borderRadius: 0,
     padding: 10,
     left: 15,
-    width: width - (IOS ? 75 : 60),
+    width: width - 60,
   },
   sendButton: {
     zIndex: 1,
-    position: 'relative',
+    position: 'absolute',
     top: 0,
     right: 0,
     height: 52,
