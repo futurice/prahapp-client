@@ -153,6 +153,13 @@ export const openLoginView = () => (dispatch, getState) => {
 }
 
 export const checkUserLogin = () => (dispatch, getState) => {
+// # Logout
+// Remove user from AsyncStorage and state
+export const logoutUser = () => (dispatch) => {
+  AsyncStorage.removeItem(userKey, () => {
+    dispatch(setUserToStorage(null));
+  });
+}
 
   AsyncStorage.getItem(userKey, (err, user) => {
     if (!user) {
