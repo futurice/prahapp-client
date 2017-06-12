@@ -1,6 +1,6 @@
 * Backend repository here: https://github.com/kaupunki-apina/prahapp-backend/
 
-* Fork from https://github.com/futurice/wappuapp-client
+* Originally based on https://github.com/futurice/wappuapp-client
 
 # Prahapp #prahantakii
 
@@ -18,7 +18,7 @@
 
 ### Architecture
 * React Native + Redux
-* iOS and Android
+* iOS and Android support
 * Selectors with [reselect](https://github.com/reactjs/reselect/) to access store
 * Redux architecture using [ducks](https://github.com/erikras/ducks-modular-redux). See `/app/concepts`
 * Data processing in _concepts_ and minimize logic in views
