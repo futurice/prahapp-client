@@ -17,15 +17,18 @@ class WebViewer extends Component {
 
   render() {
 
+    const { hideHeader } = this.props;
     let { url, name } = this.props.route;
 
     if (IOS && url.indexOf('https') < 0) {
       url = 'https://crossorigin.me/' + url;
     }
 
+    const showHeader = !hideHeader && !IOS;
+
     return (
-      <View style={styles.container}>
-        {!IOS && <Toolbar title={name} color={theme.blue2} backgroundColor={theme.secondary} navigator={this.props.navigator} /> }
+      <View style={[styles.container, { paddingTop: showHeader ? 52 : 0 }]}>
+        {showHeader && <Toolbar title={name} color={theme.blue2} backgroundColor={theme.secondary} navigator={this.props.navigator} /> }
 
         {url &&
           <WebView
@@ -46,8 +49,7 @@ WebViewer.propTypes = {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
-    paddingTop: IOS ? 10 : 52
+    flex:1
   }
 });
 

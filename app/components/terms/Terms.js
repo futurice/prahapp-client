@@ -1,7 +1,9 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { View, StyleSheet, ScrollView, Platform, Text } from 'react-native';
+import { View, StyleSheet, ScrollView, Platform } from 'react-native';
+
+import Text from '../common/MyText';
 import theme from '../../style/theme';
 import Header from '../common/Header';
 

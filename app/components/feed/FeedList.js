@@ -9,10 +9,12 @@ import {
   Text,
   RefreshControl,
   View,
+  Dimensions,
   ScrollView,
   Platform
 } from 'react-native';
 import { connect } from 'react-redux';
+import { noop } from 'lodash';
 import { ImagePickerManager } from 'NativeModules';
 import autobind from 'autobind-decorator';
 
@@ -42,6 +44,7 @@ import Loading from './Loading';
 import ActionButtons from './ActionButtons';
 import CommentsView from '../comment/CommentsView';
 import LoadingStates from '../../constants/LoadingStates';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import ImageCaptureOptions from '../../constants/ImageCaptureOptions';
 import {
@@ -56,12 +59,13 @@ import {
 import reactMixin from 'react-mixin';
 import TimerMixin from 'react-timer-mixin';
 
+const { width, height } = Dimensions.get('window');
 const IOS = Platform.OS === 'ios';
 
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: theme.lightgrey
+    backgroundColor: theme.white
   },
   feedContainer: {
     flexDirection: 'column',
@@ -74,10 +78,24 @@ const styles = StyleSheet.create({
   },
   actionButtons: {
     position: 'absolute',
-    bottom: IOS ? 30 : 0,
+    bottom: 0,
     right: 0
   },
-
+  problemWrap: {
+    flex: 1,
+    top: height / 2 - 200,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  problemIcon: {
+    fontSize: 100,
+    color: '#ccc',
+  },
+  problemText: {
+    marginTop: 20,
+    color: '#ccc',
+    fontSize: 20,
+  }
 });
 
 class FeedList extends Component {
@@ -121,6 +139,8 @@ class FeedList extends Component {
 
   @autobind
   _onScroll(event) {
+
+    const { onScrollDown, onScrollUp } = this.props;
     const { showScrollTopButton } = this.state;
     const SHOW_SCROLLTOP_LIMIT = 600;
     const HIDE_BUTTON_LIMIT = 570;
@@ -135,14 +155,18 @@ class FeedList extends Component {
 
     const SENSITIVITY = 25;
     if (this.showActionButtons && isOverHideLimit && scrollTop - this.scrollPos > SENSITIVITY) {
+      // Hide button
       this.showActionButtons = false;
       Animated.timing(this.state.actionButtonsAnimation, { toValue: 0, duration: 300 }).start();
+      onScrollDown();
     } else if (
       !this.showActionButtons &&
       ((isOverHideLimit && this.scrollPos - scrollTop > SENSITIVITY) || !isOverHideLimit)
     ) {
+      // Show button
       this.showActionButtons = true;
       Animated.timing(this.state.actionButtonsAnimation, { toValue: 1, duration: 300 }).start();
+      onScrollUp();
     }
 
     this.scrollPos = scrollTop;
@@ -175,13 +199,13 @@ class FeedList extends Component {
   }
 
   @autobind
-  chooseImage() {
+  chooseImage(openLibrary) {
     if (IOS) {
-      this.openImagePicker();
+      this.openImagePicker(openLibrary);
     } else {
       permissions.requestCameraPermission(() => {
         setTimeout(() => {
-          this.openImagePicker();
+          this.openImagePicker(openLibrary);
         });
       });
     }
@@ -199,8 +223,12 @@ class FeedList extends Component {
   }
 
   @autobind
-  openImagePicker() {
-    ImagePickerManager.showImagePicker(ImageCaptureOptions, (response) => {
+  openImagePicker(openLibrary) {
+    const imagePickFunctionality = openLibrary ? 'launchImageLibrary' : 'launchCamera';
+
+    console.log('open', imagePickFunctionality);
+
+    ImagePickerManager[imagePickFunctionality](ImageCaptureOptions, (response) => {
       if (!response.didCancel && !response.error) {
         const data = 'data:image/jpeg;base64,' + response.data;
         const editableImage = {
@@ -222,8 +250,9 @@ class FeedList extends Component {
   }
 
   @autobind
-  onImagePost(image, text, textPosition) {
-    this.props.postImage(image, text, textPosition);
+  onImagePost(postPayload) {
+    // postPayload: { image, text, imageText, imageTextPosition, addLocation }
+    this.props.postImage(postPayload);
     this.resetPostImage();
   }
 
@@ -233,11 +262,11 @@ class FeedList extends Component {
   }
 
   @autobind
-  onPressAction(type) {
+  onPressAction(type, subType) {
 
     switch (type) {
       case 'IMAGE':
-        return this.chooseImage();
+        return this.chooseImage(subType === 'library');
       case 'TEXT':
         return this.props.openTextActionView();
       case 'CHECK_IN_EVENT': {
@@ -254,8 +283,8 @@ class FeedList extends Component {
     <View style={styles.feedContainer}>
       <View style={styles.listView}>
         <FeedListItem item={item} />
-        <FeedListItem item={item} />
-        <FeedListItem item={item} />
+        <FeedListItem item={item} opacity={0.75} />
+        <FeedListItem item={item} opacity={0.5} />
       </View>
     </View>);
   }
@@ -265,8 +294,8 @@ class FeedList extends Component {
     const refreshControl = <RefreshControl
       refreshing={this.props.isRefreshing || this.props.isSending}
       onRefresh={this.onRefreshFeed}
-      colors={[theme.primary]}
-      tintColor={theme.primary}
+      colors={[theme.secondary]}
+      tintColor={theme.secondary}
       progressBackgroundColor={theme.light} />;
 
     const isLoading = isLoadingActionTypes || isLoadingUserData;
@@ -274,11 +303,13 @@ class FeedList extends Component {
     switch (feedListState) {
       case LoadingStates.LOADING:
         return this.renderSkeletonState();
-        // return <Loading />;
       case LoadingStates.FAILED:
         return (
           <ScrollView style={{ flex: 1 }} refreshControl={refreshControl}>
-            <Text style={{ marginTop: 20 }}>Could not get feed :(</Text>
+            <View style={styles.problemWrap}>
+                <Icon style={styles.problemIcon} name="hot-tub" />
+                <Text style={styles.problemText}>Could not get feed, just vask it...</Text>
+            </View>
           </ScrollView>
         );
       default:
@@ -343,6 +374,12 @@ class FeedList extends Component {
     );
   }
 }
+
+FeedList.defaultProps = {
+  onScrollUp: noop,
+  onScrollDown: noop,
+};
+
 
 const mapDispatchToProps = {
   fetchFeed,

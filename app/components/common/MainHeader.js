@@ -28,7 +28,7 @@ const getElevation = (tab) => {
       return 0;
     }
     default:{
-      return 2;
+      return 1;
     }
   }
 };
@@ -89,7 +89,7 @@ class EventDetailToolbar extends Component {
     return (
       <ToolbarAndroid
         actions={getActions(currentTab, selectedSortType)}
-        logo={require('../../../assets/prague/futubohemia/logo-blue.png')}
+        logo={require('../../../assets/logo/futurice.png')}
         overflowIconName={'sort'}
         overflowIcon={require('../../../assets/icons/sort.png')}
         title={''}

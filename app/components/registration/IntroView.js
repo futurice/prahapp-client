@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 import {
   View,
   Animated,
-  Text,
   Image,
   StyleSheet,
   Easing,
@@ -15,6 +14,7 @@ import {
 } from 'react-native';
 
 
+import Text from '../common/MyText';
 import theme from '../../style/theme';
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -22,10 +22,6 @@ import MdIcon from 'react-native-vector-icons/MaterialIcons';
 
 const IOS = Platform.OS === 'ios';
 const { width, height } = Dimensions.get('window');
-const cityIcons = {
-  'helsinki': require('../../../assets/cities/icon-ota-amfi-accent.png'),
-  'tampere': require('../../../assets/cities/icon-tampere-accent.png')
-};
 
 class InstructionView extends Component {
   constructor(props) {
@@ -60,7 +56,10 @@ class InstructionView extends Component {
 
           <View style={styles.topArea}>
             <View style={styles.iconWrap}>
-              <Image style={styles.subImage} source={require('../../../assets/prague/futubohemia/chilicorn.png')} />
+              <Image
+                style={styles.subImage}
+                resizeMode="contain"
+                source={require('../../../assets/illustrations/chat-dark.png')} />
             </View>
           </View>
 
@@ -70,8 +69,11 @@ class InstructionView extends Component {
 
                   <View style={styles.content}>
                     <View style={styles.textContainer}>
-                      <Image style={{ width: 200, height: 30, tintColor: theme.blue2 }} source={require('../../../assets/prague/futubohemia/logo.png')} />
-                      <Text style={styles.subTitle}>WELCOME TO PRAGUE!</Text>
+                      <Image
+                        style={{ width: 100, height: 30, tintColor: theme.primary }}
+                        source={require('../../../assets/logo/new.png')}
+                      />
+                      <Text style={styles.subTitle}>Welcome My Friend!</Text>
                       {/*<Text style={styles.text}>It's time for Fututrip again!</Text>*/}
                     </View>
                   </View>
@@ -104,11 +106,11 @@ const styles = StyleSheet.create({
   },
   iconWrap: {
     position: 'absolute',
-    width: IOS ? 190 : 210,
-    height: IOS ? 190 : 210,
+    width: IOS ? 180 : 200,
+    height: IOS ? 180 : 200,
     borderRadius: IOS ? 95 : 105,
-    backgroundColor: 'rgba(255,255,255,0)',
-    left: width / 2 - 105,
+    backgroundColor: 'rgba(0,0,0,0.1)',
+    left: width / 2 - 90,
     top: IOS ? width / 6 : width / 8,
     alignItems: 'center',
     justifyContent: 'center',
@@ -122,9 +124,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     opacity: 1,
     backgroundColor: theme.transparent,
-    fontSize: 190,
-    width: 190,
-    height: 190,
+    width: 150,
+    height: 150,
     // tintColor: theme.white,
     color: theme.white,
   },
@@ -137,8 +138,8 @@ const styles = StyleSheet.create({
     position: 'absolute'
   },
   subImage: {
-    width: width - 120,
-    height: width - 120,
+    width: 150,
+    height: 150,
     left: 0,
     bottom: 0,
     position: 'relative',
@@ -157,8 +158,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     top: 0,
-    width: 190,
-    height: 190,
+    width: 180,
+    height: 180,
     borderRadius: 95,
     bottom: 0,
     opacity: 0.01
@@ -176,11 +177,11 @@ const styles = StyleSheet.create({
     flexDirection: 'column'
   },
   subTitle: {
-    color: theme.blue1,
-    fontWeight: '600',
+    color: theme.midgrey,
     fontSize: 16,
     margin: 15,
     marginTop: 35,
+    fontFamily: IOS ? 'Futurice' : 'Futurice_bold'
   },
   text: {
     fontSize: 16,

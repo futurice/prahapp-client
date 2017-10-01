@@ -4,7 +4,6 @@
 import React, { Component, PropTypes } from 'react';
 import {
   StyleSheet,
-  Text,
   View,
   ListView,
   ScrollView,
@@ -21,11 +20,12 @@ import _ from 'lodash';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import WebViewer from '../webview/WebViewer';
 import PlatformTouchable from '../common/PlatformTouchable';
+import Text from '../common/MyText';
 import theme from '../../style/theme';
 import { fetchLinks } from '../../actions/profile';
 import { getCurrentCityName } from '../../concepts/city';
-import { openRegistrationView, logoutUser } from '../../actions/registration';
-import { getStoredUser } from '../../reducers/registration';
+import { openRegistrationView } from '../../actions/registration';
+import { logoutUser } from '../../concepts/auth';
 import feedback from '../../services/feedback';
 
 const { width, height } = Dimensions.get('window');
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   listItem__hero:{
     flexDirection: 'column',
     alignItems: 'center',
-    paddingTop: IOS ? 35 : 0,
+    paddingTop: IOS ? 20 : 0,
     paddingBottom: 25,
     backgroundColor: theme.yellow,
     elevation: 3,
@@ -125,21 +125,20 @@ const styles = StyleSheet.create({
   },
   listItemText__highlight: {
     color: theme.blue2,
-    fontWeight: 'bold',
+    fontWeight: 'normal',
     backgroundColor: theme.transparent,
     padding: 0,
-    paddingHorizontal: 0,
+    paddingTop: 10,
     top: 0,
-    fontSize: 14,
+    fontSize: 16,
   },
   listItemText__downgrade: {
     color: 'rgba(0,0,0,.8)',
     fontWeight: 'bold'
   },
   listItemText__small: {
-    fontSize:13,
-    paddingTop: 12,
-    color: theme.blue1
+    fontSize: 13,
+    color: theme.grey
   },
   listItemTitles: {
     alignItems: 'flex-start',
@@ -178,7 +177,7 @@ const styles = StyleSheet.create({
     borderRadius: 0,
     width: 100,
     top: 0,
-    height: 140,
+    height: 80,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: IOS ? 15 : 0,
@@ -205,9 +204,9 @@ const styles = StyleSheet.create({
     right: 0,
   },
   profilePic: {
-    width: 70,
-    height: 105,
-    borderRadius: 36
+    width: 100,
+    height: 100,
+    borderRadius: 50
   },
   listItemIcon__hero:{
     top: 0,
@@ -369,11 +368,6 @@ class Profile extends Component {
 
           {/*<View style={styles.profilePicBgLayer} /> */}
           <View style={styles.listItemHeroIcon}>
-            <Image
-            resizeMode={'contain'}
-            source={require('../../../assets/prague/futubohemia/frames.png')}
-            style={{ tintColor: theme.blue2, width: 85, height: 200, position: 'absolute', left: 8, top: -30, zIndex: 10, }}
-            />
             {avatar ?
               <Image style={styles.profilePic} source={{ uri: avatar }} /> :
               <Icon style={[styles.listItemIcon, styles.listItemIcon__hero]} name={item.icon} />
@@ -386,14 +380,12 @@ class Profile extends Component {
                 {item.title}
               </Text> :
               <Text style={[styles.listItemText, styles.listItemText__downgrade]}>
-                Unnamed Futuricean
+                Anonymous User
               </Text>
             }
-            {/*
             <Text style={[styles.listItemText, styles.listItemText__small]}>
               {currentTeam.name}
             </Text>
-            */}
           </View>
         </View>
       </View>
@@ -418,7 +410,7 @@ class Profile extends Component {
   }
 
   render() {
-    const { name, links, terms, cityName, user, logoutUser } = this.props;
+    const { name, picture, links, terms, cityName, logoutUser } = this.props;
 
     const linksForCity = links.toJS().map(link => {
       const showCity = link.showCity;
@@ -430,11 +422,11 @@ class Profile extends Component {
 
 
     const userItem = {
-      title: user.get('name'),
+      title: name,
       icon: 'face',
       rightIcon: 'create',
       id: 'user-edit',
-      picture: user.get('picture')
+      picture
     };
     const listData = [userItem].concat(linksForCity, terms.toJS());
 
@@ -469,13 +461,15 @@ class Profile extends Component {
 const mapDispatchToProps = { fetchLinks, openRegistrationView, logoutUser };
 
 const select = store => ({
-  selectedTeam: store.registration.get('selectedTeam'),
   teams: store.team.get('teams'),
+
+  selectedTeam: store.registration.get('selectedTeam'),
   name: store.registration.get('name'),
+  picture: store.registration.get('profilePicture'),
+
   links: store.profile.get('links'),
   terms: store.profile.get('terms'),
   cityName: getCurrentCityName(store),
-  user: getStoredUser(store)
 });
 
 export default connect(select, mapDispatchToProps)(Profile);

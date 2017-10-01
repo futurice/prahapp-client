@@ -1,33 +1,26 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { Animated, View, Text, Platform, StyleSheet } from 'react-native';
+import { Animated, View, Platform, StyleSheet } from 'react-native';
+
 import theme from '../../style/theme';
+import Text from '../common/MyText';
 
 const styles = StyleSheet.create({
   label:{
-    flex: 1,
-    flexDirection: 'row',
-    position: 'absolute',
+
     padding: 6,
-    top: 16,
+    top: 48,
     height: Platform.OS === 'ios' ? 26 : 27,
-    backgroundColor: '#FFF',
-    elevation:2,
-    shadowColor: '#000000',
-    shadowOpacity: 0.2,
-    shadowRadius: 1,
-    shadowOffset: {
-      height: 1,
-      width: 0
-    },
-    borderRadius: 3,
-    right: 60
+    backgroundColor: 'transparent',
+    right: 0
   },
   labelText:{
-    fontSize: 11,
+    fontSize: 13,
+    lineHeight: 17,
+    textAlign: 'center',
     fontWeight: 'bold',
-    color: theme.blue2
+    color: theme.primary,
   },
   additionalLabelText:{
     color: '#bbb',
@@ -50,7 +43,7 @@ class ActionButtonLabel extends Component {
     return (
       <Animated.View style={combinedStyle}>
         <Text style={styles.labelText}>{children}</Text>
-        <Text style={styles.additionalLabelText}>{additionalLabel}p</Text>
+        {/* <Text style={styles.additionalLabelText}>{additionalLabel}p</Text>*/}
       </Animated.View>
 
     );

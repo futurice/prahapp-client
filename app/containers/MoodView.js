@@ -5,6 +5,7 @@ import {
   View,
   Text,
   StyleSheet,
+  TouchableHighlight,
   Platform,
   Dimensions,
   ActivityIndicator
@@ -23,27 +24,33 @@ import {
 } from '../concepts/mood';
 
 import Notification from '../components/common/Notification';
-import MoodChart from '../components/mood/MoodChart';
-import MoodKpis from '../components/mood/MoodKpis';
-import MoodSlider from '../components/mood/MoodSlider';
+// import MoodChart from '../components/mood/MoodChart';
+// import MoodKpis from '../components/mood/MoodKpis';
 import Fab from '../components/common/Fab';
 import theme from '../style/theme';
 import autobind from 'autobind-decorator';
 import { openRegistrationView } from '../actions/registration';
 import { getCurrentCityName } from '../concepts/city';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const IOS = Platform.OS === 'ios';
 const { width, height } = Dimensions.get('window');
 
 class MoodView extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedMood: null
+    };
 
+  }
   componentDidMount() {
     this.props.fetchMoodData()
   }
 
   @autobind
   navigateToMoodSlider() {
+    /*
     if (!this.props.isRegistrationInfoValid) {
       this.props.openRegistrationView();
     } else {
@@ -54,19 +61,38 @@ class MoodView extends Component {
         hideNavButton: true
       });
     }
+    */
   }
 
   render() {
     const { cityMoodData, ownMoodData, teamMoodData, limitLineData, moodKpiValues,
       isNotificationVisible, notificationText, cityName, teamName, isLoading } = this.props;
 
+    const moodIcons = [
+      "sentiment-very-dissatisfied",
+      "sentiment-dissatisfied",
+      "sentiment-neutral",
+      "sentiment-satisfied",
+      "sentiment-very-satisfied",
+    ]
 
     return (
       <View style={styles.container} >
 
-        <ActivityIndicator style={styles.loader} animating={isLoading} size={'large'} color={theme.accentLight} />
-        <MoodChart cityData={cityMoodData} ownData={ownMoodData} teamData={teamMoodData} limitLineData={limitLineData} />
+        {/* <ActivityIndicator style={styles.loader} animating={isLoading} size={'large'} color={theme.accentLight} /> */}
 
+        <View style={{ flex: 1, justifyContent: 'space-around', paddingHorizontal: 30, alignItems: 'center', flexDirection: 'row', width, }}>
+          <View style={{ height: 2, flex: 1, left: 50, right: 50, position: 'absolute', backgroundColor: theme.grey3 }} />
+          {moodIcons.map((icon, index) =>
+            <TouchableHighlight key={icon} activeOpacity={1} onPress={() => this.setState({ selectedMood: index })}>
+              <Icon
+                name={icon}
+                style={{ color: this.state.selectedMood === index ? theme.secondary : theme.grey3, fontSize: 44, padding: 0, backgroundColor: '#FFF' }} />
+            </TouchableHighlight>
+          )}
+        </View>
+        {/*<MoodChart cityData={cityMoodData} ownData={ownMoodData} teamData={teamMoodData} limitLineData={limitLineData} />*/}
+      {/*
         <Fab
           onPress={this.navigateToMoodSlider}
           styles={styles.button}
@@ -88,8 +114,9 @@ class MoodView extends Component {
             <Icon name={IOS ? 'ios-refresh' : 'md-refresh'} size={IOS ? 24 : 22} />
           </Text>
         </Fab>
+      */}
 
-        <MoodKpis kpiValues={moodKpiValues} cityName={cityName} teamName={teamName} />
+        {/*<MoodKpis kpiValues={moodKpiValues} cityName={cityName} teamName={teamName} />*/}
 
         <Notification visible={isNotificationVisible} topOffset={IOS ? 20 : 0}>
           {notificationText}

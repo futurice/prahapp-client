@@ -17,12 +17,10 @@ import {
   GET_USER_FAILURE,
   SELECT_TEAM,
   RESET,
-  SET_USER_STORAGE
 } from '../actions/registration';
 
-import {
-  NO_SELECTED_CITY_FOUND
-} from '../concepts/city';
+import { SET_TOKEN } from '../concepts/auth';
+import { NO_SELECTED_CITY_FOUND } from '../concepts/city';
 
 import { getTeams } from './team';
 
@@ -34,7 +32,7 @@ const initialState = fromJS({
   isLoading: false,
   isError: false,
   isIntroductionDismissed: false,
-  storageUser: {}
+  userToken: {}
 });
 
 export default function registration(state = initialState, action) {
@@ -90,10 +88,11 @@ export default function registration(state = initialState, action) {
         name: action.payload.name,
         selectedTeam: action.payload.team,
         uuid: action.payload.uuid,
+        profilePicture: action.payload.profilePicture,
         isLoading: false
       });
-    case SET_USER_STORAGE:
-      return state.set('storageUser', fromJS(action.payload));
+    case SET_TOKEN:
+      return state.set('userToken', fromJS(action.payload));
 
     default:
       return state;
@@ -104,8 +103,8 @@ export default function registration(state = initialState, action) {
 export const getUserId = state => state.registration.get('userId');
 export const getUserName = state => state.registration.get('name');
 export const getUserTeamId = state => state.registration.get('selectedTeam', 0);
-export const getStoredUser = state => state.registration.get('storageUser', fromJS({})) || fromJS({});
+export const getToken = state => state.registration.get('userToken', fromJS({})) || fromJS({});
 export const getUserTeam = createSelector(getUserTeamId, getTeams,
   (teamId, teams) => teams.find(item => item.get('id') === teamId))
 
-export const isUserLoggedIn = createSelector(getStoredUser, user => !!user && !user.isEmpty())
+export const isUserLoggedIn = createSelector(getToken, token => !!token && !token.isEmpty())

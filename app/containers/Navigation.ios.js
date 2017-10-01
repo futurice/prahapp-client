@@ -1,71 +1,70 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { TabBarIOS } from 'react-native';
 import { connect } from 'react-redux';
 import autobind from 'autobind-decorator';
 
-import EventMap from './EventMapView';
+import EventMapView from './EventMapView';
 import CalendarView from './CalendarView';
 
 import CompetitionView from './CompetitionNavigator';
 import FeedView from './FeedView';
-import SettingsView from './ProfileView';
+import ProfileView from './ProfileView';
+import MoodView from './MoodView';
+
 import Tabs from '../constants/Tabs';
 import { isUserLoggedIn } from '../reducers/registration';
 import { changeTab } from '../actions/navigation';
 import MDIcon from 'react-native-vector-icons/MaterialIcons';
 
 import ICONS from '../constants/Icons';
+import ScrollableTabs  from 'react-native-scrollable-tab-view';
+import IconTabBar from '../components/common/MdIconTabBar';
 
 const theme = require('../style/theme');
 
+const IOS_TAB_ORDER = [
+  Tabs.FEED,
+  Tabs.CALENDAR,
+  Tabs.MAP,
+  Tabs.SETTINGS
+];
+const initialTab = 0;
+
 // # Tab navigation
 class Navigation extends Component {
+
+  componentDidMount() {
+    const { changeTab } = this.props;
+
+    changeTab(IOS_TAB_ORDER[initialTab])
+  }
+
+
   @autobind
-  onChangeTab(tab) {
-    this.props.changeTab(tab);
+  onChangeTab({ i }) {
+    this.props.changeTab(IOS_TAB_ORDER[i]);
   }
 
   render() {
     const { navigator, currentTab } = this.props;
     return (
-      <TabBarIOS
-        tintColor={theme.blue2}
-        barTintColor={theme.white}
-        unselectedTintColor={theme.blue3}
-        unselectedItemTintColor={theme.blue3}
-        translucent={false}
+      <ScrollableTabs
+        onChangeTab={this.onChangeTab}
+        initialPage={initialTab}
+        tabBarPosition={'bottom'}
+        tabBarBackgroundColor={theme.white}
+        tabBarActiveTextColor={theme.secondary}
+        tabBarInactiveTextColor={theme.blue3}
+        locked={true}
+        scrollWithoutAnimation={true}
+        prerenderingSiblingsNumber={0}
+        renderTabBar={() => <IconTabBar />}
       >
-        <TabBarIOS.Item
-          icon={ICONS.CHATS}
-          title={'Buzz'}
-          selected={currentTab === Tabs.FEED}
-          onPress={() => { this.onChangeTab(Tabs.FEED); }}>
-          <FeedView navigator={navigator} />
-        </TabBarIOS.Item>
-        <MDIcon.TabBarItemIOS
-          iconName='access-time'
-          title={'Event'}
-          selected={currentTab === Tabs.CALENDAR}
-          onPress={() => { this.onChangeTab(Tabs.CALENDAR); }}>
-          <CalendarView navigator={navigator} />
-        </MDIcon.TabBarItemIOS>
-        <MDIcon.TabBarItemIOS
-          iconName='map'
-          title={'Discover'}
-          selected={currentTab === Tabs.MAP}
-          onPress={() => { this.onChangeTab(Tabs.MAP); }}>
-          <EventMap navigator={navigator} />
-        </MDIcon.TabBarItemIOS>
-        <MDIcon.TabBarItemIOS
-          iconName='account-circle'
-          title={'Info'}
-          selected={currentTab === Tabs.SETTINGS}
-          onPress={() => { this.onChangeTab(Tabs.SETTINGS); }}>
-          <SettingsView navigator={navigator} />
-        </MDIcon.TabBarItemIOS>
-      </TabBarIOS>
+        <FeedView navigator={navigator} tabLabel={{ title: 'Vasking', icon:'fiber-smart-record' }} />
+        <EventMapView navigator={navigator} tabLabel={{ title: 'Geo', icon:'public' }} />
+        <ProfileView navigator={navigator} tabLabel={{ title: 'Me', icon:'face' }} />
+      </ScrollableTabs>
     )
   }
 }

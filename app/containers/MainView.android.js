@@ -46,12 +46,12 @@ class MainView extends Component {
 
     return (
       <View style={{ flex:1 }}>
-        <StatusBar backgroundColor={theme.yellowDark} barStyle="dark-content" />
+        <StatusBar backgroundColor={theme.grey1} barStyle="dark-content" />
 
         <Navigator
           initialRoute={{
             component: AndroidTabNavigation,
-            name: 'Futubohemia'
+            name: 'Futuricean'
           }}
           renderScene={this.renderScene}
           configureScene={() => ({

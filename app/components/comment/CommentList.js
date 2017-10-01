@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import {
   StyleSheet,
-  Text,
   View,
   Image,
   TouchableOpacity,
@@ -16,6 +15,7 @@ import { fromJS } from 'immutable';
 import moment from 'moment';
 import autobind from 'autobind-decorator';
 
+import Text from '../common/MyText';
 import theme from '../../style/theme';
 import time from '../../utils/time';
 import Icon from 'react-native-vector-icons/MaterialIcons';

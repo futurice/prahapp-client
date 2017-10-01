@@ -2,7 +2,6 @@ import React, { PropTypes, Component } from 'react';
 import {
   View,
   TouchableOpacity,
-  Text,
   TextInput,
   Platform,
   Dimensions,
@@ -25,6 +24,7 @@ import {
   closeComments
 } from '../../concepts/comments';
 
+import Text from '../common/MyText';
 import theme from '../../style/theme';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import CommentPost from './CommentPost';

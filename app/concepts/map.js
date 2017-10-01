@@ -15,7 +15,8 @@ import {
 import { fetchMarkers as _fetchMarkers } from '../actions/marker';
 
 import { isLocating, getShowFilter, getEvents, getEventListState } from '../reducers/event';
-import { getMarkers, getMarkerListState } from '../reducers/marker';
+import * as m from '../reducers/marker';
+import { getAllPostsInStore } from '../reducers/feed';
 import LoadingStates from '../constants/LoadingStates';
 import MarkerImages from '../constants/MarkerImages';
 import time from '../utils/time';
@@ -25,7 +26,7 @@ const getSelectedCategory = state => state['map'].get('selectedCategory');
 const getSelectedMarker = state => state['map'].get('selectedMarker');
 
 const isMapLoading = createSelector(
-  getMarkerListState, getEventListState, (a, b) =>
+  m.getMarkerListState, getEventListState, (a, b) =>
   a === LoadingStates.LOADING || b === LoadingStates.LOADING
 );
 
@@ -52,13 +53,22 @@ const getFirstFutureEvent = createSelector(
   }
 )
 
-const stickyMarkerCategories = ['HOTEL'/*, 'SUMMER PARTY', 'FUTUCAMP'*/];
+const getMarkers = createSelector(
+  m.getMarkers, getAllPostsInStore,
+  (markers, posts) => {
+    const postMarkers = posts.filter(post => post.has('location'));
+    return postMarkers.concat(markers);
+  }
+)
+
+const stickyMarkerCategories = ['HOTEL'];
 const getMapMarkers = createSelector(
   getMarkers, getSelectedCategory,
   (markers, categoryFilter) => {
+
     const validMarkers = markers
       .filter(marker =>
-        categoryFilter === 'ALL' ||
+        categoryFilter === 'HELSINKI' ||
         marker.get('type') === categoryFilter ||
         stickyMarkerCategories.indexOf(marker.get('type')) >= 0
       )
@@ -73,14 +83,14 @@ const getMapMarkersCoords = createSelector(getMapMarkers, markers => {
   return markers.map(marker => marker.get('location')).toJS();
 });
 
-// const getMarkerCategories = (state) => fromJS(['ALL','FOOD', 'PUB', 'BAR', 'CAFES', 'BEER MUSEUMS', 'SHOPS', 'STREET MARKETS']);
 const getMarkerCategories = createSelector(
   getMarkers, (markers) => {
+
     const validCategories = markers
       .map(marker => marker.get('type', 'CATEGORY').toUpperCase())
       .toSet().toList(); // Immutable uniq
 
-    return validCategories.unshift('ALL');
+    return validCategories.unshift('HELSINKI');
   }
 );
 
@@ -116,7 +126,7 @@ export const selectCategory = payload => (dispatch) => Promise.resolve(
 // # Reducer
 const initialState = fromJS({
   selectedMarker: null,
-  selectedCategory: 'ALL',
+  selectedCategory: 'HELSINKI',
 });
 
 export default function map(state = initialState, action) {

@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import {
   StyleSheet,
-  Text,
   View,
   Image,
   TouchableOpacity,
@@ -16,6 +15,7 @@ import autobind from 'autobind-decorator';
 import { isEmpty } from 'lodash';
 import PlatformTouchable from '../common/PlatformTouchable';
 
+import Text from '../common/MyText';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import theme from '../../style/theme';
 

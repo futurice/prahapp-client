@@ -72,11 +72,7 @@ class CheckInActionView extends Component {
   noActiveEventsView() {
     return (
       <View style={styles.eventContainer}>
-          <Image style={{
-            height: 180,
-            width: 180,
-            marginBottom: 0,
-            }} source={require('../../../assets/sad-wappu-panda.png')}/>
+          <Icon size={180} name="nature-people" />
 
         <Text style={{fontSize: 40, textAlign: 'center', color: theme.white}}>OH NO!</Text>
         <Text style={[styles.text]}>No ongoing events available in {this.props.city}.</Text>

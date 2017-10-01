@@ -29,7 +29,21 @@ export const getActionTypes = state => state.competition.get('actionTypes',  Imm
 const selectableActionTypes = [ActionTypes.IMAGE, ActionTypes.TEXT];
 export const getActionTypesForFeed = createSelector(
   getActionTypes,
-  (types) => types.filter((type) => selectableActionTypes.indexOf(type.get('code')) >= 0)
+  (types) => {
+    let feedActionTypes = types.filter((type) => selectableActionTypes.indexOf(type.get('code')) >= 0);
+
+    // Add 'pick from library'
+    let additionalImageFeedType = types.find(type => type.get('code') === ActionTypes.IMAGE);
+    if (additionalImageFeedType) {
+      additionalImageFeedType = additionalImageFeedType.merge({
+        subType: 'library',
+        name: 'Upload'
+      });
+      feedActionTypes = feedActionTypes.unshift(additionalImageFeedType);
+    }
+
+    return feedActionTypes.reverse();
+  }
 );
 
 

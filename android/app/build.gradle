@@ -88,10 +88,11 @@ android {
 
     defaultConfig {
         applicationId "com.futubohemia"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode 5
+        versionName "2.0"
+        manifestPlaceholders = [auth0Domain: "@string/auth0_domain", auth0Scheme: "https"]
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -130,6 +131,8 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-maps')
+    compile project(':react-native-android-location-enabler')
     compile project(':react-native-vector-icons')
     compile project(':react-native-share')
     compile project(':react-native-photo-view')

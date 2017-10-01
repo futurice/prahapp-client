@@ -24,10 +24,12 @@ import theme from '../../style/theme';
 import Header from '../common/Header';
 import Loader from '../common/Loader';
 
-const headerImage = require('../../../assets/prague/futubohemia/solid.png');
+const headerImage = require('../../../assets/patterns/sea.png');
 
 const { height, width } = Dimensions.get('window');
 const isIOS = Platform.OS === 'ios';
+const headerHeight = 360;
+
 
 class UserView extends Component {
   componentDidMount() {
@@ -57,9 +59,10 @@ class UserView extends Component {
     return (
       <View style={{ flex: 1 }}>
       <ParallaxView
-        backgroundSource={headerImage}
-        windowHeight={230}
+        backgroundSource={profilePicture ? { uri: profilePicture } : headerImage}
+        windowHeight={headerHeight}
         style={{ backgroundColor:theme.white }}
+        scrollableViewStyle={{ shadowColor: theme.transparent }}
         header={(
           <View style={styles.header}>
             {!isIOS &&
@@ -69,35 +72,33 @@ class UserView extends Component {
               </TouchableHighlight>
             </View>
             }
+          {/*
             <View style={styles.avatar}>
               {profilePicture
                 ? <Image style={styles.avatarImage} source={{ uri: profilePicture }} />
                 : <Icon style={styles.avatarText} name="person-outline" />
               }
             </View>
-            <Text style={styles.headerTitle}>
-              {user.name}
-            </Text>
-          {/*
-            <Text style={styles.headerSubTitle}>
-              {userTeam || user.team}
-            </Text>
           */}
-            <View style={styles.headerKpis}>
-              <View style={styles.headerKpi}>
-                <Text style={styles.headerKpiValue}>{!isLoading ? imagesCount : '-'}</Text>
-                <Text style={styles.headerKpiTitle}>photos</Text>
+
+            <View style={styles.profileInfo}>
+              <Text style={styles.headerTitle}>
+                {user.name}
+              </Text>
+              <Text style={styles.headerSubTitle}>
+                {userTeam || user.team}
+              </Text>
+              <View style={styles.headerKpis}>
+                <View style={styles.headerKpi}>
+                  <Text style={styles.headerKpiValue}>{!isLoading ? imagesCount : '-'}</Text>
+                  <Text style={styles.headerKpiTitle}>photos</Text>
+                </View>
+                <View style={styles.headerKpi}>
+                  <Text style={styles.headerKpiValue}>{!isLoading ? totalVotes : '-'}</Text>
+                  <Text style={styles.headerKpiTitle}>likes for photos</Text>
+                </View>
               </View>
-              <View style={styles.headerKpi}>
-                <Text style={styles.headerKpiValue}>{!isLoading ? totalVotes : '-'}</Text>
-                <Text style={styles.headerKpiTitle}>likes for photos</Text>
-              </View>
-            {/*
-              <View style={styles.headerKpi}>
-                <Text style={styles.headerKpiValue}>{!isLoading ? (totalSimas || '-') : '-'}</Text>
-                <Text style={styles.headerKpiTitle}>simas</Text>
-              </View>
-            */}
+
             </View>
           </View>
         )}
@@ -146,8 +147,9 @@ const styles = StyleSheet.create({
     flex:1,
     elevation: 3,
     paddingTop: 30,
+    minHeight: headerHeight,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'flex-end'
   },
   backLink: {
     position: 'absolute',
@@ -161,38 +163,46 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: theme.transparent
+    backgroundColor: theme.white
   },
   backLinkIcon: {
     color: theme.blue2
   },
+  profileInfo: {
+    backgroundColor: 'rgba(255, 255, 255, .6)',
+    padding: 12,
+    alignItems: 'flex-start',
+  },
   headerTitle:{
-    fontSize: 15,
-    fontWeight: 'bold',
+    fontSize: 16,
+    fontWeight: 'normal',
     textAlign: 'center',
-    color: theme.blue2,
-    marginBottom: 3,
+    color: theme.primary,
+    marginBottom: 2,
+    paddingHorizontal: 0,
+    backgroundColor: theme.transparent,
   },
   headerSubTitle: {
     fontSize: 12,
-    fontWeight: 'bold',
+    fontWeight: 'normal',
     textAlign: 'center',
-    color: 'rgba(0,0,0,.6)',
+    color: 'rgba(0,0,0,.5)',
     opacity: 0.9,
   },
   avatar: {
-    marginBottom: 10,
+    marginBottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    width: 90,
-    height: 90,
+    flex: 1,
+    width: 100,
+    height: 100,
     backgroundColor: theme.stable,
-    borderRadius: 45,
+    borderRadius: 50,
   },
   avatarImage: {
-    width: 90,
-    height: 90,
-    borderRadius: 45,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
   },
   avatarText: {
     backgroundColor: theme.transparent,
@@ -206,19 +216,23 @@ const styles = StyleSheet.create({
   headerKpi: {
     flex: 1,
     flexDirection: 'column',
-    alignItems: 'center',
-    marginBottom: 15,
-    marginTop: 0,
+    alignItems: 'flex-start',
+    marginBottom: 0,
+    marginTop: 10,
   },
   headerKpiTitle: {
-    color: theme.blue1,
+    color: theme.primary,
     fontWeight: '500',
-    fontSize: 11,
+    fontSize: 10,
+    backgroundColor: theme.transparent,
   },
   headerKpiValue: {
-    fontSize: 26,
-    color: theme.blue1,
-    fontWeight: '400'
+    fontSize: 16,
+    color: theme.primary,
+    fontWeight: '400',
+    minWidth: 30,
+    textAlign: 'left',
+    backgroundColor: theme.transparent
   },
   loader: {
     marginTop: 50

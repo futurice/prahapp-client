@@ -11,9 +11,9 @@ import theme from '../../style/theme';
 
 const styles = StyleSheet.create({
   toolbar: {
-    backgroundColor: theme.secondary,
+    backgroundColor: theme.white,
     height: 56,
-    elevation:2,
+    elevation: 1,
   }
 });
 
@@ -29,9 +29,9 @@ class ToolBar extends Component {
       <Icon.ToolbarAndroid
         onIconClicked={this.props.leftIconClick}
         navIconName={this.props.leftIcon}
-        titleColor={theme.blue2}
-        iconColor={theme.blue2}
-        style={styles.toolbar}
+        titleColor={theme.secondary}
+        iconColor={theme.secondary}
+        style={[styles.toolbar, this.props.styles || {}]}
         title={this.props.title}
       />
     );

@@ -3,7 +3,6 @@
 import React, { Component, PropTypes } from 'react';
 import {
   View,
-  Text,
   Image,
   TextInput,
   StyleSheet,
@@ -18,6 +17,7 @@ import { connect } from 'react-redux';
 import autobind from 'autobind-decorator';
 import AppIntro from 'react-native-app-intro';
 
+import Text from '../common/MyText';
 import theme from '../../style/theme';
 import Button from '../../components/common/Button';
 import InstructionView from './InstructionView';
@@ -34,11 +34,11 @@ import {
   generateName,
   dismissIntroduction,
   openRegistrationView,
-  openLoginView,
   closeRegistrationView,
 } from '../../actions/registration';
 import { isUserLoggedIn } from '../../reducers/registration';
 import { setCity, getCityIdByTeam, getCityId } from '../../concepts/city';
+import { openLoginView } from '../../concepts/auth';
 import { showChooseTeam } from '../../actions/team';
 import * as keyboard from '../../utils/keyboard';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -130,7 +130,7 @@ class RegistrationView extends Component {
   @autobind
   onClose() {
     this.props.reset();
-    this.props.setCity(this.state.selectedCity);
+    // this.props.setCity(this.state.selectedCity);
     this.props.dismissIntroduction();
     this.props.closeRegistrationView();
   }
@@ -341,7 +341,7 @@ class RegistrationView extends Component {
           <View style={[styles.slide, styles.slideIntro]} >
             <View style={styles.topArea} level={10} >
               <View style={styles.iconWrap}>
-                <Image style={styles.subImage} source={require('../../../assets/prague/futubohemia/glasses.png')} />
+                <Image style={styles.subImage} source={require('../../../assets/chilicorn.png')} />
                 {/*
                 <Image style={styles.bgImage} source={require('../../../assets/patterns/sea.png')} />
                 <Icon style={styles.icon} name={'people-outline'} />
@@ -557,8 +557,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   subImage: {
-    width: width - 120,
-    height: width - 120,
+    width: width - 150,
+    height: width - 150,
     left: 0,
     bottom: 0,
     position: 'relative',

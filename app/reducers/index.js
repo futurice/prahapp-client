@@ -3,7 +3,6 @@ import event from './event';
 import feed from './feed';
 import registration from './registration';
 import team from './team';
-import location from './location';
 import competition from './competition';
 import announcement from './announcement';
 import profile from './profile';
@@ -15,6 +14,8 @@ import sortType from '../concepts/sortType';
 import user from '../concepts/user';
 import comments from '../concepts/comments';
 import map from '../concepts/map';
+import auth from '../concepts/auth';
+import location from '../concepts/location';
 
 export {
   errors,
@@ -33,5 +34,6 @@ export {
   sortType,
   user,
   comments,
-  map
+  map,
+  auth,
 };

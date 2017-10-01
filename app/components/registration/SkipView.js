@@ -3,13 +3,14 @@
 import React, { Component } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   Image,
   Platform,
   ScrollView,
   Dimensions
 } from 'react-native';
+
+import Text from '../common/MyText';
 import theme from '../../style/theme';
 import PlatformTouchable from '../../components/common/PlatformTouchable';
 
@@ -26,15 +27,18 @@ class SkipView extends Component {
           <ScrollView style={{flex:1, width: null, height: null}}>
               <View style={styles.content}>
                 <View style={styles.textContainer}>
-                  <Image style={{ width: 200, height: 30, tintColor: theme.blue2 }} source={require('../../../assets/prague/futubohemia/logo.png')} />
+                  <Image
+                    style={{ width: 100, height: 30, tintColor: theme.primary }}
+                    source={require('../../../assets/logo/new.png')}
+                  />
                   {/*<Text style={styles.subTitle}>IT'S FUN O'CLOCK!</Text>*/}
                   <Text style={styles.text}>Login with your
-                    <Text style={{fontWeight: 'bold'}}> @futurice </Text>email address.
+                    <Text style={{fontWeight: 'normal', fontFamily: IOS ? 'Futurice' : 'Futurice_bold' }}> @futurice </Text>email address.
                   </Text>
                 </View>
                 <PlatformTouchable onPress={this.props.onPressProfileLink}>
-                  <View style={styles.editButton}>
-                    <Text style={{fontSize: 16, fontWeight: 'bold', color: theme.white}}>LOGIN TO FUTUBOHEMIA</Text>
+                  <View style={styles.loginButton}>
+                    <Text style={styles.loginButtonText}>LOGIN</Text>
                   </View>
                 </PlatformTouchable>
               </View>
@@ -68,17 +72,17 @@ const styles = StyleSheet.create({
   iconWrap: {
     overflow: 'hidden',
     position: 'absolute',
-    width: 200,
-    height: 200,
-    borderRadius: 100,
+    width: 190,
+    height: 190,
+    borderRadius: 95,
     backgroundColor: 'rgba(255,255,255,.1)',
-    left: width / 2 - 100,
+    left: width / 2 - 95,
     top: 50,
     alignItems: 'center',
     justifyContent: 'center'
   },
   icon: {
-    // width: 200,
+    // width: 190,
     // left: width / 2 - 100,
     // top: 50,
     // position: 'absolute',
@@ -104,8 +108,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     top: 0,
-    width: 200,
-    height: 200,
+    width: 190,
+    height: 190,
     bottom: 0,
     opacity: 0.3
   },
@@ -117,7 +121,7 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     textAlign: 'center',
-    color: theme.blue1,
+    color: theme.secondary,
     fontWeight: '600',
     fontSize: 16,
     margin: 15,
@@ -128,14 +132,14 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     fontSize: 16,
     lineHeight: 20,
-    color: theme.blue1,
+    color: theme.midgrey,
     textAlign: 'center',
   },
-  editButton: {
+  loginButton: {
     marginTop: 40,
     marginBottom: 10,
     padding: 5,
-    paddingTop: 10,
+    paddingTop: 15,
     paddingBottom: 10,
     justifyContent: 'center',
     alignItems: 'center',
@@ -146,12 +150,17 @@ const styles = StyleSheet.create({
     backgroundColor: theme.blue2,
     width: 250,
     shadowColor: '#000000',
-    shadowOpacity: 0.15,
-    shadowRadius: 1,
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
     shadowOffset: {
-      height: 3,
+      height: 10,
       width: 0
     }
+  },
+  loginButtonText: { fontSize: 16,
+    fontWeight: 'normal',
+    color: theme.white,
+    fontFamily: IOS ? 'Futurice' : 'Futurice_bold'
   }
 
 });

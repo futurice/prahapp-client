@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   TextInput,
+  ScrollView,
   BackHandler,
   KeyboardAvoidingView,
   PanResponder
@@ -21,6 +22,8 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import theme from '../../style/theme';
 import Toolbar from '../common/Toolbar';
+import PostSettings from './PostSettings';
+import * as features from '../../constants/Features';
 
 const { width, height } = Dimensions.get('window');
 const IOS = Platform.OS === 'ios';
@@ -36,6 +39,7 @@ class ImageEditor extends Component {
       textInputValue: '',
       imagePos: 0,
       editing: false,
+      locationToPost: true,
     };
   }
 
@@ -103,6 +107,11 @@ class ImageEditor extends Component {
   }
 
   @autobind
+  togglePostLocationStatus(locationToPost) {
+    this.setState({ locationToPost })
+  }
+
+  @autobind
   centerImageText(props) {
     const { image } = props || this.props;
     const scaledImageHeight = image ? width * (image.height / image.width) : 0;
@@ -118,6 +127,7 @@ class ImageEditor extends Component {
   @autobind
   sendImage() {
     const { onImagePost, image } = this.props;
+    const { locationToPost } = this.state;
     const { textInputValue, textPosition } = this.state;
     const scaledImageHeight = image ? width * (image.height / image.width) : 0;
 
@@ -126,7 +136,12 @@ class ImageEditor extends Component {
 
     const imageTextPosition = onBottom ? 1 : textPosition / scaledImageHeight;
 
-    onImagePost(image.data, textInputValue, imageTextPosition);
+    onImagePost({
+      image: image.data,
+      text: textInputValue,
+      textPosition: imageTextPosition,
+      addLocation: locationToPost,
+    });
 
     // TODO Success/Loading indicator
     this.clearTextInput();
@@ -261,7 +276,7 @@ class ImageEditor extends Component {
   renderSubmitButtonForAndroid() {
     return (
       <View style={styles.buttonWrap}>
-        <TouchableHighlight underlayColor={theme.primaryDark} onPress={this.sendImage} style={styles.button}>
+        <TouchableHighlight underlayColor={theme.secondaryDark} onPress={this.sendImage} style={styles.button}>
           <Text style={styles.buttonText}>
             <Icon size={38} name="done" />
           </Text>
@@ -284,8 +299,10 @@ class ImageEditor extends Component {
     const { image } = this.props;
     const { showTextInput, editing } = this.state;
 
+    const { OVER_IMAGE_CAPTION } = features;
     const scaledImageHeight = image ? width * (image.height / image.width) : 0;
     const scaledImageHeightStyle = { height: scaledImageHeight };
+
 
     return (
       <Modal
@@ -302,29 +319,43 @@ class ImageEditor extends Component {
           rightIconClick={this.sendImage}
           leftIconClick={this.onImageEditCancel}
           title='Photo'
+          styles={{ elevation: 0 }}
         />
         <View style={styles.container}>
-          <View style={[styles.imageWrap, scaledImageHeightStyle]}>
-            <View
-              style={[styles.imageWrap, scaledImageHeightStyle]}
-              onLayout={this.getImagePosition}
-            >
-              <Image
-                ref="editImgRef"
-                style={[
-                  styles.image,
-                  scaledImageHeightStyle
-                ]}
-                resizeMode={'contain'}
-                source={{ uri: image.data }}
-              />
-            </View>
-            {showTextInput && this.renderTextInput(scaledImageHeight)}
+
+          <PostSettings
+            onChangeImageText={this.onChangeText}
+            imageText={this.state.textInputValue}
+
+            postLocationStatus={this.state.locationToPost}
+            togglePostLocationStatus={this.togglePostLocationStatus}
+          />
+
+          <View style={{ flex: 1, }}>
+            <ScrollView>
+              <View style={[styles.imageWrap, scaledImageHeightStyle]}>
+                <View
+                  style={[styles.imageWrap, styles.imageWrapper, scaledImageHeightStyle]}
+                  onLayout={this.getImagePosition}
+                >
+                  <Image
+                    ref="editImgRef"
+                    style={[
+                      styles.image,
+                      scaledImageHeightStyle
+                    ]}
+                    resizeMode={'contain'}
+                    source={{ uri: image.data }}
+                  />
+                </View>
+                {OVER_IMAGE_CAPTION && showTextInput && this.renderTextInput(scaledImageHeight)}
+              </View>
+            </ScrollView>
           </View>
-          {!showTextInput && this.renderGuideLayer(scaledImageHeight)}
-          {showTextInput && !editing && this.renderEditButton(scaledImageHeight)}
+          {OVER_IMAGE_CAPTION && !showTextInput && this.renderGuideLayer(scaledImageHeight)}
+          {OVER_IMAGE_CAPTION && showTextInput && !editing && this.renderEditButton(scaledImageHeight)}
         </View>
-        {!IOS && !editing && this.renderSubmitButtonForAndroid()}
+        {!IOS && this.renderSubmitButtonForAndroid()}
       </View>
       }
       </Modal>
@@ -339,17 +370,29 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: theme.stable,
     justifyContent: 'flex-start',
-    alignItems: 'flex-start'
+    alignItems: 'stretch',
+    flexDirection: 'column',
   },
   imageWrap: {
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
+  },
+  imageWrapper: {
     backgroundColor: theme.stable,
-    width,
+    width: width,
+
+    elevation: 2,
+    shadowColor: theme.secondaryDark,
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    shadowOffset: {
+      height: 6,
+      width: 0
+    },
   },
   image: {
-    backgroundColor: theme.stable,
-    width,
+    backgroundColor: theme.white,
+    width
   },
   tapGuide: {
     position: 'absolute',
@@ -419,7 +462,7 @@ const styles = StyleSheet.create({
     zIndex: 9,
   },
   button: {
-    backgroundColor: theme.primary,
+    backgroundColor: theme.secondary,
     height: 66,
     width: 66,
     borderRadius: 33,

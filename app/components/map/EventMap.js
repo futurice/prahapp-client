@@ -8,7 +8,6 @@ import {
   Dimensions,
   Linking,
   Image,
-  Text,
   FlatList,
   ScrollView,
   TouchableHighlight,
@@ -18,6 +17,7 @@ import MapView from 'react-native-maps';
 import { connect } from 'react-redux';
 import autobind from 'autobind-decorator';
 
+import Text from '../common/MyText';
 import _ from 'lodash';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MDIcon from 'react-native-vector-icons/MaterialIcons';

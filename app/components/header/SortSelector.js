@@ -2,7 +2,6 @@ import React from 'react';
 import { toArray } from 'lodash';
 import {
   StyleSheet,
-  Text,
   View,
   TouchableHighlight
 } from 'react-native'
@@ -11,12 +10,13 @@ import { connect } from 'react-redux';
 
 import { getFeedSortType, setFeedSortType } from '../../concepts/sortType';
 
+import Text from '../common/MyText';
 import theme from '../../style/theme';
 import SortTypes from '../../constants/SortTypes';
 
 const sortTypeTitles = {
-  [SortTypes.SORT_NEW]: 'Newest',
-  [SortTypes.SORT_HOT]: 'Trending',
+  [SortTypes.SORT_NEW]: 'fresh',
+  [SortTypes.SORT_HOT]: 'hot',
 };
 
 const SortSelector = ({
@@ -53,12 +53,12 @@ const SortSelector = ({
 
 var styles = StyleSheet.create({
   sortSelector: {
-    paddingTop: 12,
+    paddingTop: 14,
     paddingRight: 25,
   },
   filterText: {
     color: theme.blue2,
-    fontSize: 14
+    fontSize: 15
   },
   indicators: {
     position: 'absolute',

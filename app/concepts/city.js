@@ -11,9 +11,9 @@ import { fetchMoodData } from './mood';
 import { getTeams } from '../reducers/team';
 import { getUserTeamId } from '../reducers/registration';
 
+import STORAGE_KEYS from '../constants/StorageKeys';
 
 import { APP_STORAGE_KEY } from '../../env';
-const cityKey = `${APP_STORAGE_KEY}:city`;
 
 
 // # Selectors
@@ -67,11 +67,11 @@ export const setCity = (cityId) => dispatch => {
   // set to state
   dispatch({ type: SET_CITY, payload: cityId })
 
-  dispatch(toggleCityPanel(true));
+  // dispatch(toggleCityPanel(true));
 
   // set to local storage
-  AsyncStorage.setItem(cityKey, JSON.stringify(cityId))
-    .then(() => dispatch(fetchCitySpecificContent()));
+  AsyncStorage.setItem(StorageKeys.city, JSON.stringify(cityId));
+    // .then(() => dispatch(fetchCitySpecificContent()));
 }
 
 const SET_CITY_LIST = 'city/SET_CITY_LIST';
@@ -100,7 +100,7 @@ export const NO_SELECTED_CITY_FOUND = 'city/NO_SELECTED_CITY_FOUND';
 export const initializeUsersCity = () => (dispatch, getState) => {
   const defaultCityId = '1';
 
-  return AsyncStorage.getItem(cityKey)
+  return AsyncStorage.getItem(StorageKeys.city)
     .then(c => {
 
       const activeCity = c ? JSON.parse(c) : defaultCityId;

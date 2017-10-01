@@ -2,7 +2,7 @@ import { AsyncStorage, Platform } from 'react-native';
 import { createSelector } from 'reselect';
 import { fromJS, List, Map } from 'immutable';
 import { isNil, random } from 'lodash';
-import { ReactNativeAudioStreaming } from 'react-native-audio-streaming';
+// import { ReactNativeAudioStreaming } from 'react-native-audio-streaming';
 
 import api from '../services/api';
 import { getCityId } from './city';
@@ -52,17 +52,17 @@ export const getNowPlayingLeft = createSelector(
 
 // # Action creators
 
-const pause = () => ReactNativeAudioStreaming.pause();
-const stop = () => ReactNativeAudioStreaming.stop();
-const play = () => (dispatch, getState) => {
-  const state = getState();
-  const url = getActiveStation(state).get('stream');
-  if (url) {
-    ReactNativeAudioStreaming.play(url, { showIniOSMediaCenter: true, showInAndroidNotifications: true });
-  } else {
-    stop();
-  }
-}
+// const pause = () => ReactNativeAudioStreaming.pause();
+// const stop = () => ReactNativeAudioStreaming.stop();
+// const play = () => (dispatch, getState) => {
+//   const state = getState();
+//   const url = getActiveStation(state).get('stream');
+//   if (url) {
+//     ReactNativeAudioStreaming.play(url, { showIniOSMediaCenter: true, showInAndroidNotifications: true });
+//   } else {
+//     stop();
+//   }
+// }
 
 export const onRadioPress = () => (dispatch, getState) => {
   const state = getState();

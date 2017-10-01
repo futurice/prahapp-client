@@ -3,6 +3,8 @@ package com.futubohemia;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.airbnb.android.react.maps.MapsPackage;
+import com.heanoria.library.reactnative.locationenabler.RNAndroidLocationEnablerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import cl.json.RNSharePackage;
 import com.reactnative.photoview.PhotoViewPackage;
@@ -16,7 +18,6 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.airbnb.android.react.maps.MapsPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -33,6 +34,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new MapsPackage(),
+            new RNAndroidLocationEnablerPackage(),
             new VectorIconsPackage(),
             new RNSharePackage(),
             new PhotoViewPackage(),
@@ -41,8 +44,7 @@ public class MainApplication extends Application implements ReactApplication {
             new ReactImageZoom(),
             new ImagePickerPackage(),
             new RNDeviceInfo(),
-            new BlurViewPackage(),
-            new MapsPackage()
+            new BlurViewPackage()
       );
     }
   };

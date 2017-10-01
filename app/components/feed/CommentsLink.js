@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   activeCommentIcon: {
-    color: theme.blue1,
+    color: theme.secondaryLight,
   }
 });
 

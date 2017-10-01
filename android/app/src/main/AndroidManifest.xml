@@ -42,10 +42,11 @@
           <category android:name="android.intent.category.DEFAULT"/>
           <category android:name="android.intent.category.BROWSABLE"/>
           <data
-            android:scheme="a0z08kaalruuhuybesulz8kawlkqqj1log"
+            android:scheme="a0wjivk_ggpbtq_pcgnepxh9rxolwie_b3"
             android:host="@string/auth0_domain"
           />
         </intent-filter>
+            <!-- android:pathPrefix="/android/com.futubohemia/callback" -->
       </activity>
       <!--Auth0 Lock End-->
       <!--Auth0 Lock Passwordless-->

@@ -2,7 +2,6 @@
 import React from 'react';
 import {
   StyleSheet,
-  Text,
   View,
   Image,
   TouchableOpacity,
@@ -11,6 +10,7 @@ import {
 } from 'react-native';
 import theme from '../../style/theme';
 
+import Text from '../common/MyText';
 import time from '../../utils/time';
 
 const { width, height } = Dimensions.get('window');

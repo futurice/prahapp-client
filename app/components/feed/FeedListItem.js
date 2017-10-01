@@ -7,59 +7,67 @@ import {
   Image,
   StyleSheet,
   Dimensions,
-  Text,
   Platform,
   PropTypes,
   TouchableOpacity,
+  Linking,
   View
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import ParsedText from 'react-native-parsed-text';
 
-import { connect } from 'react-redux';
+import { isNil, isEmpty } from 'lodash';
 import abuse from '../../services/abuse';
 import time from '../../utils/time';
 import theme from '../../style/theme';
 
+import Text from '../common/MyText';
 import VotePanel from './VotePanel';
+import FeedItemHeader from './FeedItemHeader';
+import FeedItemText from './FeedItemText';
+import FeedItemImage from './FeedItemImage';
 import CommentsLink from './CommentsLink';
 
 const { width } = Dimensions.get('window');
-const FEED_ITEM_MARGIN_DISTANCE = 0;
-const FEED_ITEM_MARGIN_DEFAULT = 0;
+const FEED_ITEM_MARGIN_DISTANCE = 10;
+const FEED_ITEM_MARGIN_DEFAULT = 10;
 const FEED_ADMIN_ITEM_MARGIN_DEFAULT = 15;
 const IOS = Platform.OS === 'ios';
 
 const styles = StyleSheet.create({
   itemWrapper: {
-    width,
+    width: width,
     flex: 1,
-    backgroundColor: theme.lightgreen,
-    paddingBottom: 10,
-    paddingTop: 0,
+    backgroundColor: theme.white,
+    paddingBottom: 15,
+    paddingTop: 8,
   },
   itemTouchable: {
-    elevation: 1,
     flexGrow: 1,
+    flex: 1
   },
-  itemContent:{
+  itemContent: {
     flexGrow: 1,
     marginLeft: FEED_ITEM_MARGIN_DEFAULT,
     marginRight: FEED_ITEM_MARGIN_DISTANCE,
-    borderRadius: 0,
-    // overflow: 'hidden',
-    borderBottomWidth: IOS ? 0 : 1,
-    borderBottomColor: 'rgba(0, 0, 0, .075)',
+    overflow: 'visible',
+    borderWidth: IOS ? 0 : 0,
+    borderColor: 'rgba(0, 0, 0, .033)',
     // // # Drop shadows
-    elevation: 2,
-    shadowColor: '#000000',
-    shadowOpacity: 0.075,
-    shadowRadius: 1,
+    elevation: 5,
+    shadowColor: theme.secondaryDark,
+    shadowOpacity: 0.09,
+    shadowRadius: 7,
     shadowOffset: {
-      height: 2,
+      height: 5,
       width: 0
     },
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    borderBottomLeftRadius: 3,
+    borderBottomRightRadius: 3,
+    borderTopRightRadius: 3,
+    borderTopLeftRadius: 3,
   },
   itemContent_selected: {
     backgroundColor: theme.stable
@@ -67,102 +75,11 @@ const styles = StyleSheet.create({
   itemContent_byMyTeam: {
     marginRight: FEED_ITEM_MARGIN_DEFAULT,
     marginLeft: FEED_ITEM_MARGIN_DISTANCE,
-    // backgroundColor: '#edfcfb',
   },
-
   itemContent_image: {
     marginLeft: FEED_ITEM_MARGIN_DEFAULT,
     marginRight: FEED_ITEM_MARGIN_DEFAULT,
     borderRadius: 0,
-  },
-  itemImageWrapper: {
-    width: width - (2 * FEED_ITEM_MARGIN_DEFAULT),
-    height: width - (2 * FEED_ITEM_MARGIN_DEFAULT),
-    // borderBottomLeftRadius: 20,
-    // borderBottomRightRadius: 20,
-    overflow: 'hidden'
-  },
-  itemTextWrapper: {
-    paddingLeft: 30,
-    paddingRight: 30,
-    paddingTop: 18,
-    paddingBottom: 4,
-    top: -10,
-  },
-  feedItemListText: {
-    textAlign: 'center',
-    fontSize: 17,
-    lineHeight: 25,
-    color: theme.dark
-  },
-  feedItemListItemImg: {
-    width: width - (2 * FEED_ITEM_MARGIN_DEFAULT),
-    height: width - (2 * FEED_ITEM_MARGIN_DEFAULT),
-    backgroundColor: 'transparent',
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
-
-  },
-  feedItemListItemImg__admin: {
-    width: width - (2 * FEED_ADMIN_ITEM_MARGIN_DEFAULT),
-    borderRadius: 5,
-  },
-  feedItemListItemInfo: {
-    flex: 1,
-    flexDirection: 'row',
-    padding: 13,
-    paddingTop: 13,
-    paddingLeft: 15,
-    paddingRight: 15,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  feedItemListItemAuthor: {
-    flex: 1,
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-  },
-  itemAuthorAvatar: {
-    width: 32,
-    height: 32,
-    borderRadius: 18,
-    backgroundColor: theme.grey1,
-    marginRight: 12,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  profilePic: {
-    width: 32,
-    height: 32,
-    borderRadius: 18,
-  },
-  profileIcon: {
-    top: 0,
-    left: 0,
-    textAlign: 'center',
-    width: 32,
-    height: 32,
-    borderWidth: 2,
-    borderColor: theme.grey1,
-    borderRadius: 18,
-    color: theme.white,
-    fontSize: 32,
-    lineHeight: 36,
-    backgroundColor: theme.transparent
-  },
-  itemAuthorName: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: theme.blue2,
-    paddingRight: 10
-  },
-  itemAuthorTeam:{
-    fontSize: 11,
-    color: '#aaa'
-  },
-  itemAuthorTeam__my: {
-    color: theme.primary,
-    fontWeight: 'bold'
   },
   feedItemListItemAuthorIcon:{
     color: '#bbb',
@@ -196,7 +113,7 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingBottom: 0,
     borderRadius: 2,
-    backgroundColor: '#faf5ee'
+    backgroundColor: '#EEF3F5'
   },
   itemTextWrapper__admin: {
     paddingTop: 0,
@@ -212,6 +129,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
   },
   itemTimestamp__admin:{
+    fontSize: 14,
     color: '#b5afa6'
   },
   feedItemListText__admin: {
@@ -224,16 +142,17 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: 'row',
     alignItems: 'stretch',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    overflow: 'hidden',
   },
 
   // # Skeleton styles
   skeletonWrap: {
     flex: 1,
-    minHeight: 193
+    minHeight: 210,
   },
   skeletonHeader: {
-    minHeight: 50,
+    minHeight: 55,
     paddingTop: 15,
     justifyContent: 'center',
   },
@@ -284,6 +203,10 @@ class FeedListItem extends Component {
   constructor(props) {
     super(props);
     this.state = { selected: false };
+  }
+
+  handleUrlPress(url) {
+    Linking.openURL(url);
   }
 
   itemIsCreatedByMe(item) {
@@ -369,22 +292,16 @@ class FeedListItem extends Component {
 
           <View style={[styles.feedItemListItemInfo, styles.feedItemListItemInfo__admin]}>
             <View style={[styles.feedItemListItemAuthor, styles.feedItemListItemAuthor__admin]}>
-              <Text style={styles.itemAuthorName}>Futuspirit</Text>
+              <Text style={styles.itemAuthorName}>Vaskbot</Text>
             </View>
-            <Text style={[styles.itemTimestamp, styles.itemTimestamp__admin]}>{ago}</Text>
+            <Text style={styles.itemTimestamp__admin}>{ago}</Text>
           </View>
 
           {item.type === 'IMAGE' ?
-            <View style={styles.itemImageWrapper}>
-              <TouchableOpacity
-                activeOpacity={1}
-                onPress={() => this.props.openLightBox(item.id)}
-              >
-                <Image
-                  source={{ uri: item.url }}
-                  style={[styles.feedItemListItemImg, styles.feedItemListItemImg__admin]} />
-              </TouchableOpacity>
-            </View>
+            <FeedItemImage
+              onImagePress={this.props.openLightBox}
+              postId={item.id}
+              uri={item.url} />
           :
             <View style={[styles.itemTextWrapper, styles.itemTextWrapper__admin]}>
               <Text style={[styles.feedItemListText, styles.feedItemListText__admin]}>
@@ -398,9 +315,9 @@ class FeedListItem extends Component {
   }
 
   renderSkeletonItem() {
+    const { opacity } = this.props;
     return (
-    <View style={[styles.itemWrapper, styles.skeletonWrap]}>
-      <View style={styles.itemTouchable}>
+    <View style={[styles.itemWrapper, styles.skeletonWrap, { opacity: isNil(opacity) ? 1 : opacity }]}>
         <View style={styles.itemContent}>
 
           <View style={[styles.feedItemListItemInfo, styles.skeletonHeader]}>
@@ -422,7 +339,6 @@ class FeedListItem extends Component {
 
             <View style={styles.skeletonFooterItem} />
           </View>
-        </View>
       </View>
     </View>);
   }
@@ -443,52 +359,47 @@ class FeedListItem extends Component {
 
     const itemByMyTeam = this.itemIsCreatedByMyTeam(item);
     const isItemImage = item.type === 'IMAGE';
+    const hasItemText = !isEmpty(item.text);
     const avatar = item.author.profilePicture;
 
     return (
       <View style={styles.itemWrapper}>
+        <View
+          style={[styles.itemContent,
+            itemByMyTeam ? styles.itemContent_byMyTeam : {},
+            isItemImage ? styles.itemContent_image : {},
+            selected ? styles.itemContent_selected : {}
+          ]}
+        >
         <TouchableOpacity
           activeOpacity={1}
           style={styles.itemTouchable}
           onLongPress={() => this.selectItem() }
         >
-        <View style={[styles.itemContent,
-          itemByMyTeam ? styles.itemContent_byMyTeam : {},
-          isItemImage ? styles.itemContent_image : {},
-          selected ? styles.itemContent_selected : {}
-        ]}>
+          <FeedItemHeader
+            ago={ago}
+            avatar={avatar}
+            author={item.author}
+            myTeam={itemByMyTeam}
+            onHeaderPress={openUserPhotos} />
+          {hasItemText && isItemImage &&
+            <FeedItemText
+              text={item.text}
+              isItemImage={isItemImage}
+              handleUrlPress={this.handleUrlPress} />
+          }
 
-          <TouchableOpacity activeOpacity={IOS ? 0.7 : 1} style={styles.feedItemListItemInfo} onPress={() => openUserPhotos(item.author)}>
-            <View style={styles.itemAuthorAvatar}>
-              {avatar
-                ? <Image style={styles.profilePic} source={{ uri: avatar }} />
-                : <Icon style={styles.profileIcon} name="person" />
-              }
-            </View>
-            <View style={styles.feedItemListItemAuthor}>
-              <Text style={styles.itemAuthorName}>{item.author.name}</Text>
-              {/*
-                <Text style={[styles.itemAuthorTeam, itemByMyTeam ? styles.itemAuthorTeam__my : {}]}>{item.author.team}</Text>
-              */}
-            </View>
-            <Text style={styles.itemTimestamp}>{ago}</Text>
-          </TouchableOpacity>
-
-          {isItemImage ?
-            <View style={styles.itemImageWrapper}>
-              <TouchableOpacity
-                activeOpacity={1}
-                onPress={() => this.props.openLightBox(item.id)}
-              >
-                <Image
-                  source={{ uri: item.url }}
-                  style={styles.feedItemListItemImg} />
-              </TouchableOpacity>
-            </View>
-          :
-            <View style={styles.itemTextWrapper}>
-              <Text style={styles.feedItemListText}>{item.text}</Text>
-            </View>
+          {isItemImage &&
+            <FeedItemImage
+              onImagePress={this.props.openLightBox}
+              postId={item.id}
+              uri={item.url} />
+          }
+          {!isItemImage &&
+            <FeedItemText
+              text={item.text}
+              isItemImage={isItemImage}
+              handleUrlPress={this.handleUrlPress} />
           }
 
           <View style={styles.footer}>
@@ -503,10 +414,9 @@ class FeedListItem extends Component {
               commentCount={item.commentCount}
               openComments={() => openComments(item.id)}
             />
-
           </View>
-        </View>
         </TouchableOpacity>
+        </View>
       </View>
     );
   }

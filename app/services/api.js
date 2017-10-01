@@ -3,6 +3,7 @@ import { AsyncStorage } from 'react-native';
 import { isEmpty, isObject } from 'lodash';
 
 import Endpoints from '../constants/Endpoints';
+import STORAGE_KEYS from '../constants/StorageKeys';
 import { version as VERSION_NUMBER } from '../../package.json';
 import * as ENV from '../../env';
 
@@ -109,7 +110,7 @@ const cachedFetch = (url, opts) => {
     // If server responds with error, it is thrown
     if (isErrorResponse(response.status)) {
       const error = new Error(response.statusText);
-      error.response = response;
+      error.response = response.json();
       error.status = response.status;
       throw error;
     }
@@ -149,10 +150,24 @@ const wapuFetch = (url, opts) => {
   opts.headers['x-client-version'] = VERSION_NUMBER;
   opts.headers['x-user-uuid'] = USER_UUID;
   opts.headers['x-token'] = API_TOKEN;
-  return fetch(url, opts);
+
+  return AsyncStorage.getItem(STORAGE_KEYS.token).then((token) => {
+    // Auth0 token contains:
+    // accessToken, idToken and refreshToken
+    const tokenObj = token ? JSON.parse(token) : {};
+    const { idToken } = tokenObj;
+
+    if (!idToken) {
+      return Promise.resolve();
+    }
+
+    opts.headers['Authorization'] = `Bearer ${idToken}`;
+
+    return fetch(url, opts);
+  });
 };
 
-const checkResponseStatus = response => {
+const checkResponseStatus = (response, t) => {
   if (response.status >= 200 && response.status < 400) {
     return response;
   } else {
@@ -216,17 +231,32 @@ const queryParametrize = (url, query) => {
   return queryParametrizedUrl;
 }
 
+const refreshAuthToken = token => {
+  let payload = Object.assign({}, { user: DeviceInfo.getUniqueID() });
+
+  return _post(Endpoints.urls.refreshToken(token), payload)
+    .then(response => response.json())
+    .then(newToken => {
+      console.log('AUTH/REFRESH_TOKEN', newToken);
+      return newToken;
+    })
+    .catch(error => {
+      console.log('AUTH/REFRESH_TOKEN_ERROR', error);
+    });
+};
+
 export default {
   deleteFeedItem,
-  voteFeedItem,
   fetchModels,
   fetchMoreFeed,
   fetchComments,
+  getImages,
+  getUser,
+  getUserProfile,
   postAction,
   postComment,
-  putUser,
   putMood,
-  getUser,
-  getImages,
-  getUserProfile
+  putUser,
+  refreshAuthToken,
+  voteFeedItem,
 };

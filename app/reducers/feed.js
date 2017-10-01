@@ -56,7 +56,7 @@ const initialState = Immutable.fromJS({
 export default function feed(state = initialState, action) {
   switch (action.type) {
     case SET_FEED:
-      return state.set('list', Immutable.fromJS(action.feed));
+      return console.log(action.feed) || state.set('list', Immutable.fromJS(action.feed));
     case APPEND_FEED:
       return (action.feed && action.feed.length) ?
         state.set('list', Immutable.fromJS(state.get('list')

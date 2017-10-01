@@ -11,7 +11,6 @@ import NavRouteMapper from '../components/common/navbarRouteMapper';
 import errorAlert from '../utils/error-alert';
 
 
-import { getCityPanelShowState } from '../concepts/city';
 import IOSTabNavigation from './Navigation';
 import RegistrationView from '../components/registration/RegistrationView';
 import CheckInActionView from '../components/actions/CheckInActionView';
@@ -53,7 +52,6 @@ class MainView extends Component {
           renderScene={this.renderScene}
           configureScene={() => sceneConfig}
         />
-        {showCitySelection && <CitySelector />}
         <LightBox />
         <RegistrationView />
         <CheckInActionView />
@@ -74,12 +72,18 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     flexDirection: 'row',
     alignItems: 'center',
+    // shadowColor: theme.dark,
+    // shadowOpacity: 0.05,
+    // shadowRadius: 1,
+    // shadowOffset: {
+    //   height: 1,
+    //   width: 0
+    // },
   }
 });
 
 const select = state => {
   return {
-    showCitySelection: getCityPanelShowState(state),
     errors: state.errors,
     currentTab: state.navigation.get('currentTab')
   }

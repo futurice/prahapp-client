@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const noImageCover = require('../../../assets/prague/futubohemia/chilicorn.png');
+const noImageCover = require('../../../assets/chilicorn.png');
 
 export default class EventListItem extends Component {
   propTypes: {

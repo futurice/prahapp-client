@@ -89,7 +89,7 @@ let NavigationBarRouteMapper = props => ({
       <View style={styles.navBarLogoWrap}>
         <Image
           resizeMode={'contain'}
-          source={require('../../../assets/prague/futubohemia/logo.png')}
+          source={require('../../../assets/logo/vask.png')}
           style={styles.navBarLogo} />
       </View>
     );
@@ -102,13 +102,13 @@ var styles = StyleSheet.create({
     alignItems:'center'
   },
   navBarButton:{
-    color: theme.blue2,
+    color: theme.primary,
     padding:10,
     fontSize:16,
     textAlign:'center',
   },
   navBarIcon:{
-    color: theme.blue2,
+    color: theme.primary,
     padding:6,
     paddingLeft:10,
     paddingRight:10,
@@ -116,15 +116,15 @@ var styles = StyleSheet.create({
     textAlign:'center',
   },
   navBarLogo:{
+    width: 60,
+    height: 38,
+    tintColor: theme.primary,
     top: 1,
-    width: 110,
-    height: 40,
-    tintColor: theme.blue2
   },
   navBarTitle:{
     padding:10,
     fontSize:16,
-    color: theme.blue2,
+    color: theme.primary,
     textAlign:'center',
     fontWeight:'bold',
   }

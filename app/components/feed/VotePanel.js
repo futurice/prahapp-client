@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, TouchableHighlight, Image } from 'react-native';
+import { View, StyleSheet, TouchableHighlight, Image, Platform } from 'react-native';
 import autobind from 'autobind-decorator';
 
+import Text from '../common/MyText';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import theme from '../../style/theme';
 
+const IOS = Platform.OS === 'ios';
 const heartIcon = require('../../../assets/icons/love.png');
 
 class VotePanel extends Component {
@@ -48,7 +50,7 @@ class VotePanel extends Component {
             <View style={styles.itemVoteButton}>
               <Image
                 source={heartIcon}
-                style={[styles.voteImage, {tintColor: alreadyVotedThis ? theme.blue1 : theme.grey} ]}
+                style={[styles.voteImage, {tintColor: alreadyVotedThis ? theme.secondaryLight : theme.grey} ]}
               />
               {/*
               <Text style={{color: alreadyVotedThis ? theme.primary : theme.grey}}>
@@ -112,7 +114,8 @@ const styles = StyleSheet.create({
     minWidth: 15,
     textAlign: 'left',
     fontSize: 15,
-    paddingVertical: 5,
+    top: IOS ? 3 : 0,
+    paddingVertical: 3,
     color: theme.grey
   },
   voteImage: {

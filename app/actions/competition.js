@@ -38,15 +38,14 @@ const openCheckInView = () => ({ type: OPEN_CHECKIN_VIEW });
 
 const closeCheckInView = () => ({ type: CLOSE_CHECKIN_VIEW });
 
-const _postAction = (payload) => {
+const _postAction = (payload, addLocation) => {
   return (dispatch, getState) => {
     dispatch({ type: POST_ACTION_REQUEST });
 
     const state = getState();
-    // const cityId = getCityId(state);
-    // const queryParams = !isNil(cityId) ? { cityId } : {};
+    const maybeLocationToPost = addLocation ? state.location.get('currentLocation') : null;
 
-    return api.postAction(payload, state.location.get('currentLocation'))
+    return api.postAction(payload, maybeLocationToPost)
       .then(response => {
         // Set feed sort to 'new' if posted image or text, otherwise just refresh
         if ([ActionTypes.TEXT, ActionTypes.IMAGE].indexOf(payload.type) >= 0) {
@@ -110,12 +109,15 @@ const postText = text => (dispatch) =>
     }, 2000);
   });
 
-const postImage = (image, imageText, imageTextPosition) => {
+const postImage = ({ image, text, imageText, imageTextPosition, addLocation }) => {
   const postObject = Object.assign({
     type: ActionTypes.IMAGE,
     imageData: image,
-  }, !!imageText ? { imageText, imageTextPosition } : {});
-  return _postAction(postObject);
+  },
+  !!text ? { text } : {},
+  !!imageText ? { imageText, imageTextPosition } : {});
+
+  return _postAction(postObject, addLocation);
 };
 
 const checkIn = eventId => {

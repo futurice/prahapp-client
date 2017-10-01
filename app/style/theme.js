@@ -1,22 +1,23 @@
 /*
-*	Theme colors for Wappu App
+*	Theme colors for Futurice App
 */
 
 const theme = {
-  primary:        '#003A6F',
-  primaryDarker:  '#003A6F',
-  primaryDark:    '#003A6F',
-  primaryLight:   '#003A6F',
+  primary:        '#210F00',
+  primaryDarker:  '#210F00',
+  primaryDark:    '#210F00',
+  primaryLight:   '#210F00',
 
-  secondary:      '#FDF0C4',
-  secondaryLight: '#FDF0C4',
-  secondaryDark:  '#FDF0C4',
+  secondary:      '#664cb5',
+  secondaryLight: '#ad9ddb',
+  secondaryDark:  '#281956',
   secondaryLayer: 'rgba(253, 240, 196, .5)',
 
   accent:         '#FFFB38',
   accentLight:    '#FEFF77',
   danger:         '#FF5240',
   stable:         '#f6f6f6',
+
   light:          '#fff',
   dark:           '#414e51',
   darkgrey:       '#474747',
@@ -24,32 +25,31 @@ const theme = {
   subtlegrey:     '#999',
   lightgrey:      '#f2f2f2',
   grey:           '#aaa',
+
   black:          '#222',
-  end:            '#000',
   white:          '#fff',
 
-  mellow:         '#F6D6BF',
-  pink:           '#FFCABB', // '#ffa4a1',
   lightgreen:     '#EEF3F5',
   green:          '#329E41',
 
-  sima:           '#e5a74b',
-  simaDark:       '#e29816',
-  simaLight:      'rgba(229, 167, 75, .8)',
   transparent:    'transparent',
 
+  red:            '#FF5240',
   grey1:          '#eeeeee',
   grey2:          '#aaaaaa',
-  yellow:         '#FDF0C4',
+  grey3:          '#cccccc',
+  yellow:         '#fff',
   yellowDark:     '#eddead',
-  blue1:          '#729FC1',
-  blue2:          '#003A6F',
-  blue3:          '#869aaa',
+  blue1:          '#7E878B',
+  blue2:          '#210F00',
+  darker:         '#210F00',
+  blue3:          '#888888',
   green1:         '#C3E5D9',
   green2:         '#004C41',
   purple:         '#ADB5DC',
   earth1:         '#CEC1C1',
-  earth2:         '#DCBFAD'
+  earth2:         '#DCBFAD',
+  light1:         '#faf8f5'
 
 };
 

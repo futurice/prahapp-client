@@ -1,10 +1,12 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { Animated, Easing, Platform, StyleSheet, Text, View, BackHandler } from 'react-native';
+import { Animated, Easing, Platform, StyleSheet, Dimensions, View, BackHandler } from 'react-native';
 import { connect } from 'react-redux';
 import autobind from 'autobind-decorator';
 
+import ModalBackgroundView from '../common/ModalBackgroundView';
+import Text from '../common/MyText';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ActionButton from './ActionButton';
 import ActionButtonLabel from './ActionButtonLabel';
@@ -15,14 +17,15 @@ import TimerMixin from 'react-timer-mixin';
 import { updateCooldowns } from '../../actions/competition';
 import { getActionTypesForFeed } from '../../reducers/competition';
 
+const { width, height } = Dimensions.get('window');
 const IOS = Platform.OS === 'ios';
 
 // in a happy world all this would be calculated on the fly but no
-const BUTTON_COUNT = 6;
+const BUTTON_COUNT = 3;
 const DISTANCE = 60;
 const BUTTON_WIDTH = 46;
 const BIG_BUTTON_WIDTH = 56;
-const BUTTON_DELAY = 40;
+const BUTTON_DELAY = 100;
 
 const OPEN = 'OPEN';
 const CLOSED = 'CLOSED';
@@ -30,13 +33,14 @@ const CLOSED = 'CLOSED';
 const BUTTON_POS = [];
 for (let i = 0; i < BUTTON_COUNT; i++) {
   BUTTON_POS.push({
-    x: 0,
-    y: -DISTANCE * i - (BUTTON_WIDTH + BIG_BUTTON_WIDTH / 2) + 10
+    x: -(width/BUTTON_COUNT) * i,
+    y: -DISTANCE * 3 - (BUTTON_WIDTH + BIG_BUTTON_WIDTH / 2) + 10
   });
 }
 
 const styles = StyleSheet.create({
   mainButton: {
+    zIndex: 3,
     elevation: 2,
     shadowColor: '#000000',
     shadowOpacity: 0.15,
@@ -58,50 +62,97 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF'
   },
   scrollTopButtonContent: {
-    color: theme.blue1
+    color: '#888'
+  },
+
+  actionButtonsWrap: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+    zIndex: 2,
+
+    position: 'absolute',
+    width: width - 40,
+    right: 20,
+    bottom: (height / 2) - 100,
+    minHeight: 130,
+
   },
   buttonEnclosure: {
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
-    position: 'absolute',
-    bottom: IOS ? 37 : 20,
-    right: 20,
-    overflow:'visible',
-    width: 200,
-    height: 56,
-    borderRadius: 28
+
+    // position: 'absolute',
+    // right: 20,
+    // bottom: height / 2,
+    // left: 0,
+    // bottom: IOS ? 37 : 20,
+    // right: 20,
+    overflow: 'visible',
+    width: 100,
+    height: 100,
+    borderRadius: 0
   },
   actionButton: {
-    bottom: 4,
-    right: 5,
-    width: 46,
-    height: 46
+    bottom: null,
+    right: null,
+    width: 56,
+    height: 56,
+
+    backgroundColor: theme.primary,
+    shadowColor: theme.primary,
+    shadowOpacity: 0,
+    shadowRadius: 10,
+    shadowOffset: {
+      height: 2,
+      width: 0
+    }
+
   },
   actionButtonContent: {
-    color: theme.blue2
+    color: theme.white,
+  },
+  mainButtonContent: {
+    color: theme.primary
+  },
+  cooldown: {
+    top: IOS ? 3 : 0
   },
   overlay:{
-    right:43,
+    right: 43,
     bottom:IOS ? 60 : 43,
     position:'absolute',
-    backgroundColor:theme.light,
-    opacity:0.9,
+    backgroundColor: theme.transparent,
+    // backgroundColor:theme.light,
+    // opacity:0.9,
     width:10,
     height:10,
     borderRadius:5
+  },
+  overlay_fixed: {
+    position: 'absolute',
+    zIndex: 2,
+    width,
+    height,
+    right: 0,
+    bottom:IOS ? 0 : 43,
+    backgroundColor: theme.transparent,
+
   }
 });
 
 const actions = {};
-const getBoundAction = (type, fn) => {
-  if (actions[type]) {
-    return actions[type];
+const getBoundAction = (type, subType, fn) => {
+  const actionType = `${type}_${subType}`;
+  if (actions[actionType]) {
+    return actions[actionType];
   }
 
-  actions[type] = fn.bind(null, type);
-  return actions[type];
+  actions[actionType] = fn.bind(null, type, subType);
+  return actions[actionType];
 };
 
 class ActionButtons extends Component {
@@ -110,9 +161,9 @@ class ActionButtons extends Component {
     super(props);
 
     this.state = {
-      buttons: BUTTON_POS.map(() => new Animated.ValueXY()),
-      plusButton: new Animated.Value(0),
+      buttons: BUTTON_POS.map(() => new Animated.Value(0)),
       labels: BUTTON_POS.map(() => new Animated.Value(0)),
+      plusButton: new Animated.Value(0),
       actionButtonsOpen: false,
       actionButtonsWidth: new Animated.Value(56),
       overlayOpacity: new Animated.Value(0)
@@ -120,76 +171,71 @@ class ActionButtons extends Component {
   }
 
   animateButtonsToState(nextState) {
+    const { actionTypes } = this.props;
+    const { buttons, labels } = this.state;
 
     // state is manipulated here directly on purpose, so the animations works smoothly
     /*eslint-disable */
-    this.state.actionButtonsOpen = nextState === OPEN;
+    // this.state.actionButtonsOpen = nextState === OPEN;
     /*eslint-enable */
-    BUTTON_POS.forEach((pos, i) => {
+    this.setState({ actionButtonsOpen: nextState === OPEN })
 
+    actionTypes.forEach((pos, i) => {
       // Animate action buttons, iOS handles delay better
       if (IOS) {
-        Animated.parallel([
-          Animated.delay(nextState === OPEN ?
-            BUTTON_POS.length * BUTTON_DELAY - (i * BUTTON_DELAY) :
-            0),
-          Animated.spring(this.state.buttons[i],
-            { toValue: nextState === OPEN ?
-                pos :
-                { x: 0, y: 0 } })
+        Animated.sequence([
+          Animated.delay(nextState === OPEN ? ((i+1) * BUTTON_DELAY) : 0),
+          Animated.spring(buttons[i], { toValue: nextState === OPEN ? 1 : 0 })
         ]).start();
       } else {
-        Animated.spring(this.state.buttons[i],
-          { toValue: nextState === OPEN ?
-              pos :
-              { x: 0, y: 0 } }).start();
+        Animated.spring(buttons[i], { toValue: nextState === OPEN ? 1 : 0 }).start();
       }
 
       // Animate action button labels, 200ms later than buttons
-      Animated.parallel([
-        Animated.delay(nextState === OPEN ?
-          200 + BUTTON_POS.length * BUTTON_DELAY - (i * BUTTON_DELAY) :
-          0),
-        Animated.timing(this.state.labels[i],
-          {duration:200, toValue: nextState === OPEN ? 1 : 0})
+      Animated.sequence([
+        Animated.delay(nextState === OPEN ? 200 + ((i+1) * BUTTON_DELAY) : 0),
+        Animated.spring(labels[i], { duration:200, toValue: nextState === OPEN ? 1 : 0 })
       ]).start();
     });
+
     Animated.spring(this.state.plusButton, { toValue: nextState === OPEN ? 1 : 0 }).start();
 
     // buttonset width
-    Animated.timing(
-      this.state.actionButtonsWidth,
-      { duration:0, toValue: nextState === OPEN ? 220 : 56 }
-    ).start();
+    Animated.timing(this.state.actionButtonsWidth, { duration:0, toValue: nextState === OPEN ? 56 : 56 }).start();
 
 
   }
 
   @autobind
   onToggleActionButtons() {
-      this.props.updateCooldowns();
+    const { actionButtonsOpen } = this.state;
+    this.props.updateCooldowns();
 
-      if (this.state.actionButtonsOpen === false) {
-          this.updateCooldownInterval = this.setInterval(() => {
-              this.props.updateCooldowns();
-          }, 1000);
-      } else {
-          this.clearInterval(this.updateCooldownInterval);
-      }
+    if (this.state.actionButtonsOpen === false) {
+      this.updateCooldownInterval = this.setInterval(() => {
+        this.props.updateCooldowns();
+      }, 1000);
+    } else {
+      this.clearInterval(this.updateCooldownInterval);
+    }
+
     if (this.props.isRegistrationInfoValid === false) {
       this.props.openRegistrationView();
     } else {
 
-      Animated.timing(this.state.overlayOpacity,
-        {duration:300, easing:Easing.ease, toValue: this.state.actionButtonsOpen ? 0 : 1}).start();
-      this.animateButtonsToState(this.state.actionButtonsOpen ? CLOSED : OPEN);
+      Animated.timing(this.state.overlayOpacity, {
+        duration: actionButtonsOpen ? 40 : 120,
+        easing: Easing.linear,
+        toValue: this.state.actionButtonsOpen ? 0 : 1
+      }).start();
+      this.animateButtonsToState(actionButtonsOpen ? CLOSED : OPEN);
     }
   }
 
   @autobind
-  onPressActionButtons(type, fn) {
+  onPressActionButtons(type, subType, fn) {
     // Start the action
-    getBoundAction(type, fn)();
+    getBoundAction(type, subType, fn)();
 
     // Close Action buttons
     this.onToggleActionButtons();
@@ -206,7 +252,12 @@ class ActionButtons extends Component {
     })
   }
 
-  getIconForAction(type) {
+  getIconForAction(type, overrideType) {
+
+    if (overrideType === 'library') {
+      return 'photo-library';
+    }
+
     const mapping = {
       TEXT: 'textsms',
       IMAGE: 'photo-camera',
@@ -219,10 +270,10 @@ class ActionButtons extends Component {
 
   getLabelForAction(type) {
     const mapping = {
-      TEXT: 'Write a message',
-      IMAGE: 'Take a photo',
-      SIMA: 'Have a sima',
-      CHECK_IN_EVENT: 'Check into event',
+      TEXT: 'Write a message_',
+      IMAGE: 'Take a photo_',
+      SIMA: 'Have a drink_',
+      CHECK_IN_EVENT: 'Check in to map_',
       default: 'image'
     };
     return mapping[type] || mapping['default'];
@@ -238,36 +289,40 @@ class ActionButtons extends Component {
   }
 
   renderActionButtons() {
-    const { actionTypes } = this.props;
+    const { actionTypes, onPressAction, disabledActionTypes } = this.props;
 
     return actionTypes.map((actionType, i) => {
       const actionTypeCode = actionType.get('code');
+      const actionSubTypeCode = actionType.get('subType');
       const actionTypeValue = actionType.get('value');
-      const iconName = this.getIconForAction(actionTypeCode);
-      const labelName = this.getLabelForAction(actionTypeCode);
-      const isCoolingDown = this.props.disabledActionTypes.find(dat => dat === actionTypeCode);
+      const iconName = this.getIconForAction(actionTypeCode, actionSubTypeCode);
+      // const labelName = this.getLabelForAction(actionTypeCode);
+      const labelName = actionType.get('name').split(' ')[0];
+      const isCoolingDown = disabledActionTypes.find(dat => dat === actionTypeCode);
 
       const iconOrCooldownTime = isCoolingDown ?
-        <Text style={styles.actionButtonContent}>{this.getCooldownTime(actionTypeCode)}</Text> :
+        <Text style={[styles.actionButtonContent, styles.cooldown]}>{this.getCooldownTime(actionTypeCode)}</Text> :
         <Icon name={iconName} size={22} style={styles.actionButtonContent}></Icon>;
 
       const actionButtonStyles = [
         styles.buttonEnclosure,
         {
-          transform: this.state.buttons[i].getTranslateTransform(),
-          width: this.state.actionButtonsWidth
+          transform: [{ scale: this.state.buttons[i] }],
+          // width: this.state.actionButtonsWidth
         }
       ];
 
       return (
         <Animated.View key={`button-${i}`} style={actionButtonStyles}>
-          <ActionButtonLabel additionalLabel={actionTypeValue} extraStyle={{opacity:this.state.labels[i] }}>
+          <ActionButtonLabel additionalLabel={actionTypeValue} extraStyle={{ opacity:this.state.labels[i] }}>
             {labelName}
           </ActionButtonLabel>
           <ActionButton
-            onPress={this.onPressActionButtons.bind(this, actionTypeCode, this.props.onPressAction)}
+            onPress={() => this.onPressActionButtons(actionTypeCode, actionSubTypeCode, onPressAction)}
             disabled={isCoolingDown}
-            extraStyle={styles.actionButton}>
+            underLayColor={theme.primary}
+            extraStyle={styles.actionButton}
+          >
             {iconOrCooldownTime}
           </ActionButton>
         </Animated.View>
@@ -296,7 +351,7 @@ class ActionButtons extends Component {
     return (
       <ActionButton onPress={this.onToggleActionButtons} extraStyle={styles.mainButton}>
         <Animated.View style={{ transform: [{ rotate: rotation }] }}>
-          <Icon name={'add'} size={24} style={styles.actionButtonContent}></Icon>
+          <Icon name={'add'} size={24} style={[styles.actionButtonContent, styles.mainButtonContent]}></Icon>
         </Animated.View>
       </ActionButton>
     );
@@ -304,6 +359,7 @@ class ActionButtons extends Component {
 
   render() {
     const { isLoading, actionTypes, style, visibilityAnimation } = this.props;
+    const { overlayOpacity, actionButtonsOpen } = this.state;
 
     if (isLoading || !actionTypes || actionTypes.size === 0) {
       return null;
@@ -311,18 +367,35 @@ class ActionButtons extends Component {
 
     const actionButtonsTranslate = visibilityAnimation.interpolate({
       inputRange: [0, 1],
-      outputRange: [-100, (IOS ? 30 : 0)]
+      outputRange: [-100, (IOS ? 0 : 0)]
     });
+
+    const actionButtonsWrapVisibility = {
+      transform: [{ scale: overlayOpacity }]
+    };
 
     return (
       <Animated.View style={[style, { bottom: actionButtonsTranslate }]}>
+      {/*
         <Animated.View style={[styles.overlay, {
-          transform:[{scale: this.state.overlayOpacity.interpolate({
+          transform:[{scale: overlayOpacity.interpolate({
             inputRange: [0, 1],
-            outputRange: [1,200]
+            outputRange: [1, 200]
           })}]
-        }]} />
-        {this.renderActionButtons()}
+        }]} >
+        </Animated.View>
+      */}
+
+        {actionButtonsOpen &&
+          <Animated.View style={[styles.overlay_fixed, { opacity: overlayOpacity }]}>
+            <ModalBackgroundView blurType='light' style={{ flex: 1 }} />
+          </Animated.View>
+        }
+
+        <Animated.View style={[styles.actionButtonsWrap, actionButtonsWrapVisibility]}>
+          {this.renderActionButtons()}
+        </Animated.View>
+
         {this.renderMenuButton()}
 
       </Animated.View>

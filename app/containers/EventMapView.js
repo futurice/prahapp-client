@@ -8,7 +8,7 @@ import {
 import { Navigator } from 'react-native-deprecated-custom-components';
 import autobind from 'autobind-decorator';
 
-import EventMap from '../components/map/EventMap';
+import UserMap from '../components/map/UserMap';
 import sceneConfig from '../utils/sceneConfig';
 import theme from '../style/theme';
 
@@ -42,7 +42,7 @@ class EventMapView extends Component {
       <Navigator
         style={styles.navigator}
         initialRoute={{
-          component: EventMap,
+          component: UserMap,
           name: 'Map'
         }}
 

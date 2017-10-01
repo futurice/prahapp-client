@@ -3,13 +3,19 @@ import { AsyncStorage, Platform } from 'react-native';
 import _ from 'lodash';
 
 import api from '../services/api';
-import { APP_STORAGE_KEY, AUTH_CLIENTID, AUTH_DOMAIN } from '../../env';
+import { AUTH0_CLIENTID, AUTH0_DOMAIN } from '../../env';
+import STORAGE_KEYS from '../constants/StorageKeys';
 import namegen from '../services/namegen';
 import { createRequestActionTypes } from '.';
 
 import { changeTab } from './navigation';
 import Tabs from '../constants/Tabs';
 import { getTeams } from '../reducers/team';
+
+import { fetchActionTypes } from './competition';
+import { fetchFeed } from './feed';
+import { fetchEvents } from './event';
+import { fetchTeams } from './team';
 
 const IOS = Platform.OS === 'ios';
 
@@ -32,19 +38,12 @@ const RESET = 'RESET';
 const SELECT_TEAM = 'SELECT_TEAM';
 const CLOSE_TEAM_SELECTOR = 'CLOSE_TEAM_SELECTOR';
 const DISMISS_INTRODUCTION = 'DISMISS_INTRODUCTION';
-const SET_USER_STORAGE = 'SET_USER_STORAGE';
 
-const openRegistrationView = () => {
-  return { type: OPEN_REGISTRATION_VIEW };
-};
+const openRegistrationView = () => ({ type: OPEN_REGISTRATION_VIEW });
 
-const closeRegistrationView = () => {
-  return { type: CLOSE_REGISTRATION_VIEW };
-};
+const closeRegistrationView = () => ({ type: CLOSE_REGISTRATION_VIEW });
 
-const dismissIntroduction = () => {
-  return { type: DISMISS_INTRODUCTION };
-};
+const dismissIntroduction = () => ({ type: DISMISS_INTRODUCTION });
 
 const putUser = () => {
   return (dispatch, getState) => {
@@ -122,69 +121,6 @@ const getUser = () => {
 };
 
 
-// # Login
-
-const setUserToStorage = payload => ({ type: SET_USER_STORAGE, payload });
-
-const Auth0Lock = require('react-native-lock');
-const lock = new Auth0Lock({clientId: AUTH_CLIENTID, domain: AUTH_DOMAIN, useBrowser: true });
-const userKey = `${APP_STORAGE_KEY}:user`;
-
-export const openLoginView = () => (dispatch, getState) => {
-  const state = getState();
-  const teams = getTeams(state);
-
-  lock.show({
-    connections: ['google-oauth2']
-  }, (err, profile, token) => {
-
-    const userFields = {
-      profilePicture: profile.picture,
-      name: profile.name,
-      selectedTeam: teams.getIn([0, 'id'], 1)
-    };
-
-    // Save profile to state
-    // (we don't have user id yet, because user is not created)
-    Promise.resolve(dispatch(updateProfile(userFields)))
-    .then(() => {
-      // Save profile to Storage
-      AsyncStorage.setItem(userKey, JSON.stringify(profile), () => {
-        // Set storage info to state
-        dispatch(setUserToStorage(profile));
-
-        // Send profile info to server
-        // and then get created user
-        Promise.resolve(dispatch(putUser()))
-        .then(() => dispatch(getUser()));
-
-      });
-    });
-  });
-}
-
-// # Logout
-// Remove user from AsyncStorage and state
-export const logoutUser = () => (dispatch) => {
-  AsyncStorage.removeItem(userKey, () => {
-    dispatch(setUserToStorage(null));
-  });
-}
-
-export const checkUserLogin = () => (dispatch, getState) => {
-  AsyncStorage.getItem(userKey, (err, user) => {
-    if (!user) {
-      // # No need to show login here
-      //    App Intro is shown when user has not logged and
-      //    from there user has to login in order to continue
-
-    } else {
-      const userObj = JSON.parse(user);
-      dispatch(setUserToStorage(userObj));
-    }
-  });
-};
-
 
 export {
   CREATE_USER_REQUEST,
@@ -200,11 +136,11 @@ export {
   SELECT_TEAM,
   RESET,
   DISMISS_INTRODUCTION,
-  SET_USER_STORAGE,
   putUser,
   openRegistrationView,
   closeRegistrationView,
   updateName,
+  updateProfile,
   generateName,
   getUser,
   selectTeam,

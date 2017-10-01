@@ -5,14 +5,14 @@
 import React from 'react';
 import {
   StyleSheet,
-  Text,
-  TouchableNativeFeedback,
   View,
   Animated,
   Easing
 } from 'react-native';
 
+import Text from '../common/MyText';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import TouchableNativeFeedback from './PlatformTouchable';
 
 const styles = StyleSheet.create({
   tab: {
@@ -23,17 +23,26 @@ const styles = StyleSheet.create({
   },
   tabs: {
     elevation: 4,
+    shadowColor: '#000',
+    shadowOpacity: 0.25,
+    shadowRadius: 1,
+    shadowOffset: {
+      height: 1,
+      width: 0
+    },
     height: 54,
     flexDirection: 'row',
     justifyContent: 'space-around',
     borderWidth: 0,
-    borderTopWidth: 1,
+    borderTopWidth: 0,
     borderTopColor: '#f1f1f1'
   },
   textLabel: {
-    fontSize: 10,
+    fontSize: 11,
+    fontWeight: '100',
     textAlign:'center',
     // position:'absolute',
+    marginTop: 2,
     left:0,
     right:0,
     bottom: 0
@@ -41,7 +50,7 @@ const styles = StyleSheet.create({
 });
 
 
-var AndroidTabBar = React.createClass({
+var MdIconTabBar = React.createClass({
   propTypes: {
     goToPage: React.PropTypes.func,
     activeTab: React.PropTypes.number,
@@ -69,35 +78,26 @@ var AndroidTabBar = React.createClass({
     const isTabActive = this.props.activeTab === page;
     const activeTextColor = this.props.activeTextColor || 'black';
     const inactiveTextColor = this.props.inactiveTextColor || 'black';
-
-    // const AnimatedIcon = Animated.createAnimatedComponent(Icon);
-
-    // const numberOfTabs = this.props.tabs.length;
-    // const outPutArray = times(numberOfTabs, () => 0);
-    // outPutArray[page] = 1; // -> eg. [0,1,0,0,0]
-
-    // const textScale = this.props.scrollValue.interpolate({  inputRange: range(numberOfTabs), outputRange: outPutArray});
-    // const iconTop = textScale.interpolate({ inputRange: [0, 1], outputRange: [0, -6] });
-
     const buttonAnimation = this.state.buttonAnimations[page];
 
     return (
     <TouchableNativeFeedback
       key={item.title}
       onPress={() => this.props.goToPage(page)}
-      background={TouchableNativeFeedback.SelectableBackground()}
+      background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
       delayPressIn={1}
+      style={{ flex: 1 }}
     >
       <View style={[styles.tab, { paddingLeft: isTabActive ? 0 : 0, paddingRight: isTabActive ? 0 : 0 }]}>
         <Icon
           name={item.icon}
-          size={item.iconSize || 22}
+          size={item.iconSize || 26}
           style={{
             top: 0,
             color: isTabActive ? activeTextColor : inactiveTextColor,
           }} />
 
-        {item.title && isTabActive &&
+        {item.titlex && isTabActive &&
           <Animated.Text style={[
             styles.textLabel,
             {
@@ -105,7 +105,6 @@ var AndroidTabBar = React.createClass({
               opacity: isTabActive ? buttonAnimation : 1,
               transform: [{
                 scale: isTabActive ? buttonAnimation : 0
-                // scale: isTabActive ? 1.1 : 0
               }]
             }
           ]}>
@@ -131,4 +130,4 @@ var AndroidTabBar = React.createClass({
   },
 });
 
-module.exports = AndroidTabBar;
+module.exports = MdIconTabBar;

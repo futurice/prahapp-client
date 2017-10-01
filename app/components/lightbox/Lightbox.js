@@ -141,21 +141,21 @@ class LightBox extends Component {
         backButtonClose={true}
         style={styles.modal}
         transparent={true}
-        animationType={IOS ? 'none' : 'slide'}
-        >
+        supportedOrientations={['portrait']}
+        animationType={IOS ? 'fade' : 'slide'}
+      >
         <ModalBackgroundView style={styles.container} blurType="dark" >
-          {
-          IOS ?
+          {IOS
+          ?
           <View style={{ width, height }}>
             <PhotoView
               source={{uri: itemImage}}
               minimumZoomScale={1}
               maximumZoomScale={4}
               resizeMode={'contain'}
-              style={{ width, height: width}} />
+              style={{ width, height: width }} />
           </View>
-          :
-          <View style={{ justifyContent: 'center', width, height }}>
+          : <View style={{ justifyContent: 'center', width, height }}>
             <ImageZoom
               onLoad={() => {
                 this.setState({ loading: false });
@@ -229,6 +229,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    flexGrow: 1,
     justifyContent: 'center',
     backgroundColor: IOS ? 'transparent' : theme.black,
   },

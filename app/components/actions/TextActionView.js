@@ -10,6 +10,7 @@ import {
   Dimensions,
   Animated,
   StyleSheet,
+  TouchableHighlight,
   KeyboardAvoidingView,
   Modal
 } from 'react-native';
@@ -18,7 +19,8 @@ import autobind from 'autobind-decorator';
 
 import Button from '../../components/common/Button';
 import theme from '../../style/theme';
-import Icon from 'react-native-vector-icons/MaterialIcons'
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import LinearGradient from 'react-native-linear-gradient';
 
 import {
   postText,
@@ -48,8 +50,8 @@ class TextActionView extends Component {
   }
 
   showOK() {
-    Animated.spring(this.state.okAnimation, { toValue:1, duration:250 }).start();
-    Animated.timing(this.state.formAnimation, { toValue:0, duration:100 }).start();
+    Animated.spring(this.state.okAnimation, { toValue: 1, duration: 250 }).start();
+    Animated.timing(this.state.formAnimation, { toValue: 0, duration: 100 }).start();
   }
 
   hideOK() {
@@ -104,7 +106,18 @@ class TextActionView extends Component {
         visible={isTextActionViewOpen}
         animationType={'slide'}
       >
-        <View style={[styles.container, styles.modalBackgroundStyle]}>
+        <LinearGradient
+          style={[styles.container, styles.modalBackgroundStyle]}
+          locations={[0, 1]}
+          start={{x: 0.35, y: 0}}
+          end={{x: 1, y: 1}}
+          colors={[theme.white, '#eee']}
+        >
+
+          <TouchableHighlight underlayColor="#f4f4f4" onPress={this.onClose} style={styles.closeButton}>
+            <Icon style={styles.closeButtonIcon} name="close" />
+          </TouchableHighlight>
+
 
           <Animated.View style={[styles.okView, { opacity: this.state.okAnimation }]}>
             <Animated.View style={[styles.okWrap,
@@ -113,7 +126,7 @@ class TextActionView extends Component {
               <Icon name='done' style={styles.okSign} />
             </Animated.View>
             <View style={{ marginTop: 20 }}>
-              <Text style={styles.okText}>Let's publish your message...</Text>
+              <Text style={styles.okText}>Let's vask your message...</Text>
             </View>
           </Animated.View>
 
@@ -141,7 +154,7 @@ class TextActionView extends Component {
               onChangeText={this.onChangeText}
               numberOfLines={3}
               maxLength={151}
-              placeholderTextColor={'rgba(255,255,255, 0.65)'}
+              placeholderTextColor={'rgba(0,0,0, 0.2)'}
               placeholder="Say something..."
               autoCorrect={false}
               value={this.state.text} />
@@ -157,22 +170,16 @@ class TextActionView extends Component {
 
             <View style={styles.bottomButtons}>
               <Button
-                onPress={this.onClose}
-                style={styles.cancelButton}>
-                Cancel
-              </Button>
-
-              <Button
                 onPress={this.onSendText}
-                style={styles.modalButton}
-                textStyle={{ color: theme.blue2 }}
+                style={[styles.button, styles.modalButton]}
+                textStyle={{ color: theme.primary }}
                 isDisabled={!this.state.text}>
                 Post
               </Button>
             </View>
             </KeyboardAvoidingView>
           </Animated.View>
-        </View>
+        </LinearGradient>
       </Modal>
     );
   }
@@ -225,33 +232,60 @@ const styles = StyleSheet.create({
     bottom: IOS ? 0 : 10,
     right: 0,
     left: 0,
-    padding: 20,
+    padding: 0,
     paddingBottom: 0,
-    paddingLeft: IOS ? 0 : 20,
-    paddingRight: IOS ? 0 : 20,
+    paddingLeft: IOS ? 15 : 30,
+    paddingRight: IOS ? 15 : 30,
     borderTopWidth: IOS ? 0 : 1,
     borderTopColor:'rgba(0,0,0,.1)',
   },
+  button: {
+    shadowColor: '#000000',
+    shadowOpacity: 0.15,
+    shadowRadius: 10,
+    shadowOffset: {
+      height: 7,
+      width: 0
+    }
+  },
   modalButton: {
     flex: 1,
-    marginLeft: 6,
-    backgroundColor: theme.yellow
+    marginLeft: 15,
+    backgroundColor: theme.white,
+  },
+  closeButton: {
+    position: 'absolute',
+    right: 15,
+    top: IOS ? 50 : 30,
+    backgroundColor: 'transparent',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 3,
+  },
+  closeButtonIcon: {
+    fontSize: 26,
+    color: '#888',
   },
   cancelButton: {
     flex: 1,
-    marginRight: 6,
+    marginRight: 15,
     backgroundColor: '#aaa',
   },
   modalBackgroundStyle: {
-    backgroundColor: theme.blue2
+    backgroundColor: theme.secondary
   },
   inputField: {
     fontSize: 18,
     margin: 0,
     marginLeft: 20,
     marginTop: IOS ? 110 : 0,
-    color:'#FFF',
+    color: theme.primary,
     textAlign: 'center',
+    fontFamily: IOS ? 'Futurice' : 'Futurice-Regular',
     height: 220,
     width: width - 40,
   },
@@ -286,12 +320,12 @@ const styles = StyleSheet.create({
   },
   okSign:{
     fontSize: 105,
-    color: theme.light,
+    color: theme.primary,
     backgroundColor: 'transparent',
     textAlign: 'center',
   },
   okText:{
-    color: theme.light,
+    color: '#888',
     fontWeight: 'bold',
     textAlign: 'center',
     backgroundColor: 'transparent',
