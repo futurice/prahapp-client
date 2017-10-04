@@ -25,6 +25,7 @@ import theme from '../../style/theme';
 import { fetchLinks } from '../../actions/profile';
 import { getCurrentCityName } from '../../concepts/city';
 import { openRegistrationView } from '../../actions/registration';
+import { getUserName, getUserInfo } from '../../reducers/registration';
 import { logoutUser } from '../../concepts/auth';
 import feedback from '../../services/feedback';
 
@@ -92,6 +93,14 @@ const styles = StyleSheet.create({
     color: theme.subtlegrey,
     top: 1,
     fontSize: 13,
+  },
+  editProfileButton: {
+    zIndex: 10,
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    width: 50,
+    height: 50,
   },
   avatarColumn: {
     width: 50,
@@ -366,6 +375,12 @@ class Profile extends Component {
       <View style={[styles.listItemButton, styles.listItemSeparator, styles.heroItem]}>
         <View style={[styles.listItem, styles.listItem__hero]}>
 
+          <View style={styles.editProfileButton}>
+            <TouchableOpacity onPress={this.openRegistration}>
+              <Icon name="edit" size={25} />
+            </TouchableOpacity>
+          </View>
+
           {/*<View style={styles.profilePicBgLayer} /> */}
           <View style={styles.listItemHeroIcon}>
             {avatar ?
@@ -463,8 +478,9 @@ const mapDispatchToProps = { fetchLinks, openRegistrationView, logoutUser };
 const select = store => ({
   teams: store.team.get('teams'),
 
+  name: getUserName(store),
+  info: getUserInfo(store),
   selectedTeam: store.registration.get('selectedTeam'),
-  name: store.registration.get('name'),
   picture: store.registration.get('profilePicture'),
 
   links: store.profile.get('links'),
