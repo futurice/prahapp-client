@@ -17,7 +17,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ParsedText from 'react-native-parsed-text';
 
-import { isNil, isEmpty } from 'lodash';
+import { isEmpty, get } from 'lodash';
 import abuse from '../../services/abuse';
 import time from '../../utils/time';
 import theme from '../../style/theme';
@@ -27,6 +27,7 @@ import VotePanel from './VotePanel';
 import FeedItemHeader from './FeedItemHeader';
 import FeedItemText from './FeedItemText';
 import FeedItemImage from './FeedItemImage';
+import FeedItemSkeleton from './FeedItemSkeleton';
 import CommentsLink from './CommentsLink';
 
 const { width } = Dimensions.get('window');
@@ -37,7 +38,7 @@ const IOS = Platform.OS === 'ios';
 
 const styles = StyleSheet.create({
   itemWrapper: {
-    width: width,
+    width,
     flex: 1,
     backgroundColor: theme.white,
     paddingBottom: 15,
@@ -52,8 +53,7 @@ const styles = StyleSheet.create({
     marginLeft: FEED_ITEM_MARGIN_DEFAULT,
     marginRight: FEED_ITEM_MARGIN_DISTANCE,
     overflow: 'visible',
-    borderWidth: IOS ? 0 : 0,
-    borderColor: 'rgba(0, 0, 0, .033)',
+    borderWidth: 0,
     // // # Drop shadows
     elevation: 5,
     shadowColor: theme.secondaryDark,
@@ -145,59 +145,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     overflow: 'hidden',
   },
-
-  // # Skeleton styles
-  skeletonWrap: {
-    flex: 1,
-    minHeight: 210,
-  },
-  skeletonHeader: {
-    minHeight: 55,
-    paddingTop: 15,
-    justifyContent: 'center',
-  },
-  skeletonAvatar: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    marginRight: 15,
-    backgroundColor: theme.grey1,
-  },
-  skeletonName: {
-    backgroundColor: theme.grey1,
-    width: 100,
-    height: 16,
-    marginTop: 0,
-  },
-  skeletonTime: {
-    backgroundColor: theme.grey1,
-    width: 25,
-    height: 16,
-    marginTop: 0,
-  },
-  skeletonItemText: {
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  skeletonText: {
-    backgroundColor: theme.grey1,
-    width: width / 2,
-    height: 16,
-    margin: 10,
-  },
-  skeletonFooterItem: {
-    backgroundColor: theme.grey1,
-    width: 60,
-    height: 16,
-    margin: 10,
-    marginHorizontal: 15,
-  }
 });
 
 class FeedListItem extends Component {
   propTypes: {
     item: PropTypes.object.isRequired,
-    dispatch: PropTypes.func.isRequired
   }
 
   constructor(props) {
@@ -216,10 +168,7 @@ class FeedListItem extends Component {
 
   itemIsCreatedByMyTeam(item) {
     const { userTeam } = this.props;
-    if (userTeam) {
-      return item.author.team === userTeam.get('name');
-    }
-    return false;
+    return userTeam && get(item, ['author','team']) === userTeam.get('name');
   }
 
   selectItem() {
@@ -261,29 +210,6 @@ class FeedListItem extends Component {
     this.props.removeFeedItem(this.props.item);
   }
 
-  // Render "remove" button, which is remove OR flag button,
-  // depending is the user the creator of this feed item or not
-  renderRemoveButton(item) {
-    if (item.author.type === 'SYSTEM') {
-
-      return <View></View>; // currently it is not possible to return null in RN as a view
-    }
-
-    const iconName = this.itemIsCreatedByMe(item) ? 'delete' : 'flag';
-    return (
-      <TouchableOpacity
-       style={[styles.listItemRemoveContainer,
-         {backgroundColor:item.type !== 'IMAGE' ? 'transparent' : 'rgba(255,255,255,.1)'}]}
-       onPress={() => this.showRemoveDialog(item)}>
-
-        <Icon name={iconName} style={[styles.listItemRemoveButton,
-          {opacity:item.type !== 'IMAGE' ? 0.7 : 1}]
-        }/>
-
-      </TouchableOpacity>
-    );
-  }
-
   renderAdminItem(item, ago) {
 
     return (
@@ -314,40 +240,11 @@ class FeedListItem extends Component {
     );
   }
 
-  renderSkeletonItem() {
-    const { opacity } = this.props;
-    return (
-    <View style={[styles.itemWrapper, styles.skeletonWrap, { opacity: isNil(opacity) ? 1 : opacity }]}>
-        <View style={styles.itemContent}>
-
-          <View style={[styles.feedItemListItemInfo, styles.skeletonHeader]}>
-            <View style={styles.skeletonAvatar} />
-            <View style={styles.feedItemListItemAuthor}>
-              <View style={styles.skeletonName} />
-            </View>
-            <View style={styles.skeletonTime} />
-          </View>
-
-
-          <View style={[styles.itemTextWrapper, styles.skeletonItemText]}>
-            <View style={styles.skeletonText} />
-            <View style={styles.skeletonText} />
-          </View>
-
-          <View style={styles.footer}>
-            <View style={styles.skeletonFooterItem} />
-
-            <View style={styles.skeletonFooterItem} />
-          </View>
-      </View>
-    </View>);
-  }
-
   render() {
-    const { item, openUserPhotos, openComments } = this.props;
+    const { item, openUserPhotos, openComments, opacity } = this.props;
 
     if (item.type === 'SKELETON') {
-      return this.renderSkeletonItem();
+      return <FeedItemSkeleton opacity={opacity} />;
     }
 
     const { selected } = this.state;
@@ -371,51 +268,51 @@ class FeedListItem extends Component {
             selected ? styles.itemContent_selected : {}
           ]}
         >
-        <TouchableOpacity
-          activeOpacity={1}
-          style={styles.itemTouchable}
-          onLongPress={() => this.selectItem() }
-        >
-          <FeedItemHeader
-            ago={ago}
-            avatar={avatar}
-            author={item.author}
-            myTeam={itemByMyTeam}
-            onHeaderPress={openUserPhotos} />
-          {hasItemText && isItemImage &&
-            <FeedItemText
-              text={item.text}
-              isItemImage={isItemImage}
-              handleUrlPress={this.handleUrlPress} />
-          }
+          <TouchableOpacity
+            activeOpacity={1}
+            style={styles.itemTouchable}
+            onLongPress={() => this.selectItem() }
+          >
+            <FeedItemHeader
+              ago={ago}
+              avatar={avatar}
+              author={item.author}
+              myTeam={itemByMyTeam}
+              onHeaderPress={openUserPhotos} />
+            {hasItemText && isItemImage &&
+              <FeedItemText
+                text={item.text}
+                isItemImage={isItemImage}
+                handleUrlPress={this.handleUrlPress} />
+            }
 
-          {isItemImage &&
-            <FeedItemImage
-              onImagePress={this.props.openLightBox}
-              postId={item.id}
-              uri={item.url} />
-          }
-          {!isItemImage &&
-            <FeedItemText
-              text={item.text}
-              isItemImage={isItemImage}
-              handleUrlPress={this.handleUrlPress} />
-          }
+            {isItemImage &&
+              <FeedItemImage
+                onImagePress={this.props.openLightBox}
+                postId={item.id}
+                uri={item.url} />
+            }
+            {!isItemImage &&
+              <FeedItemText
+                text={item.text}
+                isItemImage={isItemImage}
+                handleUrlPress={this.handleUrlPress} />
+            }
 
-          <View style={styles.footer}>
-            <VotePanel
-              item={item}
-              voteFeedItem={this.props.voteFeedItem}
-              openRegistrationView={this.props.openRegistrationView}
-            />
+            <View style={styles.footer}>
+              <VotePanel
+                item={item}
+                voteFeedItem={this.props.voteFeedItem}
+                openRegistrationView={this.props.openRegistrationView}
+              />
 
-            <CommentsLink
-              parentId={item.id}
-              commentCount={item.commentCount}
-              openComments={() => openComments(item.id)}
-            />
-          </View>
-        </TouchableOpacity>
+              <CommentsLink
+                parentId={item.id}
+                commentCount={item.commentCount}
+                openComments={() => openComments(item.id)}
+              />
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
     );
