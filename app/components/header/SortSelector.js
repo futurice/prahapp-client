@@ -1,11 +1,12 @@
-import React from 'react';
-import { toArray } from 'lodash';
+import React, { Component } from 'react';
 import {
+  Animated,
+  Easing,
   StyleSheet,
+  TouchableHighlight,
   View,
-  TouchableHighlight
-} from 'react-native'
-
+} from 'react-native';
+import { toArray } from 'lodash';
 import { connect } from 'react-redux';
 
 import { getFeedSortType, setFeedSortType } from '../../concepts/sortType';
@@ -19,37 +20,68 @@ const sortTypeTitles = {
   [SortTypes.SORT_HOT]: 'hot',
 };
 
-const SortSelector = ({
-  selectedSortType,
-  setFeedSortType: onSortButtonClicked
-}) => {
+class SortSelector extends Component {
+  constructor(props) {
+    super(props);
 
-  const sortTypeOptions = toArray(SortTypes);
-  const selectedSortTypeIndex = sortTypeOptions.indexOf(selectedSortType);
-  const nextSortTypeItem = selectedSortTypeIndex >= sortTypeOptions.length - 1
-    ? sortTypeOptions[0]
-    : sortTypeOptions[selectedSortTypeIndex + 1];
+    this.state = { indicatorAnimation: new Animated.Value(0) };
+  }
 
-  return (
-  <TouchableHighlight
-    underlayColor={'transparent'}
-    onPress={() => onSortButtonClicked(nextSortTypeItem) }>
-    <View style={styles.sortSelector}>
-      <Text style={styles.filterText}>
-        {sortTypeTitles[selectedSortType]}
-      </Text>
-      <View style={styles.indicators}>
-        {sortTypeOptions.map((type, index) =>
-          <View
-            key={type}
-            style={[styles.indicator, index === selectedSortTypeIndex ? styles.activeIndicator : {}]}
-          />
-        )}
-      </View>
-    </View>
-  </TouchableHighlight>
-  );
-};
+  componentWillReceiveProps({ selectedSortType }) {
+    if (selectedSortType !== this.props.selectedSortType) {
+      const sortTypeOptions = toArray(SortTypes);
+      const selectedSortTypeIndex = sortTypeOptions.indexOf(selectedSortType);
+      this.animateIndicator(selectedSortTypeIndex);
+    }
+  }
+
+  // 'toValue' can be 0 | 1
+  animateIndicator(toValue) {
+    const { indicatorAnimation } = this.state;
+
+    Animated.timing(indicatorAnimation, { toValue, duration: 512, easing: Easing.elastic(1) }).start();
+  }
+
+  render() {
+    const { selectedSortType } = this.props;
+    const { indicatorAnimation, indicatorAnimationPartTwo } = this.state;
+
+    const sortTypeOptions = toArray(SortTypes);
+    const selectedSortTypeIndex = sortTypeOptions.indexOf(selectedSortType);
+    const nextSortTypeItem = selectedSortTypeIndex >= sortTypeOptions.length - 1
+      ? sortTypeOptions[0]
+      : sortTypeOptions[selectedSortTypeIndex + 1];
+
+    const animatedIndicatorStyles = {
+      top: indicatorAnimation.interpolate({ inputRange: [0, 0.5, 1], outputRange: [0, 0, 8] }),
+      height: indicatorAnimation.interpolate({ inputRange: [0, 0.5, 1], outputRange: [6, 14, 6] }),
+    };
+
+    return (
+      <TouchableHighlight
+        underlayColor="transparent"
+        onPress={() => this.props.setFeedSortType(nextSortTypeItem)}
+      >
+        <View style={styles.sortSelector}>
+          <Text style={styles.filterText}>
+            {sortTypeTitles[selectedSortType]}
+          </Text>
+          <View style={styles.indicators}>
+            {sortTypeOptions.map((type, index) =>
+              <View
+                key={type}
+                style={styles.indicator}
+              />
+            )}
+
+            <Animated.View style={[styles.indicator, styles.activeIndicator, animatedIndicatorStyles ]}/>
+
+          </View>
+        </View>
+      </TouchableHighlight>
+    );
+  }
+}
 
 var styles = StyleSheet.create({
   sortSelector: {
@@ -79,7 +111,9 @@ var styles = StyleSheet.create({
   },
   activeIndicator: {
     opacity: 1,
-    backgroundColor: theme.blue2,
+    backgroundColor: theme.secondary,
+    position: 'absolute',
+    zIndex: 1,
   }
 });
 
