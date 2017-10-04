@@ -33,6 +33,7 @@ const {
 const OPEN_REGISTRATION_VIEW = 'OPEN_REGISTRATION_VIEW';
 const CLOSE_REGISTRATION_VIEW = 'CLOSE_REGISTRATION_VIEW';
 const UPDATE_NAME = 'UPDATE_NAME';
+const UPDATE_USER_INFO = 'UPDATE_USER_INFO';
 const UPDATE_PROFILE = 'UPDATE_PROFILE';
 const RESET = 'RESET';
 const SELECT_TEAM = 'SELECT_TEAM';
@@ -52,10 +53,11 @@ const putUser = () => {
     const state = getState();
 
     const name = state.registration.get('name');
+    const info = state.registration.get('info');
     const team = state.registration.get('selectedTeam');
     const profilePicture = state.registration.get('profilePicture');
 
-    return api.putUser({ uuid, name, team, profilePicture })
+    return api.putUser({ uuid, info, name, team, profilePicture })
       .then(response => {
         dispatch({ type: CREATE_USER_SUCCESS });
         dispatch({ type: CLOSE_REGISTRATION_VIEW });
@@ -67,6 +69,7 @@ const putUser = () => {
       .catch(error => dispatch({ type: CREATE_USER_FAILURE, error: error }));
   };
 };
+
 const selectTeam = team => {
   return (dispatch, getState) => {
     const state = getState();
@@ -85,6 +88,7 @@ const selectTeam = team => {
 };
 
 const updateName = name => ({ type: UPDATE_NAME, payload: name });
+const updateUserInfo = info => ({ type: UPDATE_USER_INFO, payload: info });
 
 const updateProfile = payload => ({ type: UPDATE_PROFILE, payload })
 
@@ -129,6 +133,7 @@ export {
   OPEN_REGISTRATION_VIEW,
   CLOSE_REGISTRATION_VIEW,
   UPDATE_NAME,
+  UPDATE_USER_INFO,
   UPDATE_PROFILE,
   GET_USER_REQUEST,
   GET_USER_SUCCESS,
@@ -140,6 +145,7 @@ export {
   openRegistrationView,
   closeRegistrationView,
   updateName,
+  updateUserInfo,
   updateProfile,
   generateName,
   getUser,
