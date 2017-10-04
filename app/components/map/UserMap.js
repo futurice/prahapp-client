@@ -27,6 +27,7 @@ import MDIcon from 'react-native-vector-icons/MaterialIcons';
 import analytics from '../../services/analytics';
 import EventDetail from '../calendar/EventDetailView';
 import Loader from '../common/Loader';
+import Button from '../common/Button';
 import PlatformTouchable from '../common/PlatformTouchable';
 import time from '../../utils/time';
 import theme from '../../style/theme';
@@ -187,30 +188,6 @@ class EventMap extends Component {
     </MapView.Callout>;
   }
 
-  renderStaticMarker(location) {
-    let calloutProps = {};
-    if (location.url) {
-      calloutProps = {
-        onPress: () => Linking.openURL(location.url)
-      }
-    }
-
-    return <MapView.Callout {...calloutProps} style={{ flex: 1, position: 'relative' }}>
-      <TouchableHighlight
-        underlayColor='transparent'
-        style={styles.calloutTouchable}
-      >
-        <View style={styles.callout}>
-          {
-            location.url
-              ? this.renderStaticUrlMarkerView(location)
-              : this.renderStaticMarkerView(location)
-          }
-        </View>
-      </TouchableHighlight>
-    </MapView.Callout>;
-  }
-
   @autobind
   animateCallout(show) {
     Animated.timing(this.state.calloutAnimation, { toValue: show ? 1 : 0, duration: 300 }).start();
@@ -261,9 +238,9 @@ class EventMap extends Component {
         >
           <View style={styles.callout}>
             {
-              location && location.get('url')
-                ? this.renderStaticUrlMarkerView(location)
-                : this.renderStaticMarkerView(location)
+              location && location.get('type') === 'OFFICE'
+                ? this.renderMarkerCalloutContent(location)
+                : this.renderPostCalloutContent(location)
             }
           </View>
         </TouchableHighlight>
@@ -272,11 +249,10 @@ class EventMap extends Component {
     );
   }
 
-  renderStaticUrlMarkerView(location) {
-    console.log(location.toJS());
+  renderPostCalloutContent(location) {
     return (
       <View style={styles.calloutContent}>
-        <View>
+        <View style={styles.calloutImage}>
           <Image
             style={styles.postImage}
             source={{ uri: location.get('url') }}
@@ -284,26 +260,28 @@ class EventMap extends Component {
         </View>
         <View style={styles.postInfo} >
           <Text style={styles.postAuthorName}>{location.getIn(['author','name'])}</Text>
-          <Text style={styles.postTextMessage}>Moro äiät! Tääl on just kova meno. Joinatkaa bisselle tai parille. Bartenderi väsää teille dressingit...</Text>
+          <Text style={styles.postTextMessage}>{location.get('text')}</Text>
           <Text style={styles.postDate}>{time.getTimeAgo(location.getIn(['createdAt']))} ago</Text>
         </View>
       </View>);
   }
 
-  renderStaticMarkerView(location) {
-    return <View style={styles.calloutContent}>
-      <View style={styles.calloutTitleWrap}>
-        <Text style={ styles.calloutTitle }>
-          {!!location && location.get('title')}
-        </Text>
+  renderMarkerCalloutContent(location) {
+    return  (
+      <View style={styles.calloutContent}>
+        <View style={styles.calloutImage}>
+          <Image
+            style={styles.postImage}
+            source={{ uri: location.get('imageUrl') }}
+          />
+        </View>
+        <View style={styles.postInfo}>
+          <Text style={styles.postAuthorName}>{location.get('title')}</Text>
+          <Text style={styles.postTextMessage}>{location.get('subtitle')}</Text>
+          <Button style={styles.calloutButton}><MDIcon name="directions" /> Directions</Button>
+        </View>
       </View>
-
-      <ScrollView>
-        <Text style={styles.calloutInfo}>
-          {!!location && location.get('subtitle')}
-        </Text>
-      </ScrollView>
-    </View>;
+    );
   }
 
   @autobind
@@ -344,7 +322,7 @@ class EventMap extends Component {
   maybeRenderLoading() {
     if (this.props.loading) {
       return <View style={styles.loaderContainer}>
-        <Loader />
+        <Loader color={theme.secondary} />
       </View>;
     }
 
@@ -434,8 +412,8 @@ class EventMap extends Component {
     if (marker && marker.type === 'HOTEL') {
       return MARKER_IMAGES['HOME']
     }
-    if (marker && marker.type === 'SUMMER PARTY') {
-      return MARKER_IMAGES['FUTUCAMP']
+    if (marker && marker.type === 'OFFICE') {
+      return MARKER_IMAGES['FUTU']
     }
     if (marker && marker.type === 'FUTUCAMP') {
       return MARKER_IMAGES['FUTUCAMP']
@@ -458,14 +436,14 @@ class EventMap extends Component {
         key={index}
         coordinate={location.location}
         onPress={() => this.onSelectMarker(location)}
-        style={isSelectedMarker ? { zIndex: markersJS.length + 1, transform: [{ scale: 1.2 }] } : { zIndex: markersJS.length - index }}
+        style={isSelectedMarker ? { zIndex: markersJS.length + 1, transform: [{ scale: 1.2 }] } : { zIndex: parseInt(location.id) }}
       >
         <View style={styles.avatarMarker}>
-          {index === 0 &&
+          {/*index === 0 &&
           <View style={{ position: 'absolute', flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme.secondary, width: 14, height: 14, borderRadius: 7, top: -3, right: -3, zIndex: 2 }}>
             <MDIcon name="whatshot" style={{ color: theme.white, fontSize: 10, backgroundColor: theme.transparent }} />
           </View>
-          }
+          */}
           <Image
             style={styles.avatarMarkerImage}
             source={this.getMarker(location, selectedMarker)}
@@ -552,7 +530,17 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: theme.white
+    backgroundColor: theme.white,
+
+
+    elevation: 2,
+    shadowColor: '#000000',
+    shadowOpacity: 0.03,
+    shadowRadius: 6,
+    shadowOffset: {
+      height: 1,
+      width: 0
+    },
   },
   avatarMarkerImage: {
     width: 26,
@@ -622,7 +610,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 15,
     paddingBottom: 10,
-    justifyContent: 'space-between',
     alignItems: 'flex-start',
     flexDirection: 'row',
   },
@@ -630,14 +617,18 @@ const styles = StyleSheet.create({
     // flex: 1,
     flexDirection:'row',
   },
+  calloutImage: {
+    width: 110,
+  },
   postImage: {
     width: 110,
     height: 110,
     borderRadius: 3,
   },
   postInfo: {
-    paddingHorizontal: 20,
-    maxWidth: width - 130 - 15,
+    flex: 1,
+    marginLeft: 20,
+    maxWidth: width - 130 - 0,
   },
   postAuthorName: {
     fontWeight: '500',
@@ -656,6 +647,10 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#888',
     backgroundColor: theme.transparent
+  },
+  calloutButton: {
+    marginTop: 15,
+    height: 33,
   },
   calloutTitle: {
     fontWeight: '500',
