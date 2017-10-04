@@ -12,7 +12,7 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 
 import AndroidTabNavigation from './Navigation';
-import RegistrationView from '../components/registration/RegistrationView';
+import AppIntroView from '../components/registration/AppIntroView';
 import TextActionView from '../components/actions/TextActionView';
 import LightBox from '../components/lightbox/Lightbox';
 import errorAlert from '../utils/error-alert';
@@ -58,7 +58,7 @@ class MainView extends Component {
             ...Navigator.SceneConfigs.FloatFromBottomAndroid
           })}
         />
-        <RegistrationView />
+        <AppIntroView />
         <LightBox />
         <TextActionView />
       </View>

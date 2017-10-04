@@ -12,7 +12,8 @@ import errorAlert from '../utils/error-alert';
 
 
 import IOSTabNavigation from './Navigation';
-import RegistrationView from '../components/registration/RegistrationView';
+import AppIntroView from '../components/registration/AppIntroView';
+import ProfileEditor from '../components/registration/ProfileEditor';
 import CheckInActionView from '../components/actions/CheckInActionView';
 import TextActionView from '../components/actions/TextActionView';
 import LightBox from '../components/lightbox/Lightbox';
@@ -52,8 +53,11 @@ class MainView extends Component {
           renderScene={this.renderScene}
           configureScene={() => sceneConfig}
         />
+
+
         <LightBox />
-        <RegistrationView />
+        <AppIntroView />
+        <ProfileEditor />
         <CheckInActionView />
         <TextActionView />
       </View>
