@@ -8,6 +8,8 @@ import {
   StyleSheet
 } from 'react-native';
 
+import theme from '../../style/theme';
+
 
 class Button extends Component {
   // propTypes: Object.assign({},
@@ -58,15 +60,16 @@ const styles = StyleSheet.create({
   button: {
     height: 50,
     justifyContent: 'center',
-    backgroundColor: '#50E3C2',
+    backgroundColor: theme.primary,
     borderRadius: 100,
     paddingLeft: 10,
     paddingRight: 10
   },
   textButton: {
+    backgroundColor: 'transparent',
     textAlign: 'center',
     fontSize: 14,
-    fontWeight: 'bold',
+    fontWeight: 'normal',
     color: '#fff'
   },
   opacity: {

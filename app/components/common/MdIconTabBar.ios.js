@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   },
   textLabel: {
     fontSize: 10,
-    fontWeight: 'bold',
+    fontWeight: 'normal',
     textAlign:'center',
     fontFamily: 'Futurice',
     // position:'absolute',
