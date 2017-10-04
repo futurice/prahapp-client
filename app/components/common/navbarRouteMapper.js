@@ -52,8 +52,22 @@ let NavigationBarRouteMapper = props => ({
       )
     }
 
+    /*
+    if (route.onLeftActionPress) {
+      return (
+        <TouchableOpacity
+          underlayColor={'transparent'}
+          onPress={() => route.onLeftActionPress()}
+        >
+          <Icon name='ios-add' style={styles.navBarIcon} />
+        </TouchableOpacity>
+      )
+    }
+    */
+
+
+
     return null;
-   // return <CityToggle />
   },
 
   RightButton: function(route, navigator, index, navState) {
