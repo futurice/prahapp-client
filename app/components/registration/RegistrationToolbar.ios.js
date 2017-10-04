@@ -4,16 +4,18 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
-  Text,
   TouchableOpacity,
   PropTypes
 } from 'react-native';
+
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Text from '../common/MyText';
 import theme from '../../style/theme';
+
 
 const styles = StyleSheet.create({
   toolbar: {
-    backgroundColor: theme.secondary,
+    backgroundColor: theme.white,
     height: 60,
     flexDirection: 'row',
     paddingTop: 20,
@@ -24,12 +26,16 @@ const styles = StyleSheet.create({
     fontSize: 20,
     paddingLeft: 10,
     paddingRight: 10,
-    color: theme.light
+    color: theme.primary
   },
   title:{
     paddingRight:15,
-    color: theme.light,
-    fontWeight: 'bold'
+    lineHeight: 25,
+    color: theme.primary,
+    fontWeight: 'normal'
+  },
+  buttonPush: {
+    width: 25,
   }
 });
 
@@ -54,10 +60,9 @@ class EventDetailToolbar extends Component {
             ? <Icon style={styles.icon} name={this.props.icon} />
             : <View/>
           }
-
         </TouchableOpacity>
         <Text style={styles.title}>{this.props.title}</Text>
-        <View />
+        <View style={styles.buttonPush} />
       </View>
 
     );
