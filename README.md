@@ -23,6 +23,33 @@
 * Redux architecture using [ducks](https://github.com/erikras/ducks-modular-redux). See `/app/concepts`
 * Data processing in _concepts_ and minimize logic in views
 
+## Local development
+
+**BEFORE JUMPING TO IOS OR ANDROID GUIDE, FOLLOW THESE GUIDES:**
+
+* https://facebook.github.io/react-native/docs/getting-started.html
+* (Optional) https://facebook.github.io/react-native/docs/debugging.html#content
+* `npm install` (you might need to use npm@2 version)
+* `cp env.example.js env.js` and fill in the blank secrets in the file
+* `react-native link`
+
+### iOS
+
+The xcode-project is expecting that you have nvm installed. It can be reconfigured in
+`Build Phases > Bundle React Native code and images`.
+
+- [Install Cocoapods](https://guides.cocoapods.org/using/getting-started.html#installation)
+- `cd ios && pod install`
+- `open prahappclient.xcworkspace`
+
+  **Note:** Use the .xworkspace instead of .xcodeproj!
+
+### Android
+
+- Android Emulator suggestion: install and start [Genymotion](https://www.genymotion.com)
+- Or connect your Android device with usb cable
+- `react-native run-android`
+
 ## Release
 
 ### iOS
@@ -42,33 +69,6 @@
 * `cd android && ./gradlew assembleRelease --no-daemon`
 * Built .apk is saved to `android/app/build/outputs/apk`
 
-## Local development
-
-**BEFORE JUMPING TO IOS OR ANDROID GUIDE, FOLLOW THESE GUIDES:**
-
-* https://facebook.github.io/react-native/docs/getting-started.html
-* (Optional) https://facebook.github.io/react-native/docs/debugging.html#content
-* `npm install` (you might need to use npm@2 version)
-* `npm dedupe` (maybe necessary if you encounter Namespace collision error)
-* `cp env.example.js env.js` and fill in the blank secrets in the file
-
-### iOS
-
-The xcode-project is expecting that you have nvm installed. It can be reconfigured in
-`Build Phases > Bundle React Native code and images`.
-
-- [Install Cocoapods](https://guides.cocoapods.org/using/getting-started.html#installation)
-- `cd ios && pod install`
-- `open wappuapp.xcworkspace`
-
-  **Note:** Use the .xworkspace instead of .xcodeproj!
-
-### Android
-
-- Android Emulator suggestion: install and start [Genymotion](https://www.genymotion.com)
-- Or connect your Android device with usb cable
-- `react-native run-android`
-
 ### Common problems
 
 Try these:
@@ -78,7 +78,7 @@ useful resources to fix problems
 * Search [react-native issues](https://github.com/facebook/react-native)
 * Search from the react native component's issues
 
-- `error: /Users/user/code/wappuapp/wappuapp-client/node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf: No such file or directory`
+- `error: /Users/user/code/prahapp/prahapp-client/node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf: No such file or directory`
   - Download the from [here](https://github.com/oblador/react-native-vector-icons/raw/master/Fonts/MaterialCommunityIcons.ttf) and move it to `/node_modules/react-native-vector-icons/Fonts`
 - Cmd + R
 
@@ -93,31 +93,6 @@ Make sure:
 #### Loading from <your-ip>:8081...
 
 Stuck at the white screen? It may take even minutes to do the initial load..
-
-#### Error: Naming collision detected
-
-Try to run `npm dedupe`.
-
-
-#### Can't find 'node' binary to build React Native bundle
-
-At least `nvm` causes this. Change Build Phases -> Bundle React Native code and images to:
-
-```
-export NODE_BINARY=node
-. ~/.nvm/nvm.sh  # add this
-nvm use 4        # add this (or whatever node version you are using)
-../node_modules/react-native/packager/react-native-xcode.sh
-```
-
-#### Websocket connection failed
-
-Setup your IP address for debugging https://facebook.github.io/react-native/docs/debugging.html#content
-
-#### jsSchedulingOverhead (-48ms) should be positive
-
-Issue: https://github.com/facebook/react-native/issues/1598
-Do this: https://github.com/facebook/react-native/issues/1598#issuecomment-172890857
 
 ## Contributing
 
