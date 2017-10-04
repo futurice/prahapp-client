@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import { fromJS, List, Map } from 'immutable';
 import { parseInt } from 'lodash';
+import moment from 'moment';
 
 import api from '../services/api';
 import {createRequestActionTypes} from '../actions';
@@ -22,7 +23,18 @@ export const getTotalVotesForUser = createSelector(
     );
     return sumOfVotes;
   }
-)
+);
+
+export const getTimeSinceLastPost = createSelector(
+  getUserImages, (posts) => {
+    if (!posts.size) {
+      return null;
+    }
+
+    // let's assume posts are in chronological order
+    return moment().diff(moment(posts.getIn([0, 'createdAt'])), 'days');
+  }
+);
 
 
 

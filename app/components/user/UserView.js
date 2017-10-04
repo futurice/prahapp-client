@@ -1,5 +1,4 @@
-'use strict';
-
+import { createStructuredSelector } from 'reselect';
 import React, { Component } from 'react';
 import { View, StyleSheet, Dimensions, TouchableOpacity,
   TouchableHighlight, Image, Platform, Text } from 'react-native';
@@ -9,6 +8,7 @@ import {
   getUserImages,
   getUserPicture,
   getUserTeam,
+  getTimeSinceLastPost,
   getTotalSimas,
   getTotalVotesForUser,
   fetchUserImages,
@@ -28,7 +28,7 @@ const headerImage = require('../../../assets/patterns/sea.png');
 
 const { height, width } = Dimensions.get('window');
 const isIOS = Platform.OS === 'ios';
-const headerHeight = 360;
+const headerHeight = width;
 
 
 class UserView extends Component {
@@ -45,7 +45,7 @@ class UserView extends Component {
 
   render() {
 
-    const { images, isLoading, totalVotes, totalSimas,
+    const { images, isLoading, totalVotes, totalSimas, timeSinceLastPost,
       userTeam, userName, navigator, profilePicture } = this.props;
     let { user } = this.props.route;
 
@@ -94,8 +94,8 @@ class UserView extends Component {
                   <Text style={styles.headerKpiTitle}>photos</Text>
                 </View>
                 <View style={styles.headerKpi}>
-                  <Text style={styles.headerKpiValue}>{!isLoading ? totalVotes : '-'}</Text>
-                  <Text style={styles.headerKpiTitle}>likes for photos</Text>
+                  <Text style={styles.headerKpiValue}>{!isLoading ? timeSinceLastPost : '-'}</Text>
+                  <Text style={styles.headerKpiTitle}>days since last photo</Text>
                 </View>
               </View>
 
@@ -265,15 +265,16 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = { openLightBox, fetchUserImages };
 
-const mapStateToProps = state => ({
-  images: getUserImages(state),
-  profilePicture: getUserPicture(state),
-  isLoading: isLoadingUserImages(state),
-  totalSimas: getTotalSimas(state),
-  totalVotes: getTotalVotesForUser(state),
-  userId: getUserId(state),
-  userName: getUserName(state),
-  userTeam: getUserTeam(state)
+const mapStateToProps = createStructuredSelector({
+  images: getUserImages,
+  profilePicture: getUserPicture,
+  isLoading: isLoadingUserImages,
+  totalSimas: getTotalSimas,
+  totalVotes: getTotalVotesForUser,
+  userId: getUserId,
+  userName: getUserName,
+  userTeam: getUserTeam,
+  timeSinceLastPost: getTimeSinceLastPost,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserView);
